@@ -292,5 +292,35 @@
       "minWidth": 400,
       "minHeight": 300
     }
+  },
+  {
+    "id": "boxedwine",
+    "name": "BoxedWine",
+    "description": ".exe, .zip — Runs 16/32-bit Windows applications.",
+    "icon": "https://boxedwine.org/favicon.ico",
+    "category": "Emulation",
+    "url": "/apps/boxedwine",
+    "type": "emulator",
+    "notes": "Runs 16/32-bit Windows applications"
+  },
+  {
+    "id": "tinymce",
+    "name": "TinyMCE",
+    "description": ".rtf, .whtml — Read & WYSIWYG modes, File save support.",
+    "icon": "https://www.tiny.cloud/favicon.ico",
+    "category": "Productivity",
+    "url": "/apps/tinymce",
+    "type": "editor",
+    "notes": "Read & WYSIWYG modes, File save support"
+  },
+  {
+    "id": "virtualx86",
+    "name": "Virtual x86",
+    "description": ".img, .iso — x86 emulator, automatic save states on close, /Users/Public/Snapshots, automatic window resize.",
+    "icon": "https://copy.sh/v86/favicon.ico",
+    "category": "Emulation",
+    "url": "/apps/virtualx86",
+    "type": "emulator",
+    "notes": "x86 emulator, automatic save states, automatic window resize"
   }
 ]

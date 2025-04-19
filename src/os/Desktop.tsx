@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Taskbar } from './Taskbar';
 import { WindowManager } from './WindowManager';
 import { Launcher } from './Launcher';
+import { StartMenu } from './StartMenu';
 import { NotificationCenter } from './NotificationCenter';
 import { NotificationProvider, useNotifications } from './NotificationProvider';
 import { Toast } from './Toast';
@@ -120,7 +121,19 @@ class WindowErrorBoundary extends React.Component<{children: React.ReactNode}, {
   }
 }
 
-  const [showLauncher, setShowLauncher] = React.useState(false);
+  // Start Menu integration
+  const [showStartMenu, setShowStartMenu] = React.useState(false);
+
+  type AppStub = {
+    id: string;
+    title: string;
+    icon: string;
+    content: (() => JSX.Element) | JSX.Element;
+    width: number;
+    height: number;
+    top: number;
+    left: number;
+  };
 
   type WidgetInstance = { id: string; widgetId: string; x?: number; y?: number; zIndex?: number };
 
@@ -213,13 +226,15 @@ class WindowErrorBoundary extends React.Component<{children: React.ReactNode}, {
         <WindowManager windows={windows} setWindows={setWindows} />
       </WindowErrorBoundary>
       <Taskbar
-        onLauncher={() => setShowLauncher(v => !v)}
+        onLauncher={() => setShowStartMenu(v => !v)}
         windows={windows}
         setWindows={setWindows}
       />
-      {showLauncher && (
-        <Launcher
-          onLaunch={app => {
+      {showStartMenu && (
+        <StartMenu
+          show={showStartMenu}
+          onClose={() => setShowStartMenu(false)}
+          onLaunchApp={(app: typeof appStubs[0]) => {
             setWindows(w => [...w, {
               id: Math.random().toString(36).slice(2),
               title: app.title,
@@ -231,35 +246,51 @@ class WindowErrorBoundary extends React.Component<{children: React.ReactNode}, {
               left: app.left,
               zIndex: 10
             }]);
-            setShowLauncher(false);
+            setShowStartMenu(false);
           }}
-          onClose={() => setShowLauncher(false)}
-          onAddWidget={widget => {
-            setWidgets(ws => {
-              const baseX = Math.round(window.innerWidth * 0.85);
-              const baseY = Math.round(window.innerHeight * 0.18);
-              const gapY = 60;
-              const widgetHeight = 140;
-              const idx = ws.length;
-              // Simple default position, let user drag and drop
-              let x = Math.round(window.innerWidth / 2 - 110) + idx * 40;
-              let y = Math.round(window.innerHeight / 2 - 70) + idx * 40;
-              return [
-                ...ws,
-                {
-                  id: 'widget-' + widget.id + '-' + Date.now(),
-                  widgetId: widget.id,
-                  x,
-                  y,
-                  zIndex: 100 + ws.length
-                }
-              ];
-            });
+          onLaunchWidget={(widget) => {
+            setWidgets(ws => [
+              ...ws,
+              {
+                id: 'widget-' + widget.id + '-' + Date.now(),
+                widgetId: widget.id,
+                x: 120 + 30 * ws.length,
+                y: 120 + 30 * ws.length,
+                zIndex: 100 + ws.length
+              }
+            ]);
+            setShowStartMenu(false);
           }}
-          onRemoveWidget={widgetId => {
-            setWidgets(ws => ws.filter(w => w.widgetId !== widgetId));
+          onClearSession={() => {
+            setWindows([]);
+            setWidgets([]);
+            localStorage.clear();
+            window.location.reload();
           }}
-          activeWidgets={widgets.map(w => w.widgetId)}
+          apps={appStubs}
+          folders={[]}
+          onOpenFolder={() => {}}
+          onOpenShortcut={(type: 'documents' | 'pictures' | 'videos') => {
+            // Open Documents, Pictures, Videos as Explorer windows
+            let folderTitle = '';
+            if (type === 'documents') folderTitle = 'Documents';
+            if (type === 'pictures') folderTitle = 'Pictures';
+            if (type === 'videos') folderTitle = 'Videos';
+            setWindows(w => [...w, {
+              id: 'explorer-' + type + '-' + Date.now(),
+              title: folderTitle,
+              icon: '📁',
+              content: () => <div style={{padding: 32, color: '#fff'}}>Folder: {folderTitle}</div>,
+              width: 700,
+              height: 520,
+              top: 120,
+              left: 420,
+              zIndex: 10
+            }]);
+            setShowStartMenu(false);
+          }}
+          spotlight={true}
+          doubleClickApps={true}
         />
       )}
       <NotificationCenter notifications={notifications} />
