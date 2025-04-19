@@ -10,8 +10,32 @@ import { desktopShortcuts } from './desktopShortcuts';
 import Nyxwallpaper from '../assets/Nyxwallpaper.png'; // Corrected path
 import './Desktop.scss';
 
+import LockScreen from './LockScreen';
+
+import { widgetStubs } from './widgets/WidgetRegistry';
+import { Plasmoid } from './widgets/Plasmoid';
+
 const DesktopContent: React.FC = () => {
   // ...existing state and logic...
+  // Lock screen state and inactivity timer
+  const [locked, setLocked] = useState(false);
+  const [wallpaperUrl] = useState(Nyxwallpaper);
+  React.useEffect(() => {
+    let timer: any;
+    const reset = () => {
+      clearTimeout(timer);
+      if (!locked) timer = setTimeout(() => setLocked(true), 5 * 60 * 1000); // 5 min
+    };
+    window.addEventListener('mousemove', reset);
+    window.addEventListener('keydown', reset);
+    reset();
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('mousemove', reset);
+      window.removeEventListener('keydown', reset);
+    };
+  }, [locked]);
+
   // Listen for PWA launch events
   useEffect(() => {
     const handler = (e: any) => {
@@ -85,6 +109,19 @@ class WindowErrorBoundary extends React.Component<{children: React.ReactNode}, {
 }
 
   const [showLauncher, setShowLauncher] = React.useState(false);
+
+  type WidgetInstance = { id: string; widgetId: string; x?: number; y?: number; zIndex?: number };
+
+  const [widgets, setWidgets] = useState<WidgetInstance[]>(() => {
+    const saved = localStorage.getItem('os_widgets');
+    if (saved) {
+      try { return JSON.parse(saved); } catch {}
+    }
+    return [];
+  });
+  // Find the highest zIndex in use
+  const maxZ = widgets.reduce((acc: number, w: WidgetInstance) => Math.max(acc, w.zIndex ?? 100), 100);
+
   const { notifications, push, remove } = useNotifications();
 
   // Show latest notifications as toasts
@@ -101,9 +138,15 @@ class WindowErrorBoundary extends React.Component<{children: React.ReactNode}, {
       windows.map(({ content, ...rest }) => rest)
     ));
   }, [windows]);
+  // Persist widgets
+  useEffect(() => {
+    localStorage.setItem('os_widgets', JSON.stringify(widgets));
+  }, [widgets]);
 
   return (
     <div className="desktop-root">
+
+      <LockScreen show={locked} onUnlock={() => setLocked(false)} wallpaperUrl={wallpaperUrl} />
       <div className="desktop-icons">
         {desktopShortcuts.map((shortcut: { id: string; app: string; icon?: string; name?: string }) => {
           const app = appStubs.find(a => a.id === shortcut.app);
@@ -130,9 +173,31 @@ class WindowErrorBoundary extends React.Component<{children: React.ReactNode}, {
           );
         })}
       </div>
+      {/* Plasmoid widgets */}
+      {widgets.map((w: WidgetInstance, idx: number) => {
+        const stub = widgetStubs.find((ws) => ws.id === w.widgetId);
+        if (!stub) return null;
+        return (
+          <Plasmoid
+            key={w.id}
+            id={w.id}
+            x={w.x ?? (120 + 40 * idx)}
+            y={w.y ?? (120 + 40 * idx)}
+            zIndex={w.zIndex ?? (100 + idx)}
+            onRemove={(id) => setWidgets((ws: WidgetInstance[]) => ws.filter((ww) => ww.id !== id))}
+            onPositionChange={(id, x, y) => setWidgets((ws: WidgetInstance[]) => ws.map((ww) => ww.id === id ? { ...ww, x, y } : ww))}
+            onFocus={id => setWidgets((ws: WidgetInstance[]) => {
+              const zTop = (ws.reduce((acc: number, w: WidgetInstance) => Math.max(acc, w.zIndex ?? 100), 100) + 1);
+              return ws.map((ww) => ww.id === id ? { ...ww, zIndex: zTop } : ww);
+            })}
+          >
+            <stub.component />
+          </Plasmoid>
+        );
+      })}
       <WindowErrorBoundary>
-  <WindowManager windows={windows} setWindows={setWindows} />
-</WindowErrorBoundary>
+        <WindowManager windows={windows} setWindows={setWindows} />
+      </WindowErrorBoundary>
       <Taskbar
         onLauncher={() => setShowLauncher(v => !v)}
         windows={windows}
@@ -155,6 +220,22 @@ class WindowErrorBoundary extends React.Component<{children: React.ReactNode}, {
             setShowLauncher(false);
           }}
           onClose={() => setShowLauncher(false)}
+          onAddWidget={widget => {
+            setWidgets(ws => [
+              ...ws,
+              {
+                id: 'widget-' + widget.id + '-' + Date.now(),
+                widgetId: widget.id,
+                x: 120 + Math.random() * 180,
+                y: 120 + Math.random() * 180,
+                zIndex: 100 + ws.length
+              }
+            ]);
+          }}
+          onRemoveWidget={widgetId => {
+            setWidgets(ws => ws.filter(w => w.widgetId !== widgetId));
+          }}
+          activeWidgets={widgets.map(w => w.widgetId)}
         />
       )}
       <NotificationCenter notifications={notifications} />

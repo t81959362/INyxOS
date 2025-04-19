@@ -17,7 +17,7 @@ function parseCmd(input: string) {
 
 export const Terminal: React.FC = () => {
   const [lines, setLines] = useState<string[]>([
-    'BrowserOS Shell v0.1',
+    'NyxOS Shell v0.1',
     'Type `help` for commands.'
   ]);
   const [input, setInput] = useState('');

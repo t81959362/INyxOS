@@ -13,8 +13,11 @@ const themes = [
 
 import { useNotifications } from '../../os/NotificationProvider';
 
+import LockScreen from '../../os/LockScreen';
+
 export const Settings: React.FC = () => {
   const [theme, setTheme] = useState('default');
+  const [locked, setLocked] = useState(false);
   const [status, setStatus] = useState('');
   const [highContrast, setHighContrast] = useState(false);
   const [screenReader, setScreenReader] = useState(false);
@@ -127,10 +130,17 @@ export const Settings: React.FC = () => {
             <input type="checkbox" checked={screenReader} onChange={toggleScreenReader} />
             Enable screen reader hints
           </label>
+          <button
+            onClick={() => setLocked(true)}
+            style={{ marginTop: 12, alignSelf: 'flex-start', background: '#232a3990', color: '#fff', border: 'none', borderRadius: 8, padding: '7px 18px', fontWeight: 600, cursor: 'pointer', fontSize: 16 }}
+          >
+            🔒 Lock Screen
+          </button>
           <span style={{ fontSize: 13, color: '#888', marginTop: 4 }}>
             Keyboard navigation: Tab, Shift+Tab, Enter, and Arrow keys supported throughout the OS.
           </span>
         </div>
+        <LockScreen show={locked} onUnlock={() => setLocked(false)} />
       </div>
       <div className="settings-section">
         <label>About:</label>

@@ -1,6 +1,8 @@
 import React from 'react';
+import StartMenuIcon from '../assets/Start Menu.png';
 import { SystemTray, TrayIcon } from './SystemTray';
 import CalendarTray from './CalendarTray';
+import BatteryTray from './BatteryTray';
 import './Taskbar.scss';
 
 // NotificationPopover import
@@ -40,6 +42,10 @@ export const Taskbar: React.FC<{
       icon: <span title="Network">🌐</span>,
     },
     {
+      id: 'battery',
+      icon: <BatteryTray />
+    },
+    {
       id: 'calendar',
       icon: <CalendarTray />
     },
@@ -69,8 +75,13 @@ export const Taskbar: React.FC<{
 
   return (
     <div className="taskbar-root">
-      <button className="launcher-btn" onClick={onLauncher} title="Show Launcher">
-        <span className="launcher-icon">🟦</span>
+      <button
+        className="taskbar-launcher"
+        onClick={onLauncher}
+        title="Open Launcher"
+        style={{ background: 'none', border: 'none', padding: 0, marginRight: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', height: 42 }}
+      >
+        <img src={StartMenuIcon} alt="Start Menu" style={{ width: 32, height: 32, objectFit: 'contain', borderRadius: 8, boxShadow: '0 1.5px 6px #232a3920' }} />
       </button>
       <div className="taskbar-center">
         <div className="taskbar-apps">
