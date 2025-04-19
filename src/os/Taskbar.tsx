@@ -1,5 +1,6 @@
 import React from 'react';
 import { SystemTray, TrayIcon } from './SystemTray';
+import CalendarTray from './CalendarTray';
 import './Taskbar.scss';
 
 // NotificationPopover import
@@ -37,6 +38,10 @@ export const Taskbar: React.FC<{
     {
       id: 'network',
       icon: <span title="Network">🌐</span>,
+    },
+    {
+      id: 'calendar',
+      icon: <CalendarTray />
     },
     {
       id: 'clock',
