@@ -190,6 +190,8 @@ class WindowErrorBoundary extends React.Component<{children: React.ReactNode}, {
               const zTop = (ws.reduce((acc: number, w: WidgetInstance) => Math.max(acc, w.zIndex ?? 100), 100) + 1);
               return ws.map((ww) => ww.id === id ? { ...ww, zIndex: zTop } : ww);
             })}
+            widgetTitle={stub.title}
+            widgetIcon={stub.icon}
           >
             <stub.component />
           </Plasmoid>

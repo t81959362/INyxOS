@@ -11,6 +11,9 @@ export type WidgetStub = {
 import { WeatherWidget } from './WeatherWidget';
 import { NotesWidget } from './NotesWidget';
 import { SystemMonitorWidget } from './SystemMonitorWidget';
+import { CalendarWidget } from './CalendarWidget';
+import { NewsFeedWidget } from './NewsFeedWidget';
+import { CalculatorWidget } from './CalculatorWidget';
 
 export const widgetStubs: WidgetStub[] = [
   {
@@ -30,5 +33,23 @@ export const widgetStubs: WidgetStub[] = [
     title: 'System Monitor',
     icon: '📊',
     component: SystemMonitorWidget,
+  },
+  {
+    id: 'calendar',
+    title: 'Calendar',
+    icon: '📅',
+    component: CalendarWidget,
+  },
+  {
+    id: 'news',
+    title: 'News Feed',
+    icon: '📰',
+    component: NewsFeedWidget,
+  },
+  {
+    id: 'calculator',
+    title: 'Calculator',
+    icon: '🧮',
+    component: CalculatorWidget,
   },
 ];
