@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { useDragResize } from '../hooks/useDragResize';
 
 export interface PlasmoidProps {
   id: string;
@@ -7,40 +8,23 @@ export interface PlasmoidProps {
   y: number;
   zIndex?: number;
   onRemove?: (id: string) => void;
-  onPositionChange?: (id: string, x: number, y: number) => void;
+  onPositionChange?: (id: string, dx: number, dy: number) => void;
   onFocus?: (id: string) => void;
 }
 
 export const Plasmoid: React.FC<PlasmoidProps> = ({ id, children, x, y, zIndex = 100, onRemove, onPositionChange, onFocus }) => {
-  const [dragging, setDragging] = useState(false);
-  const lastPointer = useRef<{ x: number; y: number } | null>(null);
+  // Use the same drag logic as Window
+  const handleMove = (dx: number, dy: number) => {
+    if (onPositionChange) onPositionChange(id, dx, dy);
+  };
 
-  function onPointerDown(e: React.PointerEvent) {
-    setDragging(true);
-    lastPointer.current = { x: e.clientX, y: e.clientY };
-    if (onFocus) onFocus(id);
-    window.getSelection()?.removeAllRanges();
-    window.addEventListener('pointermove', onPointerMove as EventListener);
-    window.addEventListener('pointerup', onPointerUp as EventListener);
-  }
+  // No resize for widgets, so dummy handler
+  const handleResize = () => {};
 
-  function onPointerMove(e: Event) {
-    if (!dragging || !lastPointer.current) return;
-    const evt = e as PointerEvent;
-    const dx = evt.clientX - lastPointer.current.x;
-    const dy = evt.clientY - lastPointer.current.y;
-    if (dx !== 0 || dy !== 0) {
-      onPositionChange?.(id, x + dx, y + dy);
-      lastPointer.current = { x: evt.clientX, y: evt.clientY };
-    }
-  }
-
-  function onPointerUp() {
-    setDragging(false);
-    lastPointer.current = null;
-    window.removeEventListener('pointermove', onPointerMove as EventListener);
-    window.removeEventListener('pointerup', onPointerUp as EventListener);
-  }
+  const { onDragStart } = useDragResize({
+    onMove: handleMove,
+    onResize: handleResize
+  });
 
   return (
     <div
@@ -55,14 +39,16 @@ export const Plasmoid: React.FC<PlasmoidProps> = ({ id, children, x, y, zIndex =
         background: 'rgba(24,28,37,0.82)',
         borderRadius: 14,
         boxShadow: '0 4px 24px #232a3930',
-        userSelect: dragging ? 'none' : undefined,
-        cursor: dragging ? 'grabbing' : 'default',
-        transition: dragging ? 'none' : 'box-shadow 0.15s',
+        userSelect: 'none',
+        cursor: 'default',
+        pointerEvents: 'auto',
+        transition: 'box-shadow 0.15s',
       }}
+      // onPointerDown removed: handled by onMouseDown in the titlebar
     >
       <div
-        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 12px 0 12px', cursor: dragging ? 'grabbing' : 'grab', userSelect: 'none' }}
-        onPointerDown={onPointerDown}
+        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 12px 0 12px', cursor: 'grab', userSelect: 'none' }}
+        onMouseDown={onDragStart}
         onClick={() => onFocus && onFocus(id)}
       >
         <span style={{ fontWeight: 700, color: '#fff', fontSize: 15 }}>Widget</span>

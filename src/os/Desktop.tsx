@@ -185,7 +185,7 @@ class WindowErrorBoundary extends React.Component<{children: React.ReactNode}, {
             y={w.y ?? (120 + 40 * idx)}
             zIndex={w.zIndex ?? (100 + idx)}
             onRemove={(id) => setWidgets((ws: WidgetInstance[]) => ws.filter((ww) => ww.id !== id))}
-            onPositionChange={(id, x, y) => setWidgets((ws: WidgetInstance[]) => ws.map((ww) => ww.id === id ? { ...ww, x, y } : ww))}
+            onPositionChange={(id, dx, dy) => setWidgets((ws: WidgetInstance[]) => ws.map((ww) => ww.id === id ? { ...ww, x: (ww.x ?? 0) + dx, y: (ww.y ?? 0) + dy } : ww))}
             onFocus={id => setWidgets((ws: WidgetInstance[]) => {
               const zTop = (ws.reduce((acc: number, w: WidgetInstance) => Math.max(acc, w.zIndex ?? 100), 100) + 1);
               return ws.map((ww) => ww.id === id ? { ...ww, zIndex: zTop } : ww);
@@ -221,16 +221,26 @@ class WindowErrorBoundary extends React.Component<{children: React.ReactNode}, {
           }}
           onClose={() => setShowLauncher(false)}
           onAddWidget={widget => {
-            setWidgets(ws => [
-              ...ws,
-              {
-                id: 'widget-' + widget.id + '-' + Date.now(),
-                widgetId: widget.id,
-                x: 120 + Math.random() * 180,
-                y: 120 + Math.random() * 180,
-                zIndex: 100 + ws.length
-              }
-            ]);
+            setWidgets(ws => {
+              const baseX = Math.round(window.innerWidth * 0.85);
+              const baseY = Math.round(window.innerHeight * 0.18);
+              const gapY = 60;
+              const widgetHeight = 140;
+              const idx = ws.length;
+              // Simple default position, let user drag and drop
+              let x = Math.round(window.innerWidth / 2 - 110) + idx * 40;
+              let y = Math.round(window.innerHeight / 2 - 70) + idx * 40;
+              return [
+                ...ws,
+                {
+                  id: 'widget-' + widget.id + '-' + Date.now(),
+                  widgetId: widget.id,
+                  x,
+                  y,
+                  zIndex: 100 + ws.length
+                }
+              ];
+            });
           }}
           onRemoveWidget={widgetId => {
             setWidgets(ws => ws.filter(w => w.widgetId !== widgetId));
