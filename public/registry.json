@@ -1,0 +1,296 @@
+[
+  {
+    "id": "pwa-x",
+    "name": "X (Twitter)",
+    "description": "Get breaking news, trending music, world events, and more - all with less data.",
+    "icon": "https://abs.twimg.com/favicons/twitter.2.ico",
+    "category": "Social",
+    "url": "https://twitter.com/",
+    "type": "pwa",
+    "featured": true
+  },
+  {
+    "id": "pwa-messenger",
+    "name": "Messenger",
+    "description": "Stay connected with friends and family, build community, and express yourself with Messenger.",
+    "icon": "https://www.messenger.com/favicon.ico",
+    "category": "Social",
+    "url": "https://www.messenger.com/",
+    "type": "pwa",
+    "featured": false
+  },
+  {
+    "id": "pwa-chatgpt",
+    "name": "ChatGPT",
+    "description": "A conversational AI model developed by OpenAI.",
+    "icon": "https://chat.openai.com/favicon.ico",
+    "category": "AI",
+    "url": "https://chat.openai.com/",
+    "type": "pwa",
+    "featured": true
+  },
+  {
+    "id": "pwa-duolingo",
+    "name": "Duolingo",
+    "description": "The free, fun, and effective way to learn a language!",
+    "icon": "https://www.duolingo.com/favicon.ico",
+    "category": "Education",
+    "url": "https://www.duolingo.com/",
+    "type": "pwa",
+    "featured": true
+  },
+  {
+    "id": "pwa-youtube",
+    "name": "YouTube",
+    "description": "A video-sharing platform to upload, view, and share videos.",
+    "icon": "https://www.youtube.com/favicon.ico",
+    "category": "Entertainment",
+    "url": "https://www.youtube.com/",
+    "type": "pwa",
+    "featured": true
+  },
+  {
+    "id": "pwa-starbucks",
+    "name": "Starbucks",
+    "description": "An international restaurant chain for coffee, tea, and fresh food items.",
+    "icon": "https://www.starbucks.com/favicon.ico",
+    "category": "Food & Drink",
+    "url": "https://www.starbucks.com/",
+    "type": "pwa",
+    "featured": false
+  },
+  {
+    "id": "pwa-airbnb",
+    "name": "Airbnb",
+    "description": "Find vacation rentals, cabins, beach houses, and more worldwide.",
+    "icon": "https://www.airbnb.com/favicon.ico",
+    "category": "Travel",
+    "url": "https://www.airbnb.com/",
+    "type": "pwa",
+    "featured": false
+  },
+  {
+    "id": "pwa-snapdrop",
+    "name": "Snapdrop",
+    "description": "Local file sharing in your browser.",
+    "icon": "https://snapdrop.net/favicon.ico",
+    "category": "Tools",
+    "url": "https://snapdrop.net/",
+    "type": "pwa",
+    "featured": true
+  },
+  {
+    "id": "pwa-versus",
+    "name": "Versus",
+    "description": "Compare products and services side by side.",
+    "icon": "https://versus.com/favicon.ico",
+    "category": "Shopping",
+    "url": "https://versus.com/",
+    "type": "pwa",
+    "featured": false
+  },
+  {
+    "id": "pwa-webdev",
+    "name": "web.dev",
+    "description": "Google's web development resource hub.",
+    "icon": "https://web.dev/favicon.ico",
+    "category": "Reference",
+    "url": "https://web.dev/",
+    "type": "pwa",
+    "featured": false
+  },
+  {
+    "id": "pwa-2048",
+    "name": "2048 Game",
+    "description": "Classic 2048 puzzle game playable offline.",
+    "icon": "https://play2048.co/favicon-192.png",
+    "category": "Games",
+    "url": "https://play2048.co/",
+    "type": "pwa",
+    "featured": false
+  },
+  {
+    "id": "pwa-sudoku",
+    "name": "Sudoku",
+    "description": "Classic Sudoku puzzle game.",
+    "icon": "https://www.sudoku.com/favicon.ico",
+    "category": "Games",
+    "url": "https://www.sudoku.com/",
+    "type": "pwa",
+    "featured": false
+  },
+  {
+    "id": "pwa-calculator",
+    "name": "Calculator",
+    "description": "A calculator app with theme switcher.",
+    "icon": "https://calculator-app-tau.vercel.app/favicon.ico",
+    "category": "Utilities",
+    "url": "https://calculator-app-tau.vercel.app/",
+    "type": "pwa",
+    "featured": false
+  },
+  {
+    "id": "pwa-squoosh",
+    "name": "Squoosh",
+    "description": "Image compression and conversion tool by Google.",
+    "icon": "https://squoosh.app/icon-192.png",
+    "category": "Creativity",
+    "url": "https://squoosh.app/",
+    "type": "pwa",
+    "featured": true
+  },
+  {
+    "id": "pwa-devdocs",
+    "name": "DevDocs",
+    "description": "API documentation browser for developers.",
+    "icon": "https://devdocs.io/favicon.ico",
+    "category": "Reference",
+    "url": "https://devdocs.io/",
+    "type": "pwa",
+    "featured": false
+  },
+  {
+    "id": "pwa-bitmidi",
+    "name": "BitMidi",
+    "description": "Listen to your favorite MIDI files.",
+    "icon": "https://bitmidi.com/favicon.ico",
+    "category": "Music",
+    "url": "https://bitmidi.com/",
+    "type": "pwa",
+    "featured": false
+  },
+  {
+    "id": "pwa-farmhand",
+    "name": "Farmhand",
+    "description": "A resource management game that puts a farm in your hand.",
+    "icon": "https://www.farmhand.life/favicon.ico",
+    "category": "Games",
+    "url": "https://www.farmhand.life/",
+    "type": "pwa",
+    "featured": false
+  },
+  {
+    "id": "pwa-squoosh",
+    "name": "Squoosh",
+    "description": "Image compression and conversion tool by Google.",
+    "icon": "https://squoosh.app/icon-192.png",
+    "category": "Creativity",
+    "url": "https://squoosh.app/",
+    "type": "pwa",
+    "featured": true,
+    "updateUrl": "https://squoosh.app/manifest.json"
+  },
+  {
+    "id": "pwa-trello",
+    "name": "Trello",
+    "description": "Organize anything with boards, lists, and cards.",
+    "icon": "https://trello.com/favicon.ico",
+    "category": "Productivity",
+    "url": "https://trello.com/",
+    "type": "pwa",
+    "featured": false,
+    "updateUrl": "https://trello.com/manifest.json"
+  },
+  {
+    "id": "pwa-maps",
+    "name": "Google Maps Go",
+    "description": "Lightweight Google Maps for web.",
+    "icon": "https://www.gstatic.com/images/branding/product/2x/maps_96in128dp.png",
+    "category": "Travel",
+    "url": "https://www.google.com/maps/",
+    "type": "pwa",
+    "featured": false,
+    "updateUrl": "https://www.google.com/maps/manifest.json"
+  },
+  {
+    "id": "pwa-flipboard",
+    "name": "Flipboard",
+    "description": "Personalized news and magazine reader.",
+    "icon": "https://cdn.flipboard.com/favicon.ico",
+    "category": "News",
+    "url": "https://flipboard.com/",
+    "type": "pwa",
+    "featured": false,
+    "updateUrl": "https://flipboard.com/manifest.json"
+  },
+  {
+    "id": "pwa-2048",
+    "name": "2048 Game",
+    "description": "Classic 2048 puzzle game playable offline.",
+    "icon": "https://play2048.co/favicon-192.png",
+    "category": "Games",
+    "url": "https://play2048.co/",
+    "type": "pwa",
+    "featured": false,
+    "updateUrl": "https://play2048.co/manifest.json"
+  },
+  {
+    "id": "pwa-spotify",
+    "name": "Spotify Web Player",
+    "description": "Listen to music and podcasts online.",
+    "icon": "https://open.scdn.co/cdn/images/favicon32.8e66b099.png",
+    "category": "Music",
+    "url": "https://open.spotify.com/",
+    "type": "pwa",
+    "featured": false,
+    "updateUrl": "https://open.spotify.com/manifest.json"
+  },
+  {
+    "id": "pwa-clipchamp",
+    "name": "Clipchamp",
+    "description": "Create and edit videos in your browser.",
+    "icon": "https://clipchamp.com/favicon.ico",
+    "category": "Creativity",
+    "url": "https://app.clipchamp.com/",
+    "type": "pwa",
+    "featured": true,
+    "updateUrl": "https://app.clipchamp.com/manifest.json"
+  },
+  {
+    "id": "pwa-todoist",
+    "name": "Todoist",
+    "description": "Organize your life and work with this powerful to-do app.",
+    "icon": "https://todoist.com/favicon.ico",
+    "category": "Productivity",
+    "url": "https://todoist.com/app",
+    "type": "pwa",
+    "featured": true,
+    "updateUrl": "https://todoist.com/manifest.json"
+  },
+  {
+    "id": "pwa-pocket",
+    "name": "Pocket",
+    "description": "Save articles and videos to view later offline.",
+    "icon": "https://getpocket.com/favicon.ico",
+    "category": "Productivity",
+    "url": "https://getpocket.com/",
+    "type": "pwa",
+    "featured": false,
+    "updateUrl": "https://getpocket.com/manifest.json"
+  },
+  {
+    "id": "pwa-reddit",
+    "name": "Reddit",
+    "description": "The front page of the internet.",
+    "icon": "https://www.redditstatic.com/desktop2x/img/favicon/apple-icon-180x180.png",
+    "category": "Social",
+    "url": "https://www.reddit.com/",
+    "type": "pwa",
+    "featured": false,
+    "updateUrl": "https://www.reddit.com/manifest.json"
+  },
+  {
+    "id": "text-editor",
+    "name": "Text Editor",
+    "icon": "icons/apps/text-editor.svg",
+    "url": "/apps/text-editor",
+    "category": "utilities",
+    "launchMode": "window",
+    "windowOptions": {
+      "width": 900,
+      "height": 650,
+      "minWidth": 400,
+      "minHeight": 300
+    }
+  }
+]

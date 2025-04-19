@@ -1,0 +1,64 @@
+.launcher-root {
+  position: fixed;
+  left: 0; top: 0; right: 0; bottom: 0;
+  background: rgba(24,28,37,0.35);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: var(--blur);
+}
+.launcher-modal {
+  background: rgba(24,28,37,0.95);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  padding: 32px 40px 24px 40px;
+  min-width: 340px;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.launcher-apps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+  margin: 24px 0;
+}
+.launcher-app {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 16px 18px;
+  min-width: 90px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: background 0.2s;
+}
+.launcher-app:hover {
+  background: var(--accent);
+}
+.launcher-app-icon {
+  font-size: 28px;
+  margin-bottom: 6px;
+}
+.launcher-close {
+  margin-top: 18px;
+  background: #e53935;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 18px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.launcher-close:hover {
+  background: #ff5252;
+}

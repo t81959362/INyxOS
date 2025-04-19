@@ -1,0 +1,445 @@
+.browser-app-root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #f6f8fb;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.10), 0 1.5px 4px rgba(24,28,37,0.09);
+  position: relative;
+}
+
+// Window controls (fake, for look)
+.browser-window-controls {
+  position: absolute;
+  top: 10px;
+  right: 18px;
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+.browser-window-controls button {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  margin: 0 1px;
+  background: #c4c4c4;
+  transition: background 0.15s;
+  cursor: pointer;
+}
+.browser-window-controls .close { background: #ed6a5e; }
+.browser-window-controls .min { background: #f5c451; }
+.browser-window-controls .max { background: #61c554; }
+
+// Tab bar
+.browser-tabbar {
+  display: flex;
+  align-items: flex-end;
+  background: #232a39;
+  padding: 0 4px;
+  min-height: 28px;
+  user-select: none;
+  border-bottom: 1.5px solid #e3e7ef;
+  box-shadow: 0 2px 6px rgba(24,28,37,0.07);
+  position: relative;
+  z-index: 3;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.browser-app-root {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+.browser-tab {
+  display: flex;
+  align-items: center;
+  background: transparent;
+  border-radius: 8px 8px 0 0;
+  margin-right: 8px;
+  padding: 0 18px 0 8px;
+  height: 32px;
+  font-size: 1rem;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+  position: relative;
+  border: none;
+  box-shadow: none;
+}
+.browser-tab.active {
+  background: #232a39;
+  color: #308aff;
+  font-weight: 600;
+  border-bottom: 2.5px solid #308aff;
+  z-index: 3;
+  box-shadow: 0 4px 12px rgba(48,138,255,0.07);
+}
+.browser-tab-pin {
+  margin-left: 4px;
+  font-size: 1em;
+}
+.browser-tab-title {
+  color: inherit;
+  font-weight: 500;
+  margin-left: 7px;
+  margin-right: 3px;
+}
+.browser-tab-close {
+  background: none;
+  border: none;
+  color: #888;
+  margin-left: 8px;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.browser-tab-close:hover {
+  color: #e74c3c;
+}
+.browser-tab-add {
+  background: #e8ebf0;
+  border: none;
+  color: #308aff;
+  font-size: 1.3em;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-left: 2px;
+  cursor: pointer;
+  transition: background 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.browser-tab-add:hover {
+  background: #308aff;
+  color: #fff;
+}
+
+// Toolbar
+.browser-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px;
+  background: #232a39;
+  border-bottom: 1.5px solid #e3e7ef;
+  box-shadow: 0 2px 6px rgba(24,28,37,0.06);
+  position: relative;
+  z-index: 2;
+  min-height: 36px;
+  gap: 0;
+}
+.browser-toolbar-left, .browser-toolbar-center, .browser-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.browser-toolbar-center {
+  flex: 1;
+  justify-content: center;
+}
+.browser-toolbar-right {
+  justify-content: flex-end;
+  gap: 4px;
+}
+.browser-toolbar button img, .browser-toolbar-right button img, .browser-toolbar-left button img {
+  display: block;
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  vertical-align: middle;
+}
+.browser-toolbar button {
+  background: none;
+  border: none;
+  color: #555;
+  font-size: 1.08em;
+  margin: 0 3px;
+  padding: 5px;
+  border-radius: 4px;
+  transition: background 0.15s, color 0.15s;
+  cursor: pointer;
+}
+.browser-toolbar button:hover {
+  background: #e8ebf0;
+  color: #308aff;
+}
+.browser-url-input {
+  flex: 1;
+  height: 32px;
+  border-radius: 16px;
+  border: 1.5px solid #e3e7ef;
+  padding: 0 16px;
+  font-size: 1.08em;
+  background: #fff;
+  margin: 0 10px;
+  box-shadow: 0 1px 2px rgba(48,138,255,0.03);
+  outline: none;
+  transition: border 0.14s;
+}
+.browser-url-input:focus {
+  border: 1.5px solid #308aff;
+}
+.browser-bookmarks,
+.browser-toolbar select,
+.browser-bookmarks-dropdown {
+  margin-left: 4px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  border: 1.5px solid #384052;
+  background: #232a39;
+  color: #fff;
+  font-size: 0.95em;
+  transition: border 0.14s, background 0.14s;
+  height: 28px;
+  appearance: none;
+  box-shadow: none;
+}
+
+.browser-toolbar select:focus,
+.browser-bookmarks-dropdown:focus {
+  border-color: #308aff;
+  outline: none;
+  background: #232a39;
+}
+
+.browser-toolbar select option,
+.browser-bookmarks-dropdown option,
+.browser-bookmarks select option {
+  background: #232a39;
+  color: #fff;
+}
+
+.browser-bookmarks select {
+  background: #232a39 !important;
+  color: #fff !important;
+  border: 1.5px solid #384052;
+  border-radius: 6px;
+  font-size: 0.95em;
+  transition: border 0.14s, background 0.14s;
+  height: 28px;
+  appearance: none;
+  box-shadow: none;
+}
+
+.browser-bookmarks select:focus {
+  border-color: #308aff;
+  outline: none;
+  background: #232a39 !important;
+}
+
+.browser-bookmarks select option {
+  background: #232a39 !important;
+  color: #fff !important;
+}
+
+.browser-bookmarks select::-ms-expand {
+  background: #232a39;
+  color: #fff;
+}
+
+.browser-bookmarks select::-webkit-input-placeholder {
+  color: #fff;
+}
+
+.browser-bookmarks select::-webkit-select-placeholder {
+  color: #fff;
+}
+
+.browser-bookmarks select:-moz-placeholder {
+  color: #fff;
+}
+
+.browser-bookmarks select::-moz-placeholder {
+  color: #fff;
+}
+
+.browser-bookmarks select:-ms-input-placeholder {
+  color: #fff;
+}
+
+.browser-bookmarks select:focus {
+  border-color: #308aff;
+  outline: none;
+  background: #232a39;
+}
+
+// Main content
+.browser-content {
+  flex: 1;
+  background: #fff;
+  border-radius: 0 0 10px 10px;
+  overflow: auto;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  position: relative;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+// Tab preview
+.browser-tab-preview {
+  position: fixed;
+  background: #fff;
+  color: #333;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  padding: 10px 18px;
+  font-size: 1em;
+  pointer-events: none;
+  z-index: 9999;
+  min-width: 180px;
+  max-width: 340px;
+  white-space: pre-line;
+}
+
+.browser-tab {
+  display: flex;
+  align-items: center;
+  background: #232a39;
+  border: 1px solid #232a39;
+  border-bottom: none;
+  border-radius: 7px 7px 0 0;
+  margin-right: 2px;
+  padding: 0 10px 0 8px;
+  height: 28px;
+  font-size: 0.97rem;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  position: relative;
+}
+.browser-tab.active {
+  background: #232a39;
+  color: #308aff;
+  border-bottom: 2px solid #308aff;
+  font-weight: 600;
+  z-index: 2;
+}
+
+.browser-tab-title {
+  color: #fff;
+  font-weight: 400;
+}
+
+.browser-tab.active .browser-tab-title {
+  color: #308aff;
+  font-weight: 600;
+}
+
+.browser-tab-title--new {
+  color: #fff !important;
+}
+
+.browser-tab-close {
+  background: none;
+  border: none;
+  color: #888;
+  margin-left: 8px;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.browser-tab-close:hover {
+  color: #e74c3c;
+}
+.browser-tab-add {
+  background: #232a39;
+  border: none;
+  color: #fff;
+  font-size: 1.2em;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  margin-left: 2px;
+  cursor: pointer;
+  transition: background 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.browser-tab-add:hover {
+  background: #308aff;
+  color: #fff;
+}
+
+.browser-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #232a39;
+  border-bottom: 1.5px solid #308aff;
+}
+.browser-toolbar button {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.15em;
+  padding: 7px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.browser-toolbar button:active, .browser-toolbar button:focus {
+  background: #308aff33;
+  outline: none;
+}
+.browser-toolbar button:hover {
+  background: #308aff55;
+  color: #fff;
+}
+.browser-url-input {
+  flex: 2 1 320px;
+  min-width: 320px;
+  max-width: 900px;
+  padding: 7px 12px;
+  border: none;
+  border-radius: 7px;
+  font-size: 1rem;
+  background: #fff;
+  color: #232a39;
+  margin: 0 8px;
+  box-sizing: border-box;
+  transition: box-shadow 0.18s;
+}
+
+.browser-url-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #308aff44;
+}
+.browser-bookmarks select {
+  background: #fff;
+  color: #232a39;
+  border: 1px solid #dbe6f7;
+  border-radius: 5px;
+  padding: 5px 8px;
+  font-size: 1em;
+  margin-left: 8px;
+}
+
+.browser-content {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  background: #fff;
+}
+.browser-iframe {
+  flex: 1;
+  width: 100%;
+  border: none;
+  background: #fff;
+}
+.browser-error {
+  margin: auto;
+  color: #e74c3c;
+  font-size: 1.2em;
+  background: #fff2f2;
+  border: 1px solid #e74c3c;
+  border-radius: 8px;
+  padding: 32px 48px;
+}

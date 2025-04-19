@@ -1,0 +1,39 @@
+.terminal-root {
+  width: 100%;
+  height: 100%;
+  background: #181c25;
+  color: #b5e0ff;
+  font-family: 'Roboto Mono', monospace;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+.term-lines {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 12px 0 12px;
+}
+.term-line {
+  white-space: pre-wrap;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.term-form {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.term-prompt {
+  color: var(--accent);
+  font-weight: bold;
+  margin-right: 6px;
+}
+.term-input {
+  background: transparent;
+  color: #fff;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: 15px;
+  flex: 1;
+}
