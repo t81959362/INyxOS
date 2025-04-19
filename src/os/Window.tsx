@@ -65,11 +65,21 @@ export const Window: React.FC<{
     return <div style={style} />;
   };
 
+  // Animation state
+  const [animState, setAnimState] = useState<'open'|'idle'|'close'|'minimize'|'snap'>("open");
+  // Trigger open animation on mount
+  React.useEffect(() => { setAnimState('open'); const t = setTimeout(() => setAnimState('idle'), 220); return () => clearTimeout(t); }, []);
+  // Animate on minimize/close
+  const handleMinimize = () => { setAnimState('minimize'); setTimeout(() => { onMinimize && onMinimize(); setAnimState('idle'); }, 220); };
+  const handleClose = () => { setAnimState('close'); setTimeout(() => { onClose(); }, 220); };
+  // Animate on snap
+  React.useEffect(() => { if (snapPreview) { setAnimState('snap'); setTimeout(() => setAnimState('idle'), 320); } }, [snapPreview]);
+
   return (
     <>
       {renderSnapPreview()}
       <div
-        className={"window-root" + (focused ? " window-focused" : "")}
+        className={"window-root window-anim-" + animState + (focused ? " window-focused" : "")}
         style={{
           left: win.left,
           top: win.top,
@@ -93,7 +103,7 @@ export const Window: React.FC<{
         <div style={{ marginLeft: 'auto', display: 'flex', gap: 2 }}>
           <button
             className="window-minimize"
-            onClick={onMinimize}
+            onClick={handleMinimize}
             title="Minimize"
             style={{
               background: 'none',
@@ -140,7 +150,7 @@ export const Window: React.FC<{
           >
             □
           </button>
-          <button className="window-close" onClick={onClose} title="Close">×</button>
+          <button className="window-close" onClick={handleClose} title="Close">×</button>
         </div>
       </div>
       <div className="window-content">{typeof win.content === 'function' ? win.content() : win.content}</div>

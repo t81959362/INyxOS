@@ -8,8 +8,53 @@
   min-width: 320px;
   min-height: 180px;
   user-select: none;
-  transition: box-shadow 0.2s, border 0.2s;
+  transition: box-shadow 0.2s, border 0.2s, opacity 0.22s cubic-bezier(.61,1.4,.38,1), transform 0.22s cubic-bezier(.61,1.4,.38,1);
+  opacity: 1;
+  transform: scale(1);
 }
+
+.window-anim-open {
+  opacity: 0;
+  transform: scale(0.85);
+  animation: windowOpenAnim 0.22s cubic-bezier(.61,1.4,.38,1) forwards;
+}
+@keyframes windowOpenAnim {
+  from { opacity: 0; transform: scale(0.85); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.window-anim-close {
+  opacity: 1;
+  transform: scale(1);
+  animation: windowCloseAnim 0.22s cubic-bezier(.61,1.4,.38,1) forwards;
+}
+@keyframes windowCloseAnim {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.85); }
+}
+
+.window-anim-minimize {
+  opacity: 1;
+  transform: scale(1);
+  animation: windowMinimizeAnim 0.22s cubic-bezier(.61,1.4,.38,1) forwards;
+}
+@keyframes windowMinimizeAnim {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.7); }
+}
+
+.window-anim-snap {
+  animation: windowWobbleAnim 0.32s cubic-bezier(.61,1.4,.38,1);
+}
+@keyframes windowWobbleAnim {
+  0% { transform: scale(1) rotate(0deg); }
+  18% { transform: scale(1.04,0.97) rotate(-2deg); }
+  36% { transform: scale(0.98,1.03) rotate(2deg); }
+  54% { transform: scale(1.03,0.97) rotate(-1deg); }
+  72% { transform: scale(0.99,1.02) rotate(1deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
 .window-root.focused {
   box-shadow: 0 0 0 3px var(--accent), var(--shadow);
   border-color: var(--accent);
