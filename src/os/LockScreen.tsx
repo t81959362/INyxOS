@@ -14,15 +14,15 @@ const LockScreen: React.FC<{
   if (!show) return null;
   return (
     <div className="lock-screen-root">
-      <div
+       <div
         className="lock-screen-bg"
         style={{
           position: 'absolute',
           inset: 0,
           zIndex: 0,
-          background: wallpaperUrl ? `url(${wallpaperUrl}) center/cover no-repeat` : 'linear-gradient(120deg,#181c25 0%,#232a39 100%)',
+          background: wallpaperUrl ? `url(${wallpaperUrl}) center/cover no-repeat` : '#181c25',
           opacity: 1,
-          filter: 'blur(10px) saturate(1.15)',
+          filter: 'blur(18px) saturate(1.12)',
           transition: 'background 0.5s',
         }}
       />
@@ -30,23 +30,24 @@ const LockScreen: React.FC<{
         position: 'relative',
         zIndex: 1,
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-        minWidth: 340,
-        minHeight: 320,
-        padding: '48px 36px',
-        borderRadius: 20,
-        background: 'rgba(255,255,255,0.18)',
-        boxShadow: '0 8px 48px 0 rgba(48,138,255,0.08), 0 2px 8px 0 rgba(24,28,37,0.08)',
-        backdropFilter: 'blur(18px) saturate(1.15)',
-        WebkitBackdropFilter: 'blur(18px) saturate(1.15)'
+        minWidth: 360,
+        minHeight: 260,
+        padding: '42px 32px',
+        borderRadius: 24,
+        background: 'rgba(30,24,48,0.49)',
+        boxShadow: '0 8px 36px 0 rgba(24,28,37,0.13)',
+        backdropFilter: 'blur(18px) saturate(1.12)',
+        WebkitBackdropFilter: 'blur(18px) saturate(1.12)',
+        border: '1.5px solid rgba(80,100,120,0.10)',
+        textAlign: 'center',
       }}>
-        <div style={{ fontSize: 48, fontWeight: 700, marginBottom: 16 }}>{now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
-        <div style={{ fontSize: 24, marginBottom: 32 }}>{now.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</div>
-        <form onSubmit={e => { e.preventDefault(); if (!password || password === 'unlock') { onUnlock(); setPassword(''); setError(''); } else { setError('Incorrect password'); } }} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
-          <input type="password" placeholder="Enter password (default: unlock)" value={password} onChange={e => setPassword(e.target.value)} style={{ fontSize: 18, padding: '8px 18px', borderRadius: 8, border: 'none', outline: 'none', background: '#232a39cc', color: '#fff', marginBottom: 6 }} />
-          <button type="submit" style={{ fontSize: 18, padding: '7px 28px', borderRadius: 8, background: '#308aff', color: '#fff', border: 'none', fontWeight: 600, cursor: 'pointer' }}>Unlock</button>
-          {error && <div style={{ color: '#ff5252', fontWeight: 500 }}>{error}</div>}
+        <div style={{ fontSize: 44, fontWeight: 700, marginBottom: 10, color: '#fff' }}>{now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+        <div style={{ fontSize: 20, marginBottom: 24, color: '#eaeaff', fontWeight: 600 }}>{now.toLocaleDateString([], { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</div>
+        <form onSubmit={e => { e.preventDefault(); if (!password || password === 'unlock') { onUnlock(); setPassword(''); setError(''); } else { setError('Incorrect password'); } }} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, width: '100%' }}>
+          <input type="password" placeholder="Enter password (default: un)" value={password} onChange={e => setPassword(e.target.value)} style={{ fontSize: 16, padding: '8px 18px', borderRadius: 8, border: 'none', outline: 'none', background: '#232a39cc', color: '#fff', marginBottom: 6, width: '88%', maxWidth: 260, textAlign: 'center', boxShadow: '0 2px 10px 0 #0002' }} />
+          <button type="submit" style={{ fontSize: 16, padding: '7px 28px', borderRadius: 8, background: '#308aff', color: '#fff', border: 'none', fontWeight: 700, cursor: 'pointer', boxShadow: '0 2px 10px 0 #308aff33', transition: 'background 0.18s' }}>Unlock</button>
+          {error && <div style={{ color: '#ff5252', fontWeight: 600 }}>{error}</div>}
         </form>
-        {/* TODO: Add notifications/media info here if enabled */}
       </div>
     </div>
   );

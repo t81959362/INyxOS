@@ -89,70 +89,72 @@ export const Window: React.FC<{
           position: "absolute",
           borderRadius: 16,
           backdropFilter: 'blur(10px)',
-          background: 'rgba(30,34,43,0.82)',
-          boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.18)',
+          background: (win.id === 'settings' || win.title === 'Settings') ? 'transparent' : 'rgba(30,34,43,0.82)',
+          boxShadow: (win.id === 'settings' || win.title === 'Settings') ? 'none' : '0 8px 32px 0 rgba(31, 38, 135, 0.18)',
           overflow: 'hidden',
-          border: focused ? '2px solid var(--accent, #308aff)' : '2px solid rgba(48,138,255,0.13)',
+          border: (win.id === 'settings' || win.title === 'Settings') ? 'none' : (focused ? '2px solid var(--accent, #308aff)' : '2px solid rgba(48,138,255,0.13)'),
           transition: 'all 0.2s cubic-bezier(.61,1.4,.38,1)',
         }}
         tabIndex={0}
         onMouseDown={onFocus}
       >
-      <div className="window-titlebar" onMouseDown={onDragStart}>
-        <span className="window-title">{win.title}</span>
-        <div style={{ marginLeft: 'auto', display: 'flex', gap: 2 }}>
-          <button
-            className="window-minimize"
-            onClick={handleMinimize}
-            title="Minimize"
-            style={{
-              background: 'none',
-              color: '#fff',
-              border: 'none',
-              borderRadius: '3px',
-              width: 28,
-              height: 24,
-              fontSize: 20,
-              cursor: 'pointer',
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              lineHeight: 1,
-              transition: 'background 0.15s',
-              position: 'relative',
-              top: 2
-            }}
-          >
-            _
-          </button>
-          {/* Maximize button only for Browser */}
-          <button
-            className="window-maximize"
-            onClick={onMaximize}
-            title="Maximize"
-            style={{
-              background: 'none',
-              color: '#fff',
-              border: 'none',
-              borderRadius: '3px',
-              width: 28,
-              height: 24,
-              fontSize: 18,
-              cursor: 'pointer',
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              lineHeight: 1,
-              transition: 'background 0.15s',
-              position: 'relative',
-              top: 2
-            }}
-          >
-            □
-          </button>
-          <button className="window-close" onClick={handleClose} title="Close">×</button>
+      {(win.id !== 'settings' && win.title !== 'Settings') && (
+        <div className="window-titlebar" onMouseDown={onDragStart}>
+          <span className="window-title">{win.title}</span>
+          <div style={{ marginLeft: 'auto', display: 'flex', gap: 2 }}>
+            <button
+              className="window-minimize"
+              onClick={handleMinimize}
+              title="Minimize"
+              style={{
+                background: 'none',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '3px',
+                width: 28,
+                height: 24,
+                fontSize: 20,
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                lineHeight: 1,
+                transition: 'background 0.15s',
+                position: 'relative',
+                top: 2
+              }}
+            >
+              _
+            </button>
+            {/* Maximize button only for Browser */}
+            <button
+              className="window-maximize"
+              onClick={onMaximize}
+              title="Maximize"
+              style={{
+                background: 'none',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '3px',
+                width: 28,
+                height: 24,
+                fontSize: 18,
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                lineHeight: 1,
+                transition: 'background 0.15s',
+                position: 'relative',
+                top: 2
+              }}
+            >
+              □
+            </button>
+            <button className="window-close" onClick={handleClose} title="Close">×</button>
+          </div>
         </div>
-      </div>
+      )}
       <div className="window-content">{typeof win.content === 'function' ? win.content() : win.content}</div>
       {/* Resize handles */}
       <div className="resize-handle resize-nw" onMouseDown={e => onResizeStart(e, 'nw')} />

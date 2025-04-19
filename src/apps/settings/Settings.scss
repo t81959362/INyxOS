@@ -1,21 +1,87 @@
 .settings-root {
-  padding: 18px 24px;
+  padding: 28px 38px;
   color: var(--foreground);
+  background: linear-gradient(120deg, rgba(180,100,255,0.16) 0%, rgba(255,120,220,0.13) 100%), rgba(30,18,48,0.48);
+  border-radius: 22px;
+  box-shadow: 0 8px 36px 0 rgba(48,138,255,0.11);
+  backdrop-filter: blur(18px) saturate(1.18);
+  max-width: 540px;
+  margin: 36px auto;
+  border: 1.5px solid rgba(200,140,255,0.11);
 }
+
 .settings-section {
-  margin-bottom: 22px;
+  background: linear-gradient(120deg, rgba(200,120,255,0.13), rgba(255,120,200,0.08));
+  border-radius: 14px;
+  box-shadow: 0 2px 14px 0 rgba(48,138,255,0.08);
+  border: 1px solid rgba(180,140,255,0.10);
+  margin-bottom: 14px;
+  padding: 13px 16px 8px 16px;
   display: flex;
-  align-items: center;
-  gap: 18px;
+  align-items: flex-start;
+  gap: 14px;
+  min-height: 48px;
 }
+
 .settings-status {
   color: var(--accent);
   margin-left: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
 }
-select {
-  background: #232a39;
+
+select, input[type="color"] {
+  background: #232a39cc;
   color: #fff;
-  border: 1px solid var(--primary);
-  border-radius: 6px;
+  border: 1.5px solid var(--primary);
+  border-radius: 7px;
   padding: 4px 10px;
+  font-size: 15px;
+  margin-right: 8px;
+}
+
+input[type="checkbox"] {
+  accent-color: var(--accent);
+  width: 17px;
+  height: 17px;
+  margin-right: 7px;
+}
+
+button {
+  background: linear-gradient(120deg, rgba(140,90,255,0.21), rgba(48,138,255,0.17));
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 16px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 10px 0 rgba(48,138,255,0.07);
+  transition: background 0.18s;
+  margin-left: 5px;
+}
+button:hover {
+  background: linear-gradient(120deg, rgba(180,140,255,0.27), rgba(48,138,255,0.22));
+}
+
+label {
+  font-size: 15px;
+  color: #eaeaff;
+  font-weight: 500;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.settings-section > label {
+  min-width: 110px;
+  justify-content: flex-end;
+}
+
+.settings-section > div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
 }

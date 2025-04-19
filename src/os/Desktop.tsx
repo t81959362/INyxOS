@@ -63,7 +63,19 @@ const DesktopContent: React.FC = () => {
       ]);
     };
     window.addEventListener('os-open-pwa', handler as any);
-    return () => window.removeEventListener('os-open-pwa', handler as any);
+
+    // Listen for Settings app close event
+    const closeSettingsHandler = (e: any) => {
+      if (e.detail === 'settings') {
+        setWindows(ws => ws.filter(w => w.id !== 'settings' && w.title !== 'Settings'));
+      }
+    };
+    window.addEventListener('os-close-app', closeSettingsHandler);
+
+    return () => {
+      window.removeEventListener('os-open-pwa', handler as any);
+      window.removeEventListener('os-close-app', closeSettingsHandler);
+    };
   }, []);
   const [windows, setWindows] = useState<any[]>(() => {
   const saved = localStorage.getItem('os_windows');

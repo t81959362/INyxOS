@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FileSystem } from '../../os/fs';
-import Nyxlogo from '../../assets/Nyxlogo.png';
+import StartMenu from '../../assets/Start Menu.png';
 import './Settings.scss';
 
 const fs = new FileSystem();
@@ -97,9 +97,36 @@ export const Settings: React.FC = () => {
   };
 
   return (
-    <div className="settings-root">
-      <img src={Nyxlogo} alt="Nyx OS" style={{ width: 80, margin: '1rem auto', display: 'block' }} />
-      <h2>Settings</h2>
+    <div className="settings-root" style={{ position: 'relative' }}>
+      <button
+        aria-label="Close Settings"
+        style={{
+          position: 'absolute',
+          top: 12,
+          right: 16,
+          width: 32,
+          height: 32,
+          border: 'none',
+          background: 'none',
+          color: '#fff',
+          fontSize: 22,
+          fontWeight: 700,
+          cursor: 'pointer',
+          zIndex: 10,
+          transition: 'color 0.18s',
+        }}
+        onClick={() => {
+          window.dispatchEvent(new CustomEvent('os-close-app', { detail: 'settings' }));
+        }}
+        onMouseOver={e => (e.currentTarget.style.color = '#ff4477')}
+        onMouseOut={e => (e.currentTarget.style.color = '#fff')}
+      >
+        ×
+      </button>
+      <div style={{ width: '100%', display: 'flex', justifyContent: 'center', marginBottom: 10 }}>
+  <img src={StartMenu} alt="Start Menu" style={{ width: 74, height: 74, borderRadius: 18, objectFit: 'cover' }} />
+</div>
+<h2 style={{ textAlign: 'center', marginBottom: 18 }}>Settings</h2>
       <div className="settings-section">
         <label>Theme:</label>
         <select value={theme} onChange={e => save(e.target.value)}>
@@ -144,9 +171,8 @@ export const Settings: React.FC = () => {
       </div>
       <div className="settings-section">
         <label>About:</label>
-        <div style={{ textAlign: 'center', marginBottom: 16 }}>
-          <img src={Nyxlogo} alt="NyxOS Logo" style={{ width: 54, height: 54, borderRadius: 14, boxShadow: '0 2px 10px #232a39cc' }} />
-          <div style={{ fontWeight: 700, fontSize: 18, marginTop: 8 }}>NyxOS Preview</div>
+        <div style={{ width: '100%', textAlign: 'center', margin: '0 auto', fontWeight: 700, fontSize: 18 }}>
+          NyxOS Preview
         </div>
       </div>
     </div>
