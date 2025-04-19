@@ -67,7 +67,7 @@
 }
 .window-titlebar {
   height: 36px;
-  background: rgba(24,28,37,0.74); /* Glass effect */
+  background: transparent;
   color: #fff;
   display: flex;
   align-items: center;
@@ -76,11 +76,7 @@
   cursor: grab;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
-  box-shadow: 0 2px 12px 0 rgba(24,28,37,0.13);
-  backdrop-filter: blur(12px) saturate(1.12);
-  -webkit-backdrop-filter: blur(12px) saturate(1.12);
-  border-bottom: 1px solid rgba(80,100,120,0.10);
-  transition: background 0.2s, box-shadow 0.2s;
+  transition: background 0.2s;
 }
 .window-close {
   background: #e53935;
