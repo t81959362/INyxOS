@@ -14,6 +14,7 @@ import { SystemMonitorWidget } from './SystemMonitorWidget';
 import { CalendarWidget } from './CalendarWidget';
 import { NewsFeedWidget } from './NewsFeedWidget';
 import { CalculatorWidget } from './CalculatorWidget';
+import { StocksWidget } from './StocksWidget';
 
 export const widgetStubs: WidgetStub[] = [
   {
@@ -51,5 +52,11 @@ export const widgetStubs: WidgetStub[] = [
     title: 'Calculator',
     icon: '🧮',
     component: CalculatorWidget,
+  },
+  {
+    id: 'stocks',
+    title: 'Stocks',
+    icon: '📈',
+    component: StocksWidget,
   },
 ];

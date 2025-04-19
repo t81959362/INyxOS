@@ -14,9 +14,8 @@ const FEEDS = [
     label: 'General (Top News)',
     urls: [
       'https://feeds.bbci.co.uk/news/rss.xml',
-      'https://feeds.reuters.com/reuters/topNews',
       'http://rss.cnn.com/rss/edition.rss',
-      'https://www.theguardian.com/world/rss',
+      'https://www.independent.co.uk/news/uk/rss',
     ]
   },
   {
@@ -25,15 +24,16 @@ const FEEDS = [
     urls: ['https://feeds.bbci.co.uk/news/rss.xml']
   },
   {
+    key: 'independent',
+    label: 'The Independent (UK)',
+    urls: ['https://www.independent.co.uk/news/uk/rss']
+  },
+  {
     key: 'guardian',
     label: 'The Guardian (UK)',
     urls: ['https://www.theguardian.com/world/rss']
   },
-  {
-    key: 'reuters',
-    label: 'Reuters (World)',
-    urls: ['https://feeds.reuters.com/reuters/topNews']
-  },
+
   {
     key: 'cnn',
     label: 'CNN (US/World)',
