@@ -36,7 +36,7 @@ export const Plasmoid: React.FC<PlasmoidProps> = ({ id, children, x, y, zIndex =
         zIndex,
         minWidth: 180,
         minHeight: 80,
-        background: 'rgba(24,28,37,0.82)',
+        background: 'linear-gradient(120deg, rgba(200,120,255,0.28), rgba(255,120,200,0.22)), rgba(44,18,62,0.68)' ,
         borderRadius: 14,
         boxShadow: '0 4px 24px #232a3930',
         userSelect: 'none',

@@ -137,18 +137,18 @@ export const WeatherWidget: React.FC = () => {
 
   return (
     <div style={{ padding: 10, minWidth: 140, maxWidth: 200 }}>
-      <div style={{ fontSize: 28 }}>
+      <div style={{ fontSize: 28, color: '#ffe6ff', fontWeight: 700, textShadow: '0 2px 8px #a26aff77' }}>
         {weather ? weather.icon : '☀️'}
       </div>
-      <div style={{ fontWeight: 600, fontSize: 18 }}>
+      <div style={{ fontWeight: 600, fontSize: 18, color: '#fff', marginBottom: 4 }}>
         Weather
       </div>
-      <div style={{ fontSize: 14, color: '#88a' }}>
+      <div style={{ fontSize: 15, color: '#ffd6fa', marginBottom: 2, fontWeight: 500 }}>
         {loading && 'Loading...'}
         {error && error}
         {weather && !loading && !error && `${weather.temperature}°C, ${weather.description}`}
       </div>
-      <div style={{ fontSize: 12, color: '#888', marginTop: 8 }}>
+      <div style={{ fontSize: 13, color: '#bfa', marginTop: 6 }}>
         {weather && !loading && !error && `Location: ${weather.location}`}
         {!weather && !loading && !error && 'No data'}
       </div>
