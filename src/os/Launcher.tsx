@@ -3,6 +3,15 @@ import { appStubs } from './defaultWindows';
 import { widgetStubs } from './widgets/WidgetRegistry';
 import './Launcher.scss';
 
+export const launcherApps = [
+  {
+    id: 'wexond',
+    title: 'Wexond Browser',
+    icon: '🌐',
+    app: 'wexond',
+  }
+];
+
 export const Launcher: React.FC<{
   onLaunch: (app: any) => void;
   onClose: () => void;

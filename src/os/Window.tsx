@@ -178,7 +178,13 @@ export const Window: React.FC<{
           </div>
         </div>
       )}
-      <div className="window-content">{typeof win.content === 'function' ? win.content() : win.content}</div>
+      <div className="window-content">{
+  typeof win.content === 'function'
+    ? win.content()
+    : (React.isValidElement(win.content)
+        ? win.content
+        : <div style={{color: 'red', padding: 24}}>App failed to render: invalid content.</div>)
+}</div>
       {/* Resize handles */}
       <div className="resize-handle resize-nw" onMouseDown={e => onResizeStart(e, 'nw')} />
       <div className="resize-handle resize-ne" onMouseDown={e => onResizeStart(e, 'ne')} />

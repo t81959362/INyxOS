@@ -133,6 +133,7 @@ class WindowErrorBoundary extends React.Component<{children: React.ReactNode}, {
     height: number;
     top: number;
     left: number;
+    zIndex?: number;
   };
 
   type WidgetInstance = { id: string; widgetId: string; x?: number; y?: number; zIndex?: number };
@@ -158,6 +159,17 @@ class WindowErrorBoundary extends React.Component<{children: React.ReactNode}, {
   }, [notifications, remove]);
 
   // Persist windows state to localStorage whenever it changes
+
+  // --- Dynamic External URL Launcher (Electron only) ---
+  const [showUrlPrompt, setShowUrlPrompt] = useState(false);
+  const [externalUrl, setExternalUrl] = useState('');
+  const handleExternalUrlOpen = () => {
+    if (window.electronAPI && externalUrl) {
+      window.electronAPI.openExternalWindow(externalUrl);
+      setShowUrlPrompt(false);
+      setExternalUrl('');
+    }
+  }
   useEffect(() => {
     localStorage.setItem('os_windows', JSON.stringify(
       windows.map(({ content, ...rest }) => rest)
@@ -184,7 +196,7 @@ class WindowErrorBoundary extends React.Component<{children: React.ReactNode}, {
                 id: Math.random().toString(36).slice(2),
                 title: app.title,
                 icon: app.icon,
-                content: typeof app.content === 'function' ? app.content() : app.content,
+                content: typeof app.content === 'function' ? app.content : () => app.content,
                 width: app.width,
                 height: app.height,
                 top: app.top,
@@ -192,7 +204,12 @@ class WindowErrorBoundary extends React.Component<{children: React.ReactNode}, {
                 zIndex: 10
               }])}
             >
-              <span className="desktop-icon-img">{shortcut.icon || app.icon}</span>
+              <span className="desktop-icon-img">{shortcut.icon ? shortcut.icon : (
+  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="6" y="6" width="20" height="20" rx="6" fill="#8f5fff"/>
+    <path d="M12 18h8M12 14h8" stroke="#fff" strokeWidth="2" strokeLinecap="round"/>
+  </svg>
+)}</span>
               <span className="desktop-icon-label">{shortcut.name || app.title}</span>
             </button>
           );
@@ -239,7 +256,7 @@ class WindowErrorBoundary extends React.Component<{children: React.ReactNode}, {
               id: Math.random().toString(36).slice(2),
               title: app.title,
               icon: app.icon,
-              content: typeof app.content === 'function' ? app.content() : app.content,
+              content: typeof app.content === 'function' ? app.content : () => app.content,
               width: app.width,
               height: app.height,
               top: app.top,

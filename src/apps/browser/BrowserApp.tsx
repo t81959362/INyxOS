@@ -61,7 +61,7 @@ export const BrowserApp: React.FC = () => {
         if (parsed in PROXIES) return parsed as keyof typeof PROXIES;
       }
     } catch {}
-    return 'none'; // Default to No Proxy
+    return 'allOrigins'; // Default to use a CORS proxy
   });
 
   // Ensure proxy is always valid after mount
@@ -357,6 +357,9 @@ export const BrowserApp: React.FC = () => {
             tab.error && active === idx ? (
               <div className="browser-error" key={tab.id}>
                 <div>{tab.error}</div>
+                <div style={{marginTop: 10, color: '#fa0', fontSize: '0.98em'}}>
+                  If this site fails to load, try switching the proxy using the dropdown in the toolbar above. Some sites block certain proxies or require special headers.
+                </div>
                 <div style={{fontSize: '0.95em', marginTop: 8, color: '#555'}}>
                   <strong>URL:</strong> {tab.url}<br/>
                   <strong>Proxy:</strong> {proxy}<br/>
