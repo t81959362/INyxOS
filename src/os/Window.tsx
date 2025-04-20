@@ -151,7 +151,30 @@ export const Window: React.FC<{
             >
               □
             </button>
-            <button className="window-close" onClick={handleClose} title="Close">×</button>
+            <button
+  className="window-close"
+  onClick={handleClose}
+  title="Close"
+  style={{
+    background: 'none',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '3px',
+    width: 28,
+    height: 24,
+    fontSize: 22,
+    cursor: 'pointer',
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    lineHeight: 1,
+    transition: 'background 0.15s',
+    position: 'relative',
+    top: 2
+  }}
+>
+  ×
+</button>
           </div>
         </div>
       )}

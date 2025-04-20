@@ -128,7 +128,6 @@ export const StartMenu: React.FC<StartMenuProps & { onLaunchWidget?: (widget: an
                 <button
                   key={widget.id}
                   className="widget-item"
-                  style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 17, color: '#fff', background: 'none', border: 'none', cursor: 'pointer', padding: '4px 0', textAlign: 'left' }}
                   onClick={() => onLaunchWidget(widget)}
                 >
                   <span style={{ fontSize: 20 }}>{widget.icon}</span>

@@ -3,6 +3,7 @@ import StartMenuIcon from '../assets/Start Menu.png';
 import { SystemTray, TrayIcon } from './SystemTray';
 import CalendarTray from './CalendarTray';
 import BatteryTray from './BatteryTray';
+import OptionsCenter from './OptionsCenter';
 import './Taskbar.scss';
 
 // NotificationPopover import
@@ -73,6 +74,8 @@ export const Taskbar: React.FC<{
     setWindows(ws => ws.map((w, i) => i === idx ? { ...w, minimized: true, focused: false } : w));
   };
 
+  const [showOptions, setShowOptions] = React.useState(false);
+
   return (
     <div className="taskbar-root">
       <button
@@ -102,8 +105,25 @@ export const Taskbar: React.FC<{
           ))}
         </div>
       </div>
-      <div className="taskbar-right">
+      <div className="taskbar-right" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
         <SystemTray icons={trayIcons} />
+        <button
+          className="taskbar-options-btn"
+          title="Action Center"
+          aria-label="Open Action Center"
+          onClick={() => setShowOptions(v => !v)}
+          style={{ background: 'none', border: 'none', borderRadius: 8, padding: 4, cursor: 'pointer', fontSize: 24, color: '#bfaaff', transition: 'background 0.14s', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+        >
+          {/* Modern Control Center/Sliders Icon (SVG) */}
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display: 'block' }}>
+            <rect x="4" y="8" width="20" height="2.4" rx="1.2" fill="#bfaaff"/>
+            <rect x="7" y="13.8" width="14" height="2.4" rx="1.2" fill="#bfaaff"/>
+            <rect x="10" y="19.6" width="8" height="2.4" rx="1.2" fill="#bfaaff"/>
+          </svg>
+        </button>
+        {showOptions && (
+          <OptionsCenter onClose={() => setShowOptions(false)} />
+        )}
       </div>
     </div>
   );
