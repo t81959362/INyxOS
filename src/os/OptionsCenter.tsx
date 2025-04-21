@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./OptionsCenter.scss";
-import AiAssistant from './components/AiAssistant';
 
 // Helper for per-app audio (to be implemented with real app integration)
 const getAudioApps = () => {
@@ -53,9 +52,6 @@ const OptionsCenter: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     );
   };
 
-  // AI Assistant toggle
-  const [aiEnabled, setAiEnabled] = useState(false);
-
   return (
     <div className="options-center-glass" tabIndex={0}>
       <button className="options-center-close" onClick={onClose}>
@@ -107,35 +103,7 @@ const OptionsCenter: React.FC<{ onClose: () => void }> = ({ onClose }) => {
             <div className="options-card-apps"><div>No audio or video apps running</div></div>
           </div>
         )}
-        {/* AI Assistant Enable */}
-        <div className="options-card ai-assistant-card">
-          <div className="options-card-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e6c4ff" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-              <rect x="4" y="4" width="16" height="16" rx="2" ry="2" />
-              <rect x="9" y="9" width="6" height="6" />
-              <line x1="9" y1="1" x2="9" y2="4" />
-              <line x1="15" y1="1" x2="15" y2="4" />
-              <line x1="9" y1="23" x2="9" y2="20" />
-              <line x1="15" y1="23" x2="15" y2="20" />
-              <line x1="1" y1="9" x2="4" y2="9" />
-              <line x1="23" y1="9" x2="20" y2="9" />
-              <line x1="1" y1="15" x2="4" y2="15" />
-              <line x1="23" y1="15" x2="20" y2="15" />
-            </svg>
-          </div>
-          <div className="options-card-title">AI Assistant</div>
-          <div className="options-card-status">{aiEnabled ? "On" : "Off"}</div>
-          <label className="switch">
-            <input
-              type="checkbox"
-              checked={aiEnabled}
-              onChange={() => setAiEnabled(v => !v)}
-            />
-            <span className="slider" />
-          </label>
-        </div>
       </div>
-      {aiEnabled && <AiAssistant onClose={() => setAiEnabled(false)} />}
     </div>
   );
 };

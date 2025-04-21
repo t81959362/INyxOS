@@ -32,18 +32,6 @@ export const appStubs = [
     zIndex: 10
   },
   {
-    id: 'nyxnet',
-    title: 'NyxNet',
-    icon: '🌐',
-    content: () => <BrowserApp />, 
-    width: 900,
-    height: 600,
-    top: 80,
-    left: 80,
-    zIndex: 10
-  },
-
-  {
     id: 'terminal',
     title: 'Terminal',
     icon: '🖥️',
