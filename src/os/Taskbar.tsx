@@ -76,6 +76,19 @@ export const Taskbar: React.FC<{
 
   const [showOptions, setShowOptions] = React.useState(false);
 
+  // Shorten URL titles to domain names
+  const shortenTitle = (t: string) => {
+    if (t.startsWith('http://') || t.startsWith('https://')) {
+      try {
+        const h = new URL(t).hostname.replace(/^www\./, '');
+        return h.charAt(0).toUpperCase() + h.slice(1);
+      } catch {
+        return t;
+      }
+    }
+    return t;
+  };
+
   return (
     <div className="taskbar-root">
       <button
@@ -96,11 +109,15 @@ export const Taskbar: React.FC<{
                 (win.focused && !win.minimized ? ' taskbar-app-icon--active' : '') +
                 (win.minimized ? ' taskbar-app-icon--minimized' : '')
               }
-              title={win.title}
+              title={shortenTitle(win.title)}
               onClick={() => handleTaskbarClick(idx)}
             >
-              <span className="taskbar-app-emoji">{win.icon}</span>
-              <span className="taskbar-app-title">{win.title}</span>
+              {typeof win.icon === 'string' && (win.icon.startsWith('http') || win.icon.startsWith('/')) ? (
+                <img src={win.icon} alt={win.title} className="taskbar-app-img" />
+              ) : (
+                <span className="taskbar-app-emoji">{win.icon}</span>
+              )}
+              <span className="taskbar-app-title">{shortenTitle(win.title)}</span>
             </div>
           ))}
         </div>

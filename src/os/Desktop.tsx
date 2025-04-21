@@ -55,8 +55,8 @@ const DesktopContent: React.FC = () => {
               title={app.name}
             />
           ),
-          width: 900,
-          height: 600,
+          width: 700,
+          height: 520,
           top: 80 + Math.random() * 60,
           left: 120 + Math.random() * 80,
           zIndex: 10,
