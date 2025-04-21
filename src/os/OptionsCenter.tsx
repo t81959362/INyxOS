@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./OptionsCenter.scss";
+import AiAssistant from './components/AiAssistant';
 
 // Helper for per-app audio (to be implemented with real app integration)
 const getAudioApps = () => {
@@ -17,8 +18,6 @@ const getAudioApps = () => {
 };
 
 const OptionsCenter: React.FC<{ onClose: () => void }> = ({ onClose }) => {
-  // Tablet Mode
-  const [tabletMode, setTabletMode] = useState(false);
   // Night Light
   const [nightLight, setNightLight] = useState(false);
 
@@ -28,7 +27,6 @@ const OptionsCenter: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   useEffect(() => {
     setAudioApps(getAudioApps());
   }, []);
-
 
   // Night Light: apply/remove warm, dim orange filter (comfortable, not pink)
   useEffect(() => {
@@ -41,14 +39,6 @@ const OptionsCenter: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       document.body.style.filter = '';
     };
   }, [nightLight]);
-
-
-
-  // Tablet mode toggle (should integrate with your state)
-  const handleTabletToggle = () => {
-    setTabletMode((v) => !v);
-    // TODO: Integrate with your OS's tablet mode state
-  };
 
   // Per-app volume change
   const handleAppVolume = (id: string, volume: number) => {
@@ -63,7 +53,8 @@ const OptionsCenter: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     );
   };
 
-
+  // AI Assistant toggle
+  const [aiEnabled, setAiEnabled] = useState(false);
 
   return (
     <div className="options-center-glass" tabIndex={0}>
@@ -73,7 +64,6 @@ const OptionsCenter: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       {/* Custom Action Tiles */}
       <CustomActionTiles
         nightLight={nightLight} setNightLight={setNightLight}
-        tabletMode={tabletMode} setTabletMode={setTabletMode}
       />
       <div className="options-center-grid">
         {/* Night Light */}
@@ -117,42 +107,35 @@ const OptionsCenter: React.FC<{ onClose: () => void }> = ({ onClose }) => {
             <div className="options-card-apps"><div>No audio or video apps running</div></div>
           </div>
         )}
-        {/* Tablet Mode */}
-        <div className="options-card tablet">
-          <div className="options-card-icon tablet" />
-          <div className="options-card-title">Tablet mode</div>
-          <div className="options-card-status">{tabletMode ? "On" : "Off"}</div>
+        {/* AI Assistant Enable */}
+        <div className="options-card ai-assistant-card">
+          <div className="options-card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e6c4ff" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+              <rect x="4" y="4" width="16" height="16" rx="2" ry="2" />
+              <rect x="9" y="9" width="6" height="6" />
+              <line x1="9" y1="1" x2="9" y2="4" />
+              <line x1="15" y1="1" x2="15" y2="4" />
+              <line x1="9" y1="23" x2="9" y2="20" />
+              <line x1="15" y1="23" x2="15" y2="20" />
+              <line x1="1" y1="9" x2="4" y2="9" />
+              <line x1="23" y1="9" x2="20" y2="9" />
+              <line x1="1" y1="15" x2="4" y2="15" />
+              <line x1="23" y1="15" x2="20" y2="15" />
+            </svg>
+          </div>
+          <div className="options-card-title">AI Assistant</div>
+          <div className="options-card-status">{aiEnabled ? "On" : "Off"}</div>
           <label className="switch">
             <input
               type="checkbox"
-              checked={tabletMode}
-              onChange={handleTabletToggle}
+              checked={aiEnabled}
+              onChange={() => setAiEnabled(v => !v)}
             />
             <span className="slider" />
           </label>
         </div>
-        {/* Per-App Volume (only if audio apps) */}
-        {audioApps.length > 0 && (
-          <div className="options-card per-app-volume">
-            <div className="options-card-title">Per-app Volume</div>
-            <div className="options-card-apps">
-              {audioApps.map((app) => (
-                <div key={app.id} className="app-volume-row">
-                  <span>{app.name}</span>
-                  <input
-                    type="range"
-                    min={0}
-                    max={1}
-                    step={0.01}
-                    value={app.volume}
-                    onChange={(e) => handleAppVolume(app.id, Number(e.target.value))}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
+      {aiEnabled && <AiAssistant onClose={() => setAiEnabled(false)} />}
     </div>
   );
 };
@@ -307,8 +290,7 @@ const defaultTiles: ActionTile[] = [];
 
 const CustomActionTiles: React.FC<{
   nightLight: boolean, setNightLight: (v: boolean) => void,
-  tabletMode: boolean, setTabletMode: (v: boolean) => void
-}> = ({ nightLight, setNightLight, tabletMode, setTabletMode }) => {
+}> = ({ nightLight, setNightLight }) => {
   const [tiles, setTiles] = useState<ActionTile[]>(() => {
     try {
       return JSON.parse(localStorage.getItem(ACTION_TILES_KEY) || '[]');
@@ -332,7 +314,6 @@ const CustomActionTiles: React.FC<{
       if (window.confirm('Run this script?')) eval(tile.script);
     } else if (tile.type === 'toggle' && tile.toggleTarget) {
       if (tile.toggleTarget === 'nightLight') setNightLight(!nightLight);
-      if (tile.toggleTarget === 'tabletMode') setTabletMode(!tabletMode);
     }
   };
   const handleRemove = (id: string) => setTiles(ts => ts.filter(t => t.id !== id));
@@ -443,7 +424,6 @@ const CustomActionTiles: React.FC<{
               >
                 <option value="">Select Setting</option>
                 <option value="nightLight">Night Light</option>
-                <option value="tabletMode">Tablet Mode</option>
               </select>
             </>
           )}
