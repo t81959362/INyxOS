@@ -85,7 +85,11 @@
   margin-right: 24px;
   color: var(--foreground);
   .taskbar-hidden-toggle {
-    background: none;
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    backdrop-filter: none !important;
     border: none;
     color: #fff;
     cursor: pointer;
@@ -96,10 +100,8 @@
     align-items: center;
     justify-content: center;
     transition: color 0.15s;
-    backdrop-filter: var(--blur);
-    border-radius: 8px;
-    padding: 4px;
     svg {
+      stroke: currentColor;
       transition: transform 0.2s ease, stroke 0.15s;
       vector-effect: non-scaling-stroke;
       stroke-linecap: round;
