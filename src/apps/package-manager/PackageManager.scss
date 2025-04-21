@@ -113,6 +113,12 @@
 .pm-app-actions {
   display: flex;
   gap: 8px;
+  /* ensure consistent size and wrapping for action buttons */
+  flex-wrap: wrap;
+  .pm-btn {
+    min-width: 60px;
+    text-align: center;
+  }
 }
 
 .pm-btn {
