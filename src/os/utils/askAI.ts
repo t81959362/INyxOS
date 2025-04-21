@@ -243,6 +243,64 @@ export async function askAI(q: string): Promise<string> {
     } catch {}
   }
 
+  // Word definitions & synonyms
+  const defineMatch2 = q.match(/define\s+(\w+)/i);
+  if (defineMatch2) {
+    const word = defineMatch2[1];
+    try {
+      const defRes: any = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
+        .then(r => r.json());
+      const first = Array.isArray(defRes) ? defRes[0] : defRes;
+      const defs = first.meanings.flatMap((m: any) => m.definitions.map((d: any) => d.definition));
+      const syns = first.meanings.flatMap((m: any) => m.definitions.flatMap((d: any) => d.synonyms || []));
+      return `Definition of ${word}: ${defs[0]}.` + (syns.length ? ` Synonyms: ${syns.slice(0,5).join(', ')}.` : '');
+    } catch {}
+  }
+  // Bitcoin price
+  if (/bitcoin price|btc price/i.test(q)) {
+    try {
+      const priceRes: any = await fetch('https://api.coindesk.com/v1/bpi/currentprice.json').then(r => r.json());
+      const rate = priceRes.bpi.USD.rate;
+      return `Bitcoin is currently trading at $${rate} USD.`;
+    } catch {}
+  }
+  // Country info (capital, population, flag)
+  const countryMatch2 = q.match(/(capital|population|flag) of (.+)/i);
+  if (countryMatch2) {
+    const field = countryMatch2[1].toLowerCase();
+    const countryName = countryMatch2[2];
+    try {
+      const cRes: any = await fetch(`https://restcountries.com/v3.1/name/${encodeURIComponent(countryName)}?fullText=true`).then(r => r.json());
+      const c = cRes[0];
+      if (field === 'capital') return `${c.name.common}'s capital is ${c.capital?.[0]}.`;
+      if (field === 'population') return `${c.name.common} has a population of ${c.population.toLocaleString()}.`;
+      if (field === 'flag') return `Flag of ${c.name.common}: ${c.flags.png}`;
+    } catch {}
+  }
+  // Geocoding: where is place
+  const geoMatch2 = q.match(/where is (.+)/i);
+  if (geoMatch2) {
+    try {
+      const place = geoMatch2[1];
+      const geoRes: any = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(place)}&format=json`).then(r => r.json());
+      if (geoRes.length) {
+        const p = geoRes[0];
+        return `${p.display_name} (lat: ${p.lat}, lon: ${p.lon})`;
+      }
+    } catch {}
+  }
+  // Pokémon lookup
+  const pokeMatch2 = q.match(/tell me about (.+)/i);
+  if (pokeMatch2) {
+    const name = pokeMatch2[1].toLowerCase();
+    try {
+      const poke: any = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`).then(r => r.json());
+      const types = poke.types.map((t: any) => t.type.name).join(', ');
+      const abilities = poke.abilities.map((a: any) => a.ability.name).join(', ');
+      return `${poke.name.charAt(0).toUpperCase()+poke.name.slice(1)} (#${poke.id}) is a ${types} type Pokémon. Abilities: ${abilities}.`;
+    } catch {}
+  }
+
   // 5. Wikipedia concise summary via REST API
   try {
     const page: any = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(q)}`)
