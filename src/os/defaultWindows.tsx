@@ -61,10 +61,10 @@ export const appStubs = [
     icon: '⚙️',
     // Use the real Settings app
     content: () => <Settings />,
-    width: 350,
-    height: 220,
-    top: 220,
-    left: 400,
+    width: 700,
+    height: 620,
+    top: 150,
+    left: 260,
     zIndex: 10
   },
   {

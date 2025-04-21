@@ -82,6 +82,12 @@ export class FileSystem {
   async move(src: string, dest: string): Promise<void> {
     await this.rename(src, dest);
   }
+
+  /** Read the content of a file node */
+  async readFile(path: string): Promise<string | undefined> {
+    const node = this.nodes.find(n => n.path === path);
+    return node?.content;
+  }
 }
 
 export const fs = new FileSystem();
