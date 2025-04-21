@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import './Window.scss';
 import { useDragResize } from './hooks/useDragResize';
 import GPUCanvas from './GPUCanvas';
@@ -65,6 +65,17 @@ export const Window: React.FC<{
     }
     return <div style={style} />;
   };
+
+  // Memoize the content to avoid remount on every reposition/resize
+  const contentElement = useMemo(() => {
+    if (typeof win.content === 'function') {
+      return win.content();
+    }
+    if (React.isValidElement(win.content)) {
+      return win.content;
+    }
+    return <div style={{ color: 'red', padding: 24 }}>App failed to render: invalid content.</div>;
+  }, [win.content]);
 
   // Animation state
   const [animState, setAnimState] = useState<'open'|'idle'|'close'|'minimize'|'snap'>("open");
@@ -184,13 +195,7 @@ export const Window: React.FC<{
             </div>
           </div>
         )}
-        <div className="window-content">{
-          typeof win.content === 'function'
-            ? win.content()
-            : (React.isValidElement(win.content)
-                ? win.content
-                : <div style={{color: 'red', padding: 24}}>App failed to render: invalid content.</div>)
-        }</div>
+        <div className="window-content">{contentElement}</div>
         {/* Resize handles */}
         <div className="resize-handle resize-nw" onMouseDown={e => onResizeStart(e, 'nw')} />
         <div className="resize-handle resize-ne" onMouseDown={e => onResizeStart(e, 'ne')} />

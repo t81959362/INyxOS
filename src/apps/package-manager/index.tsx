@@ -1,2 +1,2 @@
-import { PackageManager } from './PackageManager';
+import PackageManager from './PackageManager';
 export default PackageManager;

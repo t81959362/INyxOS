@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import { PWAInstallButton } from './PWAInstallButton';
 import './PackageManager.scss';
 
@@ -17,7 +17,7 @@ interface AppRegistryEntry {
 
 const registryUrl = '/registry.json';
 
-export const PackageManager: React.FC = () => {
+const PackageManagerComponent: React.FC = () => {
   const [apps, setApps] = useState<AppRegistryEntry[]>([]);
   const [installed, setInstalled] = useState<{ [id: string]: AppRegistryEntry }>(() => {
     const saved = localStorage.getItem('os_installed_apps');
@@ -171,3 +171,6 @@ export const PackageManager: React.FC = () => {
     </div>
   );
 };
+
+// Prevent remounts on parent updates
+export default memo(PackageManagerComponent);
