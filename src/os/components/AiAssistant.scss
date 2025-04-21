@@ -1,6 +1,6 @@
 .ai-assistant-overlay {
   position: absolute;
-  bottom: calc(100% + 10px);
+  bottom: calc(100% + 24px);
   right: 0;
   width: 360px;
   max-height: 60vh;
@@ -14,8 +14,8 @@
 }
 .ai-assistant-header {
   padding: 8px 12px;
-  font-weight: bold;
-  color: #c9e5ff;
+  font-weight: normal;
+  color: #ffffff;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -23,7 +23,7 @@
 .ai-close-btn {
   background: none;
   border: none;
-  color: #c9e5ff;
+  color: #ffffff;
   font-size: 1.2rem;
   cursor: pointer;
 }
@@ -40,7 +40,7 @@
 .ai-assistant-input {
   display: flex;
   padding: 8px;
-  border-top: 1px solid rgba(200,200,200,0.1);
+  border-top: 1px solid rgba(218, 208, 208, 0.1);
 }
 .ai-assistant-input textarea {
   flex: 1;
@@ -63,7 +63,7 @@
   padding: 6px 12px;
   border: none;
   border-radius: 6px;
-  background: #3483f0;
+  background: #9e46a1;
   color: #fff;
   cursor: pointer;
   transition: background 0.2s;
@@ -74,7 +74,7 @@
 .ai-spinner {
   width: 16px;
   height: 16px;
-  border: 2px solid rgba(255,255,255,0.6);
+  border: 2px solid rgb(255, 255, 255);
   border-top-color: transparent;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;

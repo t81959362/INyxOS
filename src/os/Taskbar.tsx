@@ -9,6 +9,7 @@ import './Taskbar.scss';
 // NotificationPopover import
 import { NotificationPopover } from './NotificationPopover';
 import { useNotifications } from './NotificationProvider';
+import AiAssistant from './components/AiAssistant';
 
 export const Taskbar: React.FC<{
   onLauncher: () => void;
@@ -18,6 +19,7 @@ export const Taskbar: React.FC<{
   const { notifications, remove } = useNotifications();
   const [showPopover, setShowPopover] = React.useState(false);
   const [showHiddenIcons, setShowHiddenIcons] = React.useState(false);
+  const [showAI, setShowAI] = React.useState(false);
 
   const trayIcons: TrayIcon[] = [
     {
@@ -41,7 +43,23 @@ export const Taskbar: React.FC<{
     },
     {
       id: 'network',
-      icon: <span title="Network">🌐</span>,
+      icon: (
+        <span title="Nexa" onClick={() => setShowAI(v => !v)} style={{ cursor: 'pointer' }}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="18" viewBox="0 0 24 24" fill="none" stroke="#e6c4ff" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <rect x="4" y="4" width="16" height="16" rx="2" ry="2" />
+            <rect x="9" y="9" width="6" height="6" />
+            <line x1="9" y1="1" x2="9" y2="4" />
+            <line x1="15" y1="1" x2="15" y2="4" />
+            <line x1="9" y1="23" x2="9" y2="20" />
+            <line x1="15" y1="23" x2="15" y2="20" />
+            <line x1="1" y1="9" x2="4" y2="9" />
+            <line x1="23" y1="9" x2="20" y2="9" />
+            <line x1="1" y1="15" x2="4" y2="15" />
+            <line x1="23" y1="15" x2="20" y2="15" />
+          </svg>
+        </span>
+      ),
+      popover: showAI ? <AiAssistant onClose={() => setShowAI(false)} /> : null,
     },
     {
       id: 'battery',

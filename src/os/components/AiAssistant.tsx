@@ -1,34 +1,27 @@
 import React, { useState, useEffect, useRef } from 'react';
-import * as ort from 'onnxruntime-web';
+import { askAI } from '../utils/askAI';
 import './AiAssistant.scss';
-
-// Path to your ONNX model (place mobilellm-125M.onnx in public/models/)
-const modelUrl = `${import.meta.env.BASE_URL}models/mobilellm-125m.onnx`;
 
 type Props = { onClose: () => void };
 
 const AiAssistant: React.FC<Props> = ({ onClose }) => {
-  const [session, setSession] = useState<ort.InferenceSession | null>(null);
   const [input, setInput] = useState('');
-  const [chat, setChat] = useState<string[]>([]);
+  const [chat, setChat] = useState<string[]>(["Nexa: Hello! I'm Nexa, your assistant. How can I help you today?"]);
   const [loading, setLoading] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  useEffect(() => {
-    (async () => {
-      const opts = { executionProviders: ['webgpu'], graphOptimizationLevel: 'all' };
-      const sess = await ort.InferenceSession.create(modelUrl, opts);
-      setSession(sess);
-    })();
-  }, []);
-
   const handleSend = async () => {
-    if (!session || !input.trim()) return;
+    if (!input.trim()) return;
     setLoading(true);
-    // TODO: preprocess input to tensor, session.run, postprocess output
-    // Placeholder: echo back
-    setChat(prev => [...prev, `You: ${input}`, `Assistant: ${input}`]);
+    setChat(prev => [...prev, `You: ${input}`]);
+    try {
+      const response = await askAI(input);
+      setChat(prev => [...prev, `Nexa: ${response}`]);
+    } catch {
+      setChat(prev => [...prev, `Nexa: Sorry, something went wrong.`]);
+    }
     setInput('');
+    if (textareaRef.current) textareaRef.current.style.height = 'auto';
     setLoading(false);
   };
 
@@ -41,7 +34,7 @@ const AiAssistant: React.FC<Props> = ({ onClose }) => {
   return (
     <div className="ai-assistant-overlay">
       <div className="ai-assistant-header">
-        <span>AI Assistant</span>
+        <span>Nexa</span>
         {loading && <div className="ai-spinner" />}
         <button className="ai-close-btn" onClick={onClose}>×</button>
       </div>
@@ -63,9 +56,9 @@ const AiAssistant: React.FC<Props> = ({ onClose }) => {
             }
           }}
           placeholder="Ask me anything..."
-          disabled={!session || loading}
+          disabled={loading}
         />
-        <button onClick={handleSend} disabled={!session || loading}>Send</button>
+        <button onClick={handleSend} disabled={loading}>Send</button>
       </div>
     </div>
   );
