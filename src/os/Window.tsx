@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './Window.scss';
 import { useDragResize } from './hooks/useDragResize';
+import GPUCanvas from './GPUCanvas';
 
 export const Window: React.FC<{
   win: any;
@@ -78,122 +79,128 @@ export const Window: React.FC<{
   return (
     <>
       {renderSnapPreview()}
-      <div
-        className={"window-root window-anim-" + animState + (focused ? " window-focused" : "")}
-        style={{
-          left: win.left,
-          top: win.top,
-          width: win.width,
-          height: win.height,
-          zIndex: win.zIndex || 1,
-          position: "absolute",
-          borderRadius: 16,
-          backdropFilter: 'blur(10px)',
-          background: (win.id === 'settings' || win.title === 'Settings') ? 'transparent' : 'rgba(30,34,43,0.82)',
-          boxShadow: (win.id === 'settings' || win.title === 'Settings') ? 'none' : '0 8px 32px 0 rgba(31, 38, 135, 0.18)',
-          overflow: 'hidden',
-          border: (win.id === 'settings' || win.title === 'Settings') ? 'none' : (focused ? '2px solid var(--accent, #308aff)' : '2px solid rgba(48,138,255,0.13)'),
-          transition: 'all 0.2s cubic-bezier(.61,1.4,.38,1)',
-        }}
-        tabIndex={0}
-        onMouseDown={onFocus}
-      >
-      {(win.id !== 'settings' && win.title !== 'Settings') && (
-        <div className="window-titlebar" onMouseDown={onDragStart}>
-          <span className="window-title">{win.title}</span>
-          <div style={{ marginLeft: 'auto', display: 'flex', gap: 2 }}>
-            <button
-              className="window-minimize"
-              onClick={handleMinimize}
-              title="Minimize"
-              style={{
-                background: 'none',
-                color: '#fff',
-                border: 'none',
-                borderRadius: '3px',
-                width: 28,
-                height: 24,
-                fontSize: 20,
-                cursor: 'pointer',
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                lineHeight: 1,
-                transition: 'background 0.15s',
-                position: 'relative',
-                top: 2
-              }}
-            >
-              _
-            </button>
-            {/* Maximize button only for Browser */}
-            <button
-              className="window-maximize"
-              onClick={onMaximize}
-              title="Maximize"
-              style={{
-                background: 'none',
-                color: '#fff',
-                border: 'none',
-                borderRadius: '3px',
-                width: 28,
-                height: 24,
-                fontSize: 18,
-                cursor: 'pointer',
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                lineHeight: 1,
-                transition: 'background 0.15s',
-                position: 'relative',
-                top: 2
-              }}
-            >
-              □
-            </button>
-            <button
-  className="window-close"
-  onClick={handleClose}
-  title="Close"
-  style={{
-    background: 'none',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '3px',
-    width: 28,
-    height: 24,
-    fontSize: 22,
-    cursor: 'pointer',
-    display: 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    lineHeight: 1,
-    transition: 'background 0.15s',
-    position: 'relative',
-    top: 2
-  }}
->
-  ×
-</button>
+      <div style={{ position: 'relative' }}>
+        {/* GPU-accelerated background */}
+        {(win.id !== 'settings' && win.title !== 'Settings') && (
+          <GPUCanvas width={win.width} height={win.height} style={{ position: 'absolute', top: 0, left: 0, zIndex: -1 }} />
+        )}
+        <div
+          className={"window-root window-anim-" + animState + (focused ? " window-focused" : "")}
+          style={{
+            left: win.left,
+            top: win.top,
+            width: win.width,
+            height: win.height,
+            zIndex: win.zIndex || 1,
+            position: "absolute",
+            borderRadius: 16,
+            backdropFilter: 'blur(10px)',
+            background: (win.id === 'settings' || win.title === 'Settings') ? 'transparent' : 'rgba(30,34,43,0.82)',
+            boxShadow: (win.id === 'settings' || win.title === 'Settings') ? 'none' : '0 8px 32px 0 rgba(31, 38, 135, 0.18)',
+            overflow: 'hidden',
+            border: (win.id === 'settings' || win.title === 'Settings') ? 'none' : (focused ? '2px solid var(--accent, #308aff)' : '2px solid rgba(48,138,255,0.13)'),
+            transition: 'all 0.2s cubic-bezier(.61,1.4,.38,1)',
+          }}
+          tabIndex={0}
+          onMouseDown={onFocus}
+        >
+        {(win.id !== 'settings' && win.title !== 'Settings') && (
+          <div className="window-titlebar" onMouseDown={onDragStart}>
+            <span className="window-title">{win.title}</span>
+            <div style={{ marginLeft: 'auto', display: 'flex', gap: 2 }}>
+              <button
+                className="window-minimize"
+                onClick={handleMinimize}
+                title="Minimize"
+                style={{
+                  background: 'none',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: '3px',
+                  width: 28,
+                  height: 24,
+                  fontSize: 20,
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  lineHeight: 1,
+                  transition: 'background 0.15s',
+                  position: 'relative',
+                  top: 2
+                }}
+              >
+                _
+              </button>
+              {/* Maximize button only for Browser */}
+              <button
+                className="window-maximize"
+                onClick={onMaximize}
+                title="Maximize"
+                style={{
+                  background: 'none',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: '3px',
+                  width: 28,
+                  height: 24,
+                  fontSize: 18,
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  lineHeight: 1,
+                  transition: 'background 0.15s',
+                  position: 'relative',
+                  top: 2
+                }}
+              >
+                □
+              </button>
+              <button
+                className="window-close"
+                onClick={handleClose}
+                title="Close"
+                style={{
+                  background: 'none',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: '3px',
+                  width: 28,
+                  height: 24,
+                  fontSize: 22,
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  lineHeight: 1,
+                  transition: 'background 0.15s',
+                  position: 'relative',
+                  top: 2
+                }}
+              >
+                ×
+              </button>
+            </div>
           </div>
-        </div>
-      )}
-      <div className="window-content">{
-  typeof win.content === 'function'
-    ? win.content()
-    : (React.isValidElement(win.content)
-        ? win.content
-        : <div style={{color: 'red', padding: 24}}>App failed to render: invalid content.</div>)
-}</div>
-      {/* Resize handles */}
-      <div className="resize-handle resize-nw" onMouseDown={e => onResizeStart(e, 'nw')} />
-      <div className="resize-handle resize-ne" onMouseDown={e => onResizeStart(e, 'ne')} />
-      <div className="resize-handle resize-sw" onMouseDown={e => onResizeStart(e, 'sw')} />
-      <div className="resize-handle resize-se" onMouseDown={e => onResizeStart(e, 'se')} />
-      <div className="resize-handle resize-n" onMouseDown={e => onResizeStart(e, 'n')} />
-      <div className="resize-handle resize-s" onMouseDown={e => onResizeStart(e, 's')} />
-      <div className="resize-handle resize-e" onMouseDown={e => onResizeStart(e, 'e')} />
-      <div className="resize-handle resize-w" onMouseDown={e => onResizeStart(e, 'w')} />
+        )}
+        <div className="window-content">{
+          typeof win.content === 'function'
+            ? win.content()
+            : (React.isValidElement(win.content)
+                ? win.content
+                : <div style={{color: 'red', padding: 24}}>App failed to render: invalid content.</div>)
+        }</div>
+        {/* Resize handles */}
+        <div className="resize-handle resize-nw" onMouseDown={e => onResizeStart(e, 'nw')} />
+        <div className="resize-handle resize-ne" onMouseDown={e => onResizeStart(e, 'ne')} />
+        <div className="resize-handle resize-sw" onMouseDown={e => onResizeStart(e, 'sw')} />
+        <div className="resize-handle resize-se" onMouseDown={e => onResizeStart(e, 'se')} />
+        <div className="resize-handle resize-n" onMouseDown={e => onResizeStart(e, 'n')} />
+        <div className="resize-handle resize-s" onMouseDown={e => onResizeStart(e, 's')} />
+        <div className="resize-handle resize-e" onMouseDown={e => onResizeStart(e, 'e')} />
+        <div className="resize-handle resize-w" onMouseDown={e => onResizeStart(e, 'w')} />
+      </div>
     </div>
     </>
   );

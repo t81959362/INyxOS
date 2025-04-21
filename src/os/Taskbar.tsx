@@ -17,6 +17,7 @@ export const Taskbar: React.FC<{
 }> = ({ onLauncher, windows, setWindows }) => {
   const { notifications, remove } = useNotifications();
   const [showPopover, setShowPopover] = React.useState(false);
+  const [showHiddenIcons, setShowHiddenIcons] = React.useState(false);
 
   const trayIcons: TrayIcon[] = [
     {
@@ -122,8 +123,17 @@ export const Taskbar: React.FC<{
           ))}
         </div>
       </div>
-      <div className="taskbar-right" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        <SystemTray icons={trayIcons} />
+      <div className="taskbar-right" style={{ display: 'flex', alignItems: 'center', gap: 8, position: 'relative' }}>
+        <button
+          className={`taskbar-hidden-toggle${showHiddenIcons ? ' open' : ''}`}
+          onClick={() => setShowHiddenIcons(h => !h)}
+          title={showHiddenIcons ? 'Hide hidden icons' : 'Show hidden icons'}
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M4 12l6-4-6-4" />
+          </svg>
+        </button>
+        <SystemTray icons={showHiddenIcons ? trayIcons : trayIcons.slice(0, 3)} />
         <button
           className="taskbar-options-btn"
           title="Action Center"

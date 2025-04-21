@@ -84,6 +84,35 @@
 .taskbar-right {
   margin-right: 24px;
   color: var(--foreground);
+  .taskbar-hidden-toggle {
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    font-size: 20px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s;
+    backdrop-filter: var(--blur);
+    border-radius: 8px;
+    padding: 4px;
+    svg {
+      transition: transform 0.2s ease, stroke 0.15s;
+      vector-effect: non-scaling-stroke;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    &:hover {
+      background: none;
+      color: var(--accent);
+    }
+    &.open svg {
+      transform: rotate(180deg);
+    }
+  }
 }
 .clock {
   font-family: monospace;
