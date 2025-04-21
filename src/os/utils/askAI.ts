@@ -490,6 +490,143 @@ export async function askAI(q: string): Promise<string> {
     finalQuery = inlineMatch[2];
   }
 
+  // External API handlers
+  // 1a. Random dog picture
+  if (/random dog|dog picture/i.test(q)) {
+    try {
+      const d: any = await fetch('https://dog.ceo/api/breeds/image/random').then(r => r.json());
+      return d.message;
+    } catch {}
+    return "Sorry, I couldn't fetch a dog picture.";
+  }
+  // 1b. Bitcoin price
+  if (/bitcoin price|btc price|btc ticker/i.test(q)) {
+    try {
+      const g: any = await fetch('https://api.gemini.com/v2/ticker/btcusd').then(r => r.json());
+      return `BTC last price: ${g.last} USD`;
+    } catch {}
+    return "Sorry, I couldn't fetch BTC price.";
+  }
+  // 1c. Recipe search
+  const recipeMatch = q.match(/recipe for (.+)/i);
+  if (recipeMatch) {
+    const term = recipeMatch[1].trim();
+    const key = import.meta.env.VITE_SPOONACULAR_KEY;
+    if (!key) return 'Spoonacular API key not configured.';
+    try {
+      const s: any = await fetch(
+        `https://api.spoonacular.com/recipes/complexSearch?query=${encodeURIComponent(term)}&apiKey=${key}`
+      ).then(r => r.json());
+      const title = s.results?.[0]?.title;
+      return title ? `Top recipe: ${title}` : 'No recipes found.';
+    } catch {}
+    return "Sorry, I couldn't fetch recipes.";
+  }
+  // 1d. Random cat fact
+  if (/cat fact/i.test(q)) {
+    try {
+      const c: any = await fetch('https://cat-fact.herokuapp.com/facts/random').then(r => r.json());
+      return c.text || c.fact || JSON.stringify(c);
+    } catch {}
+    return "Sorry, I couldn't fetch a cat fact.";
+  }
+  // 1e. senseBox data from openSenseMap
+  if (/sensebox|open sensebox|weather station/i.test(q)) {
+    try {
+      const os: any = await fetch(
+        'https://api.opensensemap.org/boxes/57000b8745fd40c8196ad04c?format=json'
+      ).then(r => r.json());
+      return `senseBox: ${os.name}, sensors: ${os.sensors.length}`;
+    } catch {}
+    return "Sorry, I couldn't fetch senseBox data.";
+  }
+  // 1f. NASA NEO browse
+  if (/near earth objects|nasa neo/i.test(q)) {
+    try {
+      const n: any = await fetch(
+        'https://api.nasa.gov/neo/rest/v1/neo/browse?api_key=DEMO_KEY'
+      ).then(r => r.json());
+      const first = n.near_earth_objects?.[0];
+      return first
+        ? `1st NEO: ${first.name}, hazardous: ${first.is_potentially_hazardous_asteroid}`
+        : 'No NEO data.';
+    } catch {}
+    return "Sorry, I couldn't fetch NEO data.";
+  }
+  // 1g. Wayback Machine availability
+  if (/wayback machine|archive available/i.test(q)) {
+    try {
+      const w: any = await fetch(
+        'https://archive.org/wayback/available?url=google.com'
+      ).then(r => r.json());
+      const cs = w.archived_snapshots?.closest;
+      return cs?.available
+        ? `Snapshot at ${cs.timestamp}`
+        : 'No snapshot available.';
+    } catch {}
+    return "Sorry, I couldn't check Wayback availability.";
+  }
+  // 1h. MusicBrainz artist lookup
+  if (/musicbrainz artist/i.test(q)) {
+    try {
+      const m: any = await fetch(
+        'http://musicbrainz.org/ws/2/artist/5b11f4ce-a62d-471e-81fc-a69a8278c7da?fmt=json'
+      ).then(r => r.json());
+      return `Artist: ${m.name}, info: ${m.disambiguation || 'n/a'}`;
+    } catch {}
+    return "Sorry, I couldn't fetch MusicBrainz data.";
+  }
+  // 1i. Openwhyd hot electro playlist
+  if (/openwhyd|hot electro/i.test(q)) {
+    try {
+      const p: any = await fetch(
+        'https://openwhyd.org/hot/electro?format=json'
+      ).then(r => r.json());
+      return p?.[0]?.title
+        ? `Top track: ${p[0].title}`
+        : 'No playlist data.';
+    } catch {}
+    return "Sorry, I couldn't fetch playlist data.";
+  }
+  // 1j. Archive.org metadata
+  if (/archive\.org|archive metadata/i.test(q)) {
+    try {
+      const a: any = await fetch(
+        'https://archive.org/metadata/TheAdventuresOfTomSawyer_201303'
+      ).then(r => r.json());
+      return a.metadata
+        ? `Title: ${a.metadata.title}, creator: ${a.metadata.creator}`
+        : 'No metadata.';
+    } catch {}
+    return "Sorry, I couldn't fetch archive metadata.";
+  }
+  // 1k. OMDB movie details (requires key)
+  const movieMatch = q.match(/movie (.+)/i);
+  if (movieMatch) {
+    const term = movieMatch[1].trim();
+    const omdbKey = import.meta.env.VITE_OMDB_KEY;
+    if (!omdbKey) return 'OMDB API key not configured.';
+    try {
+      const o: any = await fetch(
+        `https://www.omdbapi.com/?t=${encodeURIComponent(term)}&apikey=${omdbKey}`
+      ).then(r => r.json());
+      return o.Title
+        ? `Movie: ${o.Title} (${o.Year}), IMDb: ${o.imdbRating}`
+        : 'Movie not found.';
+    } catch {}
+    return "Sorry, I couldn't fetch movie data.";
+  }
+
+  // GitHub user lookup
+  const ghMatch = q.match(/github user (\S+)/i);
+  if (ghMatch) {
+    try {
+      const user: any = await fetch(`https://api.github.com/users/${ghMatch[1]}`).then(r => r.json());
+      return `GitHub user ${user.login}: ${user.public_repos} repos, ${user.followers} followers.`;
+    } catch {}
+    return `Sorry, couldn't fetch GitHub user ${ghMatch[1]}.`;
+  }
+
   // 6. Fallback via OpenRouter
   const openrouterKey = import.meta.env.VITE_OPENROUTER_API_KEY;
   const openrouterModel = inlineModel || import.meta.env.VITE_OPENROUTER_MODEL || 'google/gemini-2.0-flash-thinking-exp-1219:free';

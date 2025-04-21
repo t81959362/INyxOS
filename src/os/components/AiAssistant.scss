@@ -96,7 +96,7 @@
   text-align: center;
 }
 .ai-image-preview img {
-  max-width: 80%;
+  max-width: 100%;
   max-height: 120px;
   border-radius: 8px;
   display: inline-block;
@@ -105,13 +105,13 @@
   position: absolute;
   bottom: calc(100% + 8px);
   right: 0;
-  width: 240px;
-  max-height: 160px;
+  width: 360px;
+  max-height: 280px;
   background: rgba(0, 0, 0, 0.7);
-  padding: 4px;
+  padding: 0.1px;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.123);
   z-index: 1001;
 }
 .ai-image-popup img {
