@@ -284,6 +284,7 @@ export async function askAI(q: string): Promise<string> {
 
   // 6. Fallback via OpenRouter
   const openrouterKey = import.meta.env.VITE_OPENROUTER_API_KEY;
+  const openrouterModel = import.meta.env.VITE_OPENROUTER_MODEL || 'google/gemini-2.0-flash-thinking-exp-1219:free';
   if (openrouterKey) {
     try {
       const or: any = await fetch('https://openrouter.ai/api/v1/chat/completions', {
@@ -292,7 +293,7 @@ export async function askAI(q: string): Promise<string> {
           Authorization: `Bearer ${openrouterKey}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ model: 'openai/gpt-4o', messages: [{ role: 'user', content: q }] }),
+        body: JSON.stringify({ model: openrouterModel, messages: [{ role: 'user', content: q }] }),
       }).then(r => r.json());
       const msg = or.choices?.[0]?.message?.content;
       if (msg) return msg;
