@@ -2,6 +2,7 @@
 let lastIntent: 'weather' | 'time' | null = null;
 // store last location for follow-up queries
 let lastLocation: string | null = null;
+import { addEvent, getEvents } from './calendar';
 
 export async function askAI(q: string): Promise<string> {
   q = q.trim();
@@ -89,6 +90,25 @@ export async function askAI(q: string): Promise<string> {
       } catch {}
       return `Sorry, I couldn't determine time for "${locQuery}".`;
     }
+  }
+
+  // Calendar: add event via natural language
+  const addMatch = q.match(/^add\s+['"](.+?)['"]/i);
+  if (addMatch) {
+    const ev = addEvent(q);
+    window.dispatchEvent(new CustomEvent('os-notification', { detail: { title: 'Calendar', message: `${ev.title} @ ${new Date(ev.datetime).toLocaleString()}` } }));
+    return `✔️ Added "${addMatch[1]}" on ${new Date(ev.datetime).toLocaleDateString()} at ${new Date(ev.datetime).toLocaleTimeString()}`;
+  }
+  // Calendar: list events due this week
+  if (/what(?:'s| is) due (?:this|) week\?/i.test(q)) {
+    const now = new Date();
+    const day = now.getDay();
+    const diff = now.getDate() - day + (day === 0 ? -6 : 1);
+    const start = new Date(now.setDate(diff)); start.setHours(0,0,0,0);
+    const end = new Date(start); end.setDate(start.getDate() + 6);
+    const eventsList = getEvents(start, end);
+    if (!eventsList.length) return 'No events this week.';
+    return eventsList.map(e => `${new Date(e.datetime).toLocaleDateString()}: ${e.title}`).join('\n');
   }
 
   // 0. Chatty control intents
