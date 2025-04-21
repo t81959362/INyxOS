@@ -6,7 +6,6 @@ import { Settings } from '../apps/settings/Settings';
 import { BrowserApp } from '../apps/browser/BrowserApp';
 import PackageManager from '../apps/package-manager';
 import LibreOfficeApp from '../apps/libreoffice/LibreOfficeApp';
-import { TinyCoreApp } from '../apps/vm/TinyCoreApp';
 
 export const appStubs = [
   {
@@ -91,12 +90,20 @@ export const appStubs = [
     zIndex: 10
   },
   {
-    id: 'tinycorevm',
-    title: 'Tiny Core VM',
-    icon: '🖥️',
-    content: () => <TinyCoreApp />,
-    width: 800,
-    height: 600,
+    id: 'winxp',
+    title: 'Windows XP',
+    icon: 'https://winxp.vercel.app/favicon.ico',
+    content: () => (
+      <iframe
+        src="https://winxp.vercel.app/"
+        sandbox="allow-scripts allow-same-origin allow-popups allow-pointer-lock"
+        allow="fullscreen; pointer-lock"
+        style={{ width: '100%', height: '100%', border: 'none', background: '#000' }}
+        title="Windows XP"
+      />
+    ),
+    width: 1024,
+    height: 768,
     top: 100,
     left: 200,
     zIndex: 10,
