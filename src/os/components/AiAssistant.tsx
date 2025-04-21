@@ -29,6 +29,21 @@ const AiAssistant: React.FC<Props> = ({ onClose }) => {
     setLoading(false);
   };
 
+  const handleThink = async () => {
+    if (!input.trim()) return;
+    setLoading(true);
+    setChat(prev => [...prev, `You: ${input}`]);
+    try {
+      const response = await askAI(`flash thinking ${input}`);
+      setChat(prev => [...prev, `Nexa (Thinking): ${response}`]);
+    } catch {
+      setChat(prev => [...prev, `Nexa: Sorry, something went wrong.`]);
+    }
+    setInput('');
+    if (textareaRef.current) textareaRef.current.style.height = 'auto';
+    setLoading(false);
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInput(e.target.value);
     e.target.style.height = 'auto';
@@ -68,6 +83,7 @@ const AiAssistant: React.FC<Props> = ({ onClose }) => {
           disabled={loading}
         />
         <button onClick={handleSend} disabled={loading}>Send</button>
+        <button className="ai-think-btn" onClick={handleThink} disabled={loading} title="Think">🧠</button>
       </div>
     </div>
   );

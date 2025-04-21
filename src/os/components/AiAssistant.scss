@@ -71,6 +71,15 @@
 .ai-assistant-input button:disabled {
   opacity: 0.5;
 }
+.ai-think-btn {
+  margin-left: 4px;
+  background: #4a90e2;
+  font-size: 1.2rem;
+  padding: 6px;
+}
+.ai-think-btn:hover {
+  background: #357abd;
+}
 .ai-spinner {
   width: 16px;
   height: 16px;

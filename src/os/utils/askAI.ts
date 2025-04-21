@@ -1,8 +1,49 @@
 // Utility to route queries to free public APIs or HF fallback
 let lastIntent: 'weather' | 'time' | null = null;
+// store last location for follow-up queries
+let lastLocation: string | null = null;
 
 export async function askAI(q: string): Promise<string> {
   q = q.trim();
+  // 0.3 Pronoun resolution for weather: use lastLocation
+  if (/weather/i.test(q) && /\b(there|here|it)\b/i.test(q) && lastLocation) {
+    const city = lastLocation;
+    try {
+      const geo: any = await fetch(
+        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(city)}&format=json&limit=1`
+      ).then(r => r.json());
+      if (Array.isArray(geo) && geo.length > 0) {
+        const { lat, lon } = geo[0];
+        const w: any = await fetch(
+          `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`
+        ).then(r => r.json());
+        const cw = w.current_weather;
+        lastIntent = 'weather';
+        return `Current in ${city}: ${cw.temperature}°C, wind ${cw.windspeed} km/h.`;
+      }
+    } catch {}
+    return `Sorry, I couldn't find location "${city}".`;
+  }
+  // 0.4 Pronoun resolution for time: use lastLocation
+  if (/time/i.test(q) && /\b(there|here|it)\b/i.test(q) && lastLocation) {
+    const place = lastLocation;
+    try {
+      const geo: any = await fetch(
+        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(place)}&format=json&limit=1`
+      ).then(r => r.json());
+      if (Array.isArray(geo) && geo.length > 0) {
+        const { lat, lon } = geo[0];
+        const tzRes: any = await fetch(
+          `https://api.ipgeolocation.io/timezone?apiKey=free&lat=${lat}&long=${lon}`
+        ).then(r => r.json());
+        const dt = new Date().toLocaleTimeString('en-US', { timeZone: tzRes.timezone });
+        lastIntent = 'time';
+        return `It’s ${dt} in ${place}.`;
+      }
+    } catch {}
+    return `Sorry, I couldn't determine time for "${place}".`;
+  }
+
   // 0.5 Follow-up: if user just replies with a location and previous intent was weather/time
   if (!q.includes(' ') && /^[A-Za-z\s]+$/.test(q) && lastIntent) {
     const locQuery = q;
@@ -19,6 +60,7 @@ export async function askAI(q: string): Promise<string> {
           ).then(r => r.json());
           const cw = w.current_weather;
           lastIntent = 'weather';
+          lastLocation = locQuery;
           return `Current in ${locQuery}: ${cw.temperature}°C, wind ${cw.windspeed} km/h.`;
         }
       } catch {}
@@ -39,6 +81,7 @@ export async function askAI(q: string): Promise<string> {
           ).then(r => r.json());
           const dt = new Date().toLocaleTimeString('en-US', { timeZone: tzRes.features?.[0]?.properties.timezone });
           lastIntent = 'time';
+          lastLocation = locQuery;
           return `It’s ${dt} in ${locQuery}.`;
         }
       } catch {}
@@ -82,6 +125,7 @@ export async function askAI(q: string): Promise<string> {
   if (weatherMatch) {
     const city = weatherMatch[1];
     lastIntent = 'weather';
+    lastLocation = city;
     // Geocode via Nominatim
     const loc = await fetch(
       `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(city)}&format=json`
@@ -102,6 +146,7 @@ export async function askAI(q: string): Promise<string> {
   if (timeMatch) {
     const placeRaw = timeMatch[1].trim().replace(/[?.!]+$/, '');
     lastIntent = 'time';
+    lastLocation = placeRaw;
     try {
       const geo: any = await fetch(
         `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(placeRaw)}&format=json&limit=1`
