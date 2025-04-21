@@ -1,24 +1,14 @@
 import { DesktopShortcut } from './types';
 
 export const desktopShortcuts: DesktopShortcut[] = [
-  {
-    id: 'wexond',
-    title: 'Wexond Browser',
-    icon: '🌐',
-    app: 'wexond',
-  },
+
   {
     id: 'explorer',
     name: 'File Explorer',
     icon: '🗂️',
     app: 'explorer',
   },
-  {
-    id: 'browser',
-    name: 'Browser',
-    icon: '🌐',
-    app: 'browser',
-  },
+
   {
     id: 'terminal',
     name: 'Terminal',
@@ -26,10 +16,10 @@ export const desktopShortcuts: DesktopShortcut[] = [
     app: 'terminal',
   },
   {
-    id: 'textedit',
-    name: 'Text Editor',
-    icon: '📝',
-    app: 'textedit',
+    id: 'nyxnet',
+    name: 'NyxNet',
+    icon: '🌐',
+    app: 'nyxnet',
   },
   {
     id: 'package-manager',

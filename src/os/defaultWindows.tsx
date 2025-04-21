@@ -13,7 +13,7 @@ export const appStubs = [
     title: 'File Explorer',
     icon: '🗂️',
     // Use the real File Explorer app
-    content: () => <FileExplorer />,
+    content: () => <FileExplorer />, 
     width: 700,
     height: 520,
     top: 120,
@@ -21,16 +21,28 @@ export const appStubs = [
     zIndex: 10
   },
   {
-    id: 'browser',
-    title: 'Browser',
+    id: 'nyxnet',
+    title: 'NyxNet',
     icon: '🌐',
-    content: () => <BrowserApp />,
+    content: () => <BrowserApp />, 
     width: 900,
     height: 600,
     top: 80,
     left: 80,
     zIndex: 10
   },
+  {
+    id: 'nyxnet',
+    title: 'NyxNet',
+    icon: '🌐',
+    content: () => <BrowserApp />, 
+    width: 900,
+    height: 600,
+    top: 80,
+    left: 80,
+    zIndex: 10
+  },
+
   {
     id: 'terminal',
     title: 'Terminal',

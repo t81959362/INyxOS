@@ -1,11 +1,11 @@
 .glass-context-menu {
-  background: rgba(30, 34, 43, 0.6);
-  backdrop-filter: blur(12px) saturate(1.4);
-  border-radius: 14px;
-  box-shadow: 0 6px 36px 0 rgba(31, 38, 135, 0.18), 0 1.5px 4px 0 rgba(24,28,37,0.09);
-  padding: 7px 0;
-  min-width: 180px;
-  border: 1.5px solid var(--primary, #308aff55);
+  background: linear-gradient(135deg, rgba(138,43,226,0.2), rgba(75,0,130,0.2));
+  backdrop-filter: blur(16px) saturate(1.6);
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(75,0,130,0.15), 0 1px 3px rgba(75,0,130,0.1);
+  padding: 4px 0;
+  min-width: 150px;
+  border: none;
   color: #e3f2fd;
   font-size: 1.04rem;
   font-family: inherit;
@@ -22,9 +22,8 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 7px 22px 7px 18px;
+  padding: 5px 16px;
   cursor: pointer;
-  border: none;
   background: none;
   min-height: 34px;
   transition: background 0.13s, color 0.13s;

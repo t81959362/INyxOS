@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 // Extend window interface for Electron API (injected via preload)
 declare global {
   interface Window {
@@ -9,13 +9,14 @@ declare global {
 }
 import { Taskbar } from './Taskbar';
 import { WindowManager } from './WindowManager';
-import { Launcher } from './Launcher';
+// import { Launcher } from './Launcher';
 import { StartMenu } from './StartMenu';
 import { NotificationCenter } from './NotificationCenter';
 import { NotificationProvider, useNotifications } from './NotificationProvider';
 import { Toast } from './Toast';
 import { defaultWindows, appStubs } from './defaultWindows';
 import { desktopShortcuts } from './desktopShortcuts';
+import { FileSystem } from './fs';
 import Nyxwallpaper from '../assets/Nyxwallpaper.png'; // Corrected path
 import './Desktop.scss';
 
@@ -23,9 +24,13 @@ import LockScreen from './LockScreen';
 
 import { widgetStubs } from './widgets/WidgetRegistry';
 import { Plasmoid } from './widgets/Plasmoid';
-import { ContextMenuProvider } from './ContextMenuProvider';
-import { useContextMenu } from './ContextMenuProvider';
+import { ContextMenuProvider, useContextMenu } from './ContextMenuProvider';
 import { ContextMenuItem } from './components/ContextMenu';
+
+// Types for desktop items: apps or folders
+type AppDesktopItem = { id: string; name: string; icon: string; app: string; type: 'app'; mtime: number; size: number };
+type FolderDesktopItem = { id: string; name: string; icon: string; type: 'folder'; mtime: number; size: number };
+type DesktopItem = AppDesktopItem | FolderDesktopItem;
 
 const DesktopContent: React.FC = () => {
   // ...existing state and logic...
@@ -120,19 +125,29 @@ const DesktopContent: React.FC = () => {
   return defaultWindows;
 });
 
-// Simple error boundary to prevent one app from crashing the desktop
-class WindowErrorBoundary extends React.Component<{children: React.ReactNode}, {hasError: boolean}> {
-  constructor(props: any) {
-    super(props);
-    this.state = { hasError: false };
+  // initialize FS and notifications
+  const fsRef = useRef(new FileSystem());
+  useEffect(() => { fsRef.current.init(); }, []);
+  const { push } = useNotifications();
+  // icon sizing and desktop items state
+  const [iconSize, setIconSize] = useState<'large'|'medium'|'small'>('medium');
+  const [desktopItems, setDesktopItems] = useState<DesktopItem[]>(() =>
+    desktopShortcuts.map(d => ({ id: d.id, name: d.name!, icon: d.icon, app: d.app, type: 'app', mtime: Date.now(), size: 0 }))
+  );
+
+  // Simple error boundary to prevent one app from crashing the desktop
+  class WindowErrorBoundary extends React.Component<{children: React.ReactNode}, {hasError: boolean}> {
+    constructor(props: any) {
+      super(props);
+      this.state = { hasError: false };
+    }
+    static getDerivedStateFromError() { return { hasError: true }; }
+    componentDidCatch(error: any, info: any) { console.error('Window error:', error, info); }
+    render() {
+      if (this.state.hasError) return <div style={{color: 'red', padding: 24}}>App crashed. Please close this window.</div>;
+      return this.props.children;
+    }
   }
-  static getDerivedStateFromError() { return { hasError: true }; }
-  componentDidCatch(error: any, info: any) { console.error('Window error:', error, info); }
-  render() {
-    if (this.state.hasError) return <div style={{color: 'red', padding: 24}}>App crashed. Please close this window.</div>;
-    return this.props.children;
-  }
-}
 
   // Start Menu integration
   const [showStartMenu, setShowStartMenu] = React.useState(false);
@@ -161,7 +176,7 @@ class WindowErrorBoundary extends React.Component<{children: React.ReactNode}, {
   // Find the highest zIndex in use
   const maxZ = widgets.reduce((acc: number, w: WidgetInstance) => Math.max(acc, w.zIndex ?? 100), 100);
 
-  const { notifications, push, remove } = useNotifications();
+  const { notifications, remove } = useNotifications();
 
   // Show latest notifications as toasts
   React.useEffect(() => {
@@ -195,23 +210,30 @@ class WindowErrorBoundary extends React.Component<{children: React.ReactNode}, {
 
   const { openMenu } = useContextMenu();
   const desktopMenuItems: ContextMenuItem[] = [
-    { label: 'View', icon: '👁️', submenu: [
-        { label: 'Large icons', onClick: () => {} },
-        { label: 'Medium icons', onClick: () => {} },
-        { label: 'Small icons', onClick: () => {} },
+    { label: 'View', icon: '🖼️', submenu: [
+        { label: 'Large icons', onClick: () => setIconSize('large') },
+        { label: 'Medium icons', onClick: () => setIconSize('medium') },
+        { label: 'Small icons', onClick: () => setIconSize('small') },
       ] },
     { label: 'Sort By', icon: '↕️', submenu: [
-        { label: 'Name', onClick: () => {} },
-        { label: 'Date modified', onClick: () => {} },
-        { label: 'Type', onClick: () => {} },
-        { label: 'Size', onClick: () => {} },
+        { label: 'Name', onClick: () => setDesktopItems(prev => [...prev].sort((a, b) => a.name.localeCompare(b.name))) },
+        { label: 'Date modified', onClick: () => setDesktopItems(prev => [...prev].sort((a, b) => b.mtime - a.mtime)) },
+        { label: 'Type', onClick: () => setDesktopItems(prev => [...prev].sort((a, b) => a.type.localeCompare(b.type))) },
+        { label: 'Size', onClick: () => setDesktopItems(prev => [...prev].sort((a, b) => a.size - b.size)) },
       ] },
-    { label: 'New Folder', icon: '📁', onClick: () => push({ title: 'Info', message: 'Create folder...', type: 'info' }) },
-    { label: 'Display settings', icon: '🎛️', onClick: () => {
-        const settings = appStubs.find(a => a.id === 'settings');
-        if (settings) window.dispatchEvent(new CustomEvent('os-open-pwa', { detail: settings }));
+    { label: 'New Folder', icon: '📁', onClick: async () => {
+        const name = prompt('Folder name', 'New folder')?.trim();
+        if (!name) return;
+        await fsRef.current.mkdir(`/home/user/${name}`);
+        setDesktopItems(prev => [...prev, { id: `folder-${Date.now()}`, name, icon: '📁', type: 'folder', mtime: Date.now(), size: 0 }]);
+        push({ title: 'Folder created', message: `Created folder: ${name}`, type: 'success' });
+        // Notify file explorer instances to refresh
+        window.dispatchEvent(new CustomEvent('fs-change'));
       } },
-    { label: 'Refresh', icon: '🔄', shortcut: 'F5', onClick: () => window.location.reload() },
+    { label: 'Display settings', icon: '🎛️', onClick: () => {
+        const stub = appStubs.find(a => a.id === 'settings');
+        if (stub) window.dispatchEvent(new CustomEvent('os-open-pwa', { detail: stub }));
+      } },
   ];
 
   return (
@@ -219,32 +241,31 @@ class WindowErrorBoundary extends React.Component<{children: React.ReactNode}, {
 
         <LockScreen show={locked} onUnlock={() => setLocked(false)} wallpaperUrl={wallpaperUrl} />
         <div className="desktop-icons">
-          {desktopShortcuts.map((shortcut: { id: string; app: string; icon?: string; name?: string }) => {
-            const app = appStubs.find(a => a.id === shortcut.app);
-            if (!app) return null;
-            return (
-              <button
-                key={shortcut.id}
-                className="desktop-icon"
-                onClick={() => setWindows(w => [...w, {
+          {desktopItems.map(item => {
+            const isApp = item.type === 'app';
+            const stub = isApp ? appStubs.find(a => a.id === item.app) : null;
+            const handleClick = () => {
+              if (isApp && stub) {
+                setWindows(ws => [...ws, {
                   id: Math.random().toString(36).slice(2),
-                  title: app.title,
-                  icon: app.icon,
-                  content: typeof app.content === 'function' ? app.content : () => app.content,
-                  width: app.width,
-                  height: app.height,
-                  top: app.top,
-                  left: app.left,
+                  title: stub.title,
+                  icon: stub.icon,
+                  content: typeof stub.content === 'function' ? stub.content : () => stub.content,
+                  width: stub.width,
+                  height: stub.height,
+                  top: stub.top,
+                  left: stub.left,
                   zIndex: 10
-                }])}
-              >
-                <span className="desktop-icon-img">{shortcut.icon ? shortcut.icon : (
-  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="6" y="6" width="20" height="20" rx="6" fill="#8f5fff"/>
-    <path d="M12 18h8M12 14h8" stroke="#fff" strokeWidth="2" strokeLinecap="round"/>
-  </svg>
-)}</span>
-                <span className="desktop-icon-label">{shortcut.name || app.title}</span>
+                }]);
+              } else if (item.type === 'folder') {
+                const explorer = appStubs.find(a => a.id === 'explorer');
+                if (explorer) window.dispatchEvent(new CustomEvent('os-open-pwa', { detail: explorer }));
+              }
+            };
+            return (
+              <button key={item.id} className={`desktop-icon ${iconSize}`} onClick={handleClick}>
+                <span className="desktop-icon-img">{item.icon}</span>
+                <span className="desktop-icon-label">{item.name}</span>
               </button>
             );
           })}
