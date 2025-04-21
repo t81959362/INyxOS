@@ -110,7 +110,7 @@ export const Window: React.FC<{
             boxShadow: (win.id === 'settings' || win.title === 'Settings') ? 'none' : '0 8px 32px 0 rgba(31, 38, 135, 0.18)',
             overflow: 'hidden',
             border: (win.id === 'settings' || win.title === 'Settings') ? 'none' : (focused ? '2px solid var(--accent, #308aff)' : '2px solid rgba(48,138,255,0.13)'),
-            transition: 'all 0.2s cubic-bezier(.61,1.4,.38,1)',
+            transition: 'border 0.2s cubic-bezier(.61,1.4,.38,1), box-shadow 0.2s cubic-bezier(.61,1.4,.38,1)',
           }}
           tabIndex={0}
           onMouseDown={onFocus}

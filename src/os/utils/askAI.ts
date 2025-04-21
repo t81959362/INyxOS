@@ -1,5 +1,5 @@
 // Utility to route queries to free public APIs or HF fallback
-let lastIntent: 'weather' | 'time' | null = null;
+let lastIntent: 'weather' | 'time' | 'image' | null = null;
 // store last location for follow-up queries
 let lastLocation: string | null = null;
 import { addEvent, getEvents } from './calendar';
@@ -8,6 +8,30 @@ export async function askAI(q: string): Promise<string> {
   q = q.trim();
   // normalize: strip surrounding quotes (including curly)
   q = q.replace(/^[“”"'`]+|[“”"'`]+$/g, '').trim();
+
+  // 0.x Image intent: "show me an image of <term>"
+  const imageMatch = q.match(/(?:show me an image of|image of) (.+)/i);
+  if (imageMatch) {
+    const term = imageMatch[1].trim();
+    try {
+      const summary: any = await fetch(
+        `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(term)}`
+      ).then(r => r.json());
+      const original = summary.originalimage?.source;
+      const thumbnail = summary.thumbnail?.source;
+      let imgUrl = original || thumbnail;
+      if (!original && thumbnail) {
+        const m = thumbnail.match(/^(https:\/\/upload\.wikimedia\.org\/wikipedia\/commons)\/thumb\/(.+?)\/\d+px-.*$/);
+        if (m) imgUrl = `${m[1]}/${m[2]}`;
+      }
+      if (imgUrl) {
+        lastIntent = 'image';
+        return imgUrl;
+      }
+    } catch {}
+    return `Sorry, I couldn't find an image for "${term}".`;
+  }
+
   // 0.3 Pronoun resolution for weather: use lastLocation
   if (/weather/i.test(q) && /\b(there|here|it)\b/i.test(q) && lastLocation) {
     const city = lastLocation;
@@ -36,10 +60,11 @@ export async function askAI(q: string): Promise<string> {
       ).then(r => r.json());
       if (Array.isArray(geo) && geo.length > 0) {
         const { lat, lon } = geo[0];
-        const tzRes: any = await fetch(
-          `https://api.ipgeolocation.io/timezone?apiKey=free&lat=${lat}&long=${lon}`
+        const wt: any = await fetch(
+          `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&timezone=auto`
         ).then(r => r.json());
-        const dt = new Date().toLocaleTimeString('en-US', { timeZone: tzRes.timezone });
+        const tz = wt.timezone;
+        const dt = new Date().toLocaleTimeString([], { hour: 'numeric', hour12: true, timeZone: tz });
         lastIntent = 'time';
         return `It’s ${dt} in ${place}.`;
       }
@@ -77,12 +102,11 @@ export async function askAI(q: string): Promise<string> {
         ).then(r => r.json());
         if (Array.isArray(geo) && geo.length > 0) {
           const { lat, lon } = geo[0];
-          const now = new Date();
-          // get timezone from WorldTimeAPI
-          const tzRes: any = await fetch(
-            `https://api.geoapify.com/v1/timezone?lat=${lat}&lon=${lon}`
+          const wt: any = await fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&timezone=auto`
           ).then(r => r.json());
-          const dt = new Date().toLocaleTimeString('en-US', { timeZone: tzRes.features?.[0]?.properties.timezone });
+          const tz = wt.timezone;
+          const dt = new Date().toLocaleTimeString([], { hour: 'numeric', hour12: true, timeZone: tz });
           lastIntent = 'time';
           lastLocation = locQuery;
           return `It’s ${dt} in ${locQuery}.`;
@@ -178,29 +202,12 @@ export async function askAI(q: string): Promise<string> {
         const wt: any = await fetch(
           `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&timezone=auto`
         ).then(r => r.json());
-        // Fetch actual local time via WorldTimeAPI using timezone from Open-Meteo
         const tz = wt.timezone;
-        try {
-          const tt: any = await fetch(
-            `http://worldtimeapi.org/api/timezone/${encodeURIComponent(tz)}`
-          ).then(r => r.json());
-          if (tt.datetime) {
-            const dt = new Date(tt.datetime);
-            const pretty = dt.toLocaleTimeString([], { hour: 'numeric', minute: 'numeric', hour12: true });
-            return `It’s ${pretty} in ${placeRaw}.`;
-          }
-        } catch {}
-        // Fallback: parse Open-Meteo timestamp
-        const [datePart, timePart] = wt.current_weather.time.split('T');
-        const [hh, mm] = timePart.split(':');
-        const hourNum = parseInt(hh, 10);
-        const period = hourNum >= 12 ? 'PM' : 'AM';
-        const hour12 = hourNum % 12 || 12;
-        return `It’s ${hour12}:${mm} ${period} in ${placeRaw}.`;
+        const dt = new Date().toLocaleTimeString([], { hour: 'numeric', hour12: true, timeZone: tz });
+        return `It’s ${dt} in ${placeRaw}.`;
       }
     } catch {}
-    // fallback to local time
-    const fallbackTime = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+    const fallbackTime = new Date().toLocaleTimeString([], { hour: 'numeric', hour12: true });
     return `It’s ${fallbackTime} right now.`;
   }
 
@@ -719,7 +726,11 @@ export async function askAI(q: string): Promise<string> {
         body: JSON.stringify({ model: openrouterModel, messages: [{ role: 'user', content: finalQuery }] }),
       }).then(r => r.json());
       const msg = or.choices?.[0]?.message?.content;
-      if (msg) return msg;
+      if (msg) {
+        // Remove markdown bold
+        const cleaned = msg.replace(/\*\*(.+?)\*\*/g, '$1');
+        return cleaned;
+      }
     } catch {}
   }
   return `I'm sorry, I don't have an answer for that.`;
