@@ -1,326 +1,282 @@
 [
   {
-    "id": "pwa-x",
-    "name": "X (Twitter)",
-    "description": "Get breaking news, trending music, world events, and more - all with less data.",
-    "icon": "https://abs.twimg.com/favicons/twitter.2.ico",
-    "category": "Social",
-    "url": "https://twitter.com/",
+    "id": "smaller-pictures",
+    "name": "Smaller Pictures",
+    "url": "https://smaller-pictures.appspot.com/",
+    "icon": "https://smaller-pictures.appspot.com/favicon.ico",
+    "category": "Utility",
     "type": "pwa",
-    "featured": true
+    "description": "Batch-resize and optimize images in your browser",
+    "sandbox": "allow-scripts allow-same-origin"
   },
   {
-    "id": "pwa-messenger",
-    "name": "Messenger",
-    "description": "Stay connected with friends and family, build community, and express yourself with Messenger.",
-    "icon": "https://www.messenger.com/favicon.ico",
-    "category": "Social",
-    "url": "https://www.messenger.com/",
+    "id": "qi-reader",
+    "name": "QR Reader",
+    "url": "https://www.qireader.com/",
+    "icon": "https://www.qireader.com/favicon.ico",
+    "category": "Utility",
     "type": "pwa",
-    "featured": false
+    "description": "Scan and decode QR codes in your browser",
+    "sandbox": "allow-scripts allow-same-origin"
   },
   {
-    "id": "pwa-chatgpt",
-    "name": "ChatGPT",
-    "description": "A conversational AI model developed by OpenAI.",
-    "icon": "https://chat.openai.com/favicon.ico",
-    "category": "AI",
-    "url": "https://chat.openai.com/",
-    "type": "pwa",
-    "featured": true
-  },
-  {
-    "id": "pwa-duolingo",
-    "name": "Duolingo",
-    "description": "The free, fun, and effective way to learn a language!",
-    "icon": "https://www.duolingo.com/favicon.ico",
-    "category": "Education",
-    "url": "https://www.duolingo.com/",
-    "type": "pwa",
-    "featured": true
-  },
-  {
-    "id": "pwa-youtube",
-    "name": "YouTube",
-    "description": "A video-sharing platform to upload, view, and share videos.",
-    "icon": "https://www.youtube.com/favicon.ico",
-    "category": "Entertainment",
-    "url": "https://www.youtube.com/",
-    "type": "pwa",
-    "featured": true
-  },
-  {
-    "id": "pwa-starbucks",
-    "name": "Starbucks",
-    "description": "An international restaurant chain for coffee, tea, and fresh food items.",
-    "icon": "https://www.starbucks.com/favicon.ico",
-    "category": "Food & Drink",
-    "url": "https://www.starbucks.com/",
-    "type": "pwa",
-    "featured": false
-  },
-  {
-    "id": "pwa-airbnb",
-    "name": "Airbnb",
-    "description": "Find vacation rentals, cabins, beach houses, and more worldwide.",
-    "icon": "https://www.airbnb.com/favicon.ico",
-    "category": "Travel",
-    "url": "https://www.airbnb.com/",
-    "type": "pwa",
-    "featured": false
-  },
-  {
-    "id": "pwa-snapdrop",
-    "name": "Snapdrop",
-    "description": "Local file sharing in your browser.",
-    "icon": "https://snapdrop.net/favicon.ico",
-    "category": "Tools",
-    "url": "https://snapdrop.net/",
-    "type": "pwa",
-    "featured": true
-  },
-  {
-    "id": "pwa-versus",
-    "name": "Versus",
-    "description": "Compare products and services side by side.",
-    "icon": "https://versus.com/favicon.ico",
-    "category": "Shopping",
-    "url": "https://versus.com/",
-    "type": "pwa",
-    "featured": false
-  },
-  {
-    "id": "pwa-webdev",
-    "name": "web.dev",
-    "description": "Google's web development resource hub.",
-    "icon": "https://web.dev/favicon.ico",
-    "category": "Reference",
-    "url": "https://web.dev/",
-    "type": "pwa",
-    "featured": false
-  },
-  {
-    "id": "pwa-2048",
-    "name": "2048 Game",
-    "description": "Classic 2048 puzzle game playable offline.",
-    "icon": "https://play2048.co/favicon-192.png",
-    "category": "Games",
-    "url": "https://play2048.co/",
-    "type": "pwa",
-    "featured": false
-  },
-  {
-    "id": "pwa-sudoku",
-    "name": "Sudoku",
-    "description": "Classic Sudoku puzzle game.",
-    "icon": "https://www.sudoku.com/favicon.ico",
-    "category": "Games",
-    "url": "https://www.sudoku.com/",
-    "type": "pwa",
-    "featured": false
-  },
-  {
-    "id": "pwa-calculator",
-    "name": "Calculator",
-    "description": "A calculator app with theme switcher.",
-    "icon": "https://calculator-app-tau.vercel.app/favicon.ico",
-    "category": "Utilities",
-    "url": "https://calculator-app-tau.vercel.app/",
-    "type": "pwa",
-    "featured": false
-  },
-  {
-    "id": "pwa-squoosh",
-    "name": "Squoosh",
-    "description": "Image compression and conversion tool by Google.",
-    "icon": "https://squoosh.app/icon-192.png",
-    "category": "Creativity",
-    "url": "https://squoosh.app/",
-    "type": "pwa",
-    "featured": true
-  },
-  {
-    "id": "pwa-devdocs",
-    "name": "DevDocs",
-    "description": "API documentation browser for developers.",
-    "icon": "https://devdocs.io/favicon.ico",
-    "category": "Reference",
-    "url": "https://devdocs.io/",
-    "type": "pwa",
-    "featured": false
-  },
-  {
-    "id": "pwa-bitmidi",
-    "name": "BitMidi",
-    "description": "Listen to your favorite MIDI files.",
-    "icon": "https://bitmidi.com/favicon.ico",
-    "category": "Music",
-    "url": "https://bitmidi.com/",
-    "type": "pwa",
-    "featured": false
-  },
-  {
-    "id": "pwa-farmhand",
-    "name": "Farmhand",
-    "description": "A resource management game that puts a farm in your hand.",
-    "icon": "https://www.farmhand.life/favicon.ico",
-    "category": "Games",
-    "url": "https://www.farmhand.life/",
-    "type": "pwa",
-    "featured": false
-  },
-  {
-    "id": "pwa-squoosh",
-    "name": "Squoosh",
-    "description": "Image compression and conversion tool by Google.",
-    "icon": "https://squoosh.app/icon-192.png",
-    "category": "Creativity",
-    "url": "https://squoosh.app/",
-    "type": "pwa",
-    "featured": true,
-    "updateUrl": "https://squoosh.app/manifest.json"
-  },
-  {
-    "id": "pwa-trello",
-    "name": "Trello",
-    "description": "Organize anything with boards, lists, and cards.",
-    "icon": "https://trello.com/favicon.ico",
-    "category": "Productivity",
-    "url": "https://trello.com/",
-    "type": "pwa",
-    "featured": false,
-    "updateUrl": "https://trello.com/manifest.json"
-  },
-  {
-    "id": "pwa-maps",
-    "name": "Google Maps Go",
-    "description": "Lightweight Google Maps for web.",
-    "icon": "https://www.gstatic.com/images/branding/product/2x/maps_96in128dp.png",
-    "category": "Travel",
-    "url": "https://www.google.com/maps/",
-    "type": "pwa",
-    "featured": false,
-    "updateUrl": "https://www.google.com/maps/manifest.json"
-  },
-  {
-    "id": "pwa-flipboard",
+    "id": "flipboard",
     "name": "Flipboard",
-    "description": "Personalized news and magazine reader.",
-    "icon": "https://cdn.flipboard.com/favicon.ico",
-    "category": "News",
     "url": "https://flipboard.com/",
+    "icon": "https://flipboard.com/favicon.ico",
+    "category": "News",
     "type": "pwa",
-    "featured": false,
-    "updateUrl": "https://flipboard.com/manifest.json"
+    "description": "Discover and share stories from around the world",
+    "sandbox": "allow-scripts allow-same-origin"
   },
   {
-    "id": "pwa-2048",
-    "name": "2048 Game",
-    "description": "Classic 2048 puzzle game playable offline.",
-    "icon": "https://play2048.co/favicon-192.png",
-    "category": "Games",
-    "url": "https://play2048.co/",
-    "type": "pwa",
-    "featured": false,
-    "updateUrl": "https://play2048.co/manifest.json"
-  },
-  {
-    "id": "pwa-spotify",
-    "name": "Spotify Web Player",
-    "description": "Listen to music and podcasts online.",
-    "icon": "https://open.scdn.co/cdn/images/favicon32.8e66b099.png",
-    "category": "Music",
-    "url": "https://open.spotify.com/",
-    "type": "pwa",
-    "featured": false,
-    "updateUrl": "https://open.spotify.com/manifest.json"
-  },
-  {
-    "id": "pwa-clipchamp",
-    "name": "Clipchamp",
-    "description": "Create and edit videos in your browser.",
-    "icon": "https://clipchamp.com/favicon.ico",
-    "category": "Creativity",
-    "url": "https://app.clipchamp.com/",
-    "type": "pwa",
-    "featured": true,
-    "updateUrl": "https://app.clipchamp.com/manifest.json"
-  },
-  {
-    "id": "pwa-todoist",
-    "name": "Todoist",
-    "description": "Organize your life and work with this powerful to-do app.",
-    "icon": "https://todoist.com/favicon.ico",
-    "category": "Productivity",
-    "url": "https://todoist.com/app",
-    "type": "pwa",
-    "featured": true,
-    "updateUrl": "https://todoist.com/manifest.json"
-  },
-  {
-    "id": "pwa-pocket",
-    "name": "Pocket",
-    "description": "Save articles and videos to view later offline.",
-    "icon": "https://getpocket.com/favicon.ico",
-    "category": "Productivity",
-    "url": "https://getpocket.com/",
-    "type": "pwa",
-    "featured": false,
-    "updateUrl": "https://getpocket.com/manifest.json"
-  },
-  {
-    "id": "pwa-reddit",
-    "name": "Reddit",
-    "description": "The front page of the internet.",
-    "icon": "https://www.redditstatic.com/desktop2x/img/favicon/apple-icon-180x180.png",
+    "id": "pinterest",
+    "name": "Pinterest",
+    "url": "https://pinterest.com/",
+    "icon": "https://pinterest.com/favicon.ico",
     "category": "Social",
-    "url": "https://www.reddit.com/",
     "type": "pwa",
-    "featured": false,
-    "updateUrl": "https://www.reddit.com/manifest.json"
+    "description": "Visual discovery and bookmarking",
+    "sandbox": "allow-scripts allow-same-origin"
   },
   {
-    "id": "text-editor",
-    "name": "Text Editor",
-    "icon": "icons/apps/text-editor.svg",
-    "url": "/apps/text-editor",
-    "category": "utilities",
-    "launchMode": "window",
-    "windowOptions": {
-      "width": 900,
-      "height": 650,
-      "minWidth": 400,
-      "minHeight": 300
-    }
+    "id": "telegram-web",
+    "name": "Telegram Web",
+    "url": "https://web.telegram.org/",
+    "icon": "https://web.telegram.org/favicon.ico",
+    "category": "Communication",
+    "type": "pwa",
+    "description": "Cloud-based messaging service",
+    "sandbox": "allow-scripts allow-same-origin"
   },
   {
-    "id": "boxedwine",
-    "name": "BoxedWine",
-    "description": ".exe, .zip — Runs 16/32-bit Windows applications.",
-    "icon": "https://boxedwine.org/favicon.ico",
-    "category": "Emulation",
-    "url": "/apps/boxedwine",
-    "type": "emulator",
-    "notes": "Runs 16/32-bit Windows applications"
+    "id": "spotify",
+    "name": "Spotify",
+    "url": "https://spotify.com/",
+    "icon": "https://spotify.com/favicon.ico",
+    "category": "Music",
+    "type": "pwa",
+    "description": "Music streaming service",
+    "sandbox": "allow-scripts allow-same-origin"
   },
   {
-    "id": "tinymce",
-    "name": "TinyMCE",
-    "description": ".rtf, .whtml — Read & WYSIWYG modes, File save support.",
-    "icon": "https://www.tiny.cloud/favicon.ico",
+    "id": "google-maps",
+    "name": "Google Maps",
+    "url": "https://google.com/maps",
+    "icon": "https://www.google.com/maps/favicon.ico",
+    "category": "Maps",
+    "type": "pwa",
+    "description": "Interactive maps and directions",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "weather-com",
+    "name": "Weather.com",
+    "url": "https://weather.com/",
+    "icon": "https://weather.com/favicon.ico",
+    "category": "Weather",
+    "type": "pwa",
+    "description": "Local weather forecasts and radar",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "trivago",
+    "name": "Trivago",
+    "url": "https://trivago.com/",
+    "icon": "https://trivago.com/favicon.ico",
+    "category": "Travel",
+    "type": "pwa",
+    "description": "Hotel search and price comparison",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "vscode-dev",
+    "name": "VSCode.dev",
+    "url": "https://vscode.dev/",
+    "icon": "https://vscode.dev/favicon.ico",
+    "category": "Development",
+    "type": "pwa",
+    "description": "Online code editor",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "devdocs",
+    "name": "DevDocs",
+    "url": "https://devdocs.io/",
+    "icon": "https://devdocs.io/favicon.ico",
+    "category": "Documentation",
+    "type": "pwa",
+    "description": "API documentation browser",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "aliexpress",
+    "name": "AliExpress",
+    "url": "https://www.aliexpress.com/",
+    "icon": "https://www.aliexpress.com/favicon.ico",
+    "category": "Shopping",
+    "type": "pwa",
+    "description": "Online retail marketplace",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "codeit",
+    "name": "CodeIt",
+    "url": "https://codeit.codes/",
+    "icon": "https://codeit.codes/favicon.ico",
+    "category": "Development",
+    "type": "pwa",
+    "description": "Learn to code interactively",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "edit-video",
+    "name": "Edit.Video",
+    "url": "https://edit.video/",
+    "icon": "https://edit.video/favicon.ico",
+    "category": "Video",
+    "type": "pwa",
+    "description": "Browser-based video editing",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "photopea",
+    "name": "Photopea",
+    "url": "https://www.photopea.com/",
+    "icon": "https://www.photopea.com/favicon.ico",
+    "category": "Graphics",
+    "type": "pwa",
+    "description": "Advanced image editor",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "typst",
+    "name": "Typst",
+    "url": "https://typst.app/",
+    "icon": "https://typst.app/favicon.ico",
+    "category": "Writing",
+    "type": "pwa",
+    "description": "Next-generation typesetting online",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "vimonlineeditor",
+    "name": "Vim Online Editor",
+    "url": "https://www.vimonlineeditor.com/",
+    "icon": "https://www.vimonlineeditor.com/favicon.ico",
+    "category": "Development",
+    "type": "pwa",
+    "description": "Online Vim in browser",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "traintimes",
+    "name": "Train Times",
+    "url": "https://traintimes.org.uk/",
+    "icon": "https://traintimes.org.uk/favicon.ico",
+    "category": "Travel",
+    "type": "pwa",
+    "description": "UK train schedules and times",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "vslite",
+    "name": "VS Lite",
+    "url": "https://vslite.dev/",
+    "icon": "https://vslite.dev/favicon.ico",
+    "category": "Development",
+    "type": "pwa",
+    "description": "Lightweight code editor in browser",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "logseq",
+    "name": "Logseq",
+    "url": "https://logseq.com/?spa=true",
+    "icon": "https://logseq.com/favicon.ico",
     "category": "Productivity",
-    "url": "/apps/tinymce",
-    "type": "editor",
-    "notes": "Read & WYSIWYG modes, File save support"
+    "type": "pwa",
+    "description": "Knowledge management tool",
+    "sandbox": "allow-scripts allow-same-origin"
   },
   {
-    "id": "virtualx86",
-    "name": "Virtual x86",
-    "description": ".img, .iso — x86 emulator, automatic save states on close, /Users/Public/Snapshots, automatic window resize.",
-    "icon": "https://copy.sh/v86/favicon.ico",
-    "category": "Emulation",
-    "url": "/apps/virtualx86",
-    "type": "emulator",
-    "notes": "x86 emulator, automatic save states, automatic window resize"
+    "id": "paintz",
+    "name": "PaintZ",
+    "url": "https://paintz.app/",
+    "icon": "https://paintz.app/favicon.ico",
+    "category": "Graphics",
+    "type": "pwa",
+    "description": "Online painting app",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "kiwix",
+    "name": "Kiwix",
+    "url": "https://pwa.kiwix.org/www/index.html",
+    "icon": "https://pwa.kiwix.org/favicon.ico",
+    "category": "Education",
+    "type": "pwa",
+    "description": "Offline Wikipedia reader",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "vectorpea",
+    "name": "VectorPea",
+    "url": "https://www.vectorpea.com/",
+    "icon": "https://www.vectorpea.com/favicon.ico",
+    "category": "Graphics",
+    "type": "pwa",
+    "description": "Online vector graphics editor",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "ytaudio",
+    "name": "YTAudio",
+    "url": "https://ytaud.io/",
+    "icon": "https://ytaud.io/favicon.ico",
+    "category": "Audio",
+    "type": "pwa",
+    "description": "YouTube to audio converter",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "espruino-ide",
+    "name": "Espruino IDE",
+    "url": "https://www.espruino.com/ide/",
+    "icon": "https://www.espruino.com/favicon.ico",
+    "category": "Development",
+    "type": "pwa",
+    "description": "JavaScript IDE for microcontrollers",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "dogsafefoods",
+    "name": "Dog Safe Foods",
+    "url": "https://dogsafefoods.com/",
+    "icon": "https://dogsafefoods.com/favicon.ico",
+    "category": "Health",
+    "type": "pwa",
+    "description": "Check if foods are safe for dogs",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "recipesage",
+    "name": "RecipeSage",
+    "url": "https://recipesage.com/",
+    "icon": "https://recipesage.com/favicon.ico",
+    "category": "Food",
+    "type": "pwa",
+    "description": "Discover and generate recipes",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "versus",
+    "name": "Versus.com",
+    "url": "https://versus.com/en",
+    "icon": "https://versus.com/favicon.ico",
+    "category": "Comparison",
+    "type": "pwa",
+    "description": "Compare products, athletes and more",
+    "sandbox": "allow-scripts allow-same-origin"
   }
 ]

@@ -69,7 +69,14 @@ export const TextEditor: React.FC = () => {
         </select>
         <button className="te-btn" onClick={newFile}>📄 New</button>
         <button className="te-btn" onClick={save} disabled={!filename}>💾 Save</button>
-        <input className="te-path" value={cwd} onChange={e => setCwd(e.target.value)} placeholder="Working folder" />
+        <input 
+          className="te-path"
+          id="text-editor-path"
+          name="editorPath"
+          value={cwd} 
+          onChange={e => setCwd(e.target.value)} 
+          placeholder="Working folder"
+        />
         <span className="te-status-modern">{status}</span>
       </div>
       <div className="te-editor-area-container">

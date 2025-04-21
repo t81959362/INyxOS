@@ -1,24 +1,24 @@
 .package-manager-root {
-  padding: 32px 24px;
+  padding: 16px 12px;
   font-family: inherit;
   color: var(--text, #f3f3f3);
   background: var(--bg, rgba(30,34,43,0.95));
   border-radius: 18px;
   box-shadow: 0 4px 32px #000a;
   max-width: 900px;
-  margin: 40px auto;
+  margin: 20px auto;
 }
 
 .package-manager-root h1 {
   font-size: 2.2em;
   font-weight: 700;
-  margin-bottom: 18px;
+  margin-bottom: 12px;
 }
 
 .pm-controls {
   display: flex;
-  gap: 12px;
-  margin-bottom: 24px;
+  gap: 8px;
+  margin-bottom: 16px;
   align-items: center;
 }
 
@@ -49,17 +49,27 @@
   font-size: 1em;
 }
 
+.pm-search {
+  background: #fff;
+  color: #000;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 1em;
+  outline: none;
+}
+
 .pm-app-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 24px;
+  gap: 16px;
 }
 
 .pm-app-card {
   background: rgba(44,48,60,0.98);
   border-radius: 13px;
   box-shadow: 0 2px 14px #0006;
-  padding: 20px 16px 16px 16px;
+  padding: 16px 12px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -118,18 +128,47 @@
 .pm-btn-install {
   background: var(--accent, #3fa7ff);
   color: #fff;
+  padding: 4px 12px;
+  font-size: 0.9em;
 }
 
 .pm-btn-uninstall {
   background: #f33a3a;
   color: #fff;
+  padding: 4px 12px;
+  font-size: 0.9em;
 }
 
 .pm-btn-launch {
   background: #222c;
   color: var(--accent, #3fa7ff);
+  padding: 4px 12px;
+  font-size: 0.9em;
+}
+
+.pm-btn-delete {
+  background: #f33a3a;
+  color: #fff;
+  padding: 4px 12px;
+  font-size: 0.9em;
 }
 
 .pm-btn:active {
   filter: brightness(0.95);
+}
+
+.pm-add-custom {
+  margin: -5px 0 16px;
+  display: flex;
+  gap: 8px;
+}
+
+.pm-add-custom input {
+  background: #fff;
+  color: #000;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 1em;
+  outline: none;
 }

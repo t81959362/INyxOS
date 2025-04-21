@@ -392,20 +392,55 @@ const CustomActionTiles: React.FC<{
           </select>
           {addType === 'website' && (
             <>
-              <input placeholder="Title" value={input.title||''} onChange={e => setInput((inp: any) => ({...inp, title: e.target.value}))} />
-              <input placeholder="URL (https://...)" value={input.url||''} onChange={e => setInput((inp: any) => ({...inp, url: e.target.value}))} />
+              <input
+                id="options-title-input"
+                name="optionsTitle"
+                placeholder="Title"
+                value={input.title||''}
+                onChange={e => setInput((inp: any) => ({...inp, title: e.target.value}))}
+              />
+              <input
+                id="options-url-input"
+                name="optionsUrl"
+                placeholder="URL (https://...)"
+                value={input.url||''}
+                onChange={e => setInput((inp: any) => ({...inp, url: e.target.value}))}
+              />
             </>
           )}
           {addType === 'script' && (
             <>
-              <input placeholder="Title" value={input.title||''} onChange={e => setInput((inp: any) => ({...inp, title: e.target.value}))} />
-              <textarea placeholder="JS Script" value={input.script||''} onChange={e => setInput((inp: any) => ({...inp, script: e.target.value}))} />
+              <input
+                id="options-title-input"
+                name="optionsTitle"
+                placeholder="Title"
+                value={input.title||''}
+                onChange={e => setInput((inp: any) => ({...inp, title: e.target.value}))}
+              />
+              <textarea
+                id="options-script-input"
+                name="optionsScript"
+                placeholder="JS Script"
+                value={input.script||''}
+                onChange={e => setInput((inp: any) => ({...inp, script: e.target.value}))}
+              />
             </>
           )}
           {addType === 'toggle' && (
             <>
-              <input placeholder="Title" value={input.title||''} onChange={e => setInput((inp: any) => ({...inp, title: e.target.value}))} />
-              <select value={input.toggleTarget||''} onChange={e => setInput((inp: any) => ({...inp, toggleTarget: e.target.value}))}>
+              <input
+                id="options-title-input"
+                name="optionsTitle"
+                placeholder="Title"
+                value={input.title||''}
+                onChange={e => setInput((inp: any) => ({...inp, title: e.target.value}))}
+              />
+              <select
+                id="options-toggle-target-input"
+                name="optionsToggleTarget"
+                value={input.toggleTarget||''}
+                onChange={e => setInput((inp: any) => ({...inp, toggleTarget: e.target.value}))}
+              >
                 <option value="">Select Setting</option>
                 <option value="nightLight">Night Light</option>
                 <option value="tabletMode">Tablet Mode</option>

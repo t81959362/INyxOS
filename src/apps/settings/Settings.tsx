@@ -124,9 +124,9 @@ export const Settings: React.FC = () => {
         ×
       </button>
       <div style={{ width: '100%', display: 'flex', justifyContent: 'center', marginBottom: 10 }}>
-  <img src={StartMenu} alt="Start Menu" style={{ width: 74, height: 74, borderRadius: 18, objectFit: 'cover' }} />
-</div>
-<h2 style={{ textAlign: 'center', marginBottom: 18 }}>Settings</h2>
+        <img src={StartMenu} alt="Start Menu" style={{ width: 74, height: 74, borderRadius: 18, objectFit: 'cover' }} />
+      </div>
+      <h2 style={{ textAlign: 'center', marginBottom: 18 }}>Settings</h2>
       <div className="settings-section">
         <label>Theme:</label>
         <select value={theme} onChange={e => save(e.target.value)}>
@@ -150,11 +150,23 @@ export const Settings: React.FC = () => {
         <label>Accessibility:</label>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           <label>
-            <input type="checkbox" checked={highContrast} onChange={toggleHighContrast} />
+            <input
+              type="checkbox"
+              id="high-contrast-toggle"
+              name="highContrast"
+              checked={highContrast}
+              onChange={toggleHighContrast}
+            />
             High-contrast mode
           </label>
           <label>
-            <input type="checkbox" checked={screenReader} onChange={toggleScreenReader} />
+            <input
+              type="checkbox"
+              id="screen-reader-toggle"
+              name="screenReader"
+              checked={screenReader}
+              onChange={toggleScreenReader}
+            />
             Enable screen reader hints
           </label>
           <button

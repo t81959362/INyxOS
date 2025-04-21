@@ -44,7 +44,15 @@ const LockScreen: React.FC<{
         <div style={{ fontSize: 44, fontWeight: 700, marginBottom: 10, color: '#fff' }}>{now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
         <div style={{ fontSize: 20, marginBottom: 24, color: '#eaeaff', fontWeight: 600 }}>{now.toLocaleDateString([], { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</div>
         <form onSubmit={e => { e.preventDefault(); if (!password || password === 'unlock') { onUnlock(); setPassword(''); setError(''); } else { setError('Incorrect password'); } }} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, width: '100%' }}>
-          <input type="password" placeholder="Enter password (default: un)" value={password} onChange={e => setPassword(e.target.value)} style={{ fontSize: 16, padding: '8px 18px', borderRadius: 8, border: 'none', outline: 'none', background: '#232a39cc', color: '#fff', marginBottom: 6, width: '88%', maxWidth: 260, textAlign: 'center', boxShadow: '0 2px 10px 0 #0002' }} />
+          <input 
+            type="password"
+            id="lock-screen-password"
+            name="lockPassword"
+            placeholder="Enter password (default: un)" 
+            value={password} 
+            onChange={e => setPassword(e.target.value)} 
+            style={{ fontSize: 16, padding: '8px 18px', borderRadius: 8, border: 'none', outline: 'none', background: '#232a39cc', color: '#fff', marginBottom: 6, width: '88%', maxWidth: 260, textAlign: 'center', boxShadow: '0 2px 10px 0 #0002' }}
+          />
           <button type="submit" style={{ fontSize: 16, padding: '7px 28px', borderRadius: 8, background: '#308aff', color: '#fff', border: 'none', fontWeight: 700, cursor: 'pointer', boxShadow: '0 2px 10px 0 #308aff33', transition: 'background 0.18s' }}>Unlock</button>
           {error && <div style={{ color: '#ff5252', fontWeight: 600 }}>{error}</div>}
         </form>
