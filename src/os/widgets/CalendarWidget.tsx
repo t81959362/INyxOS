@@ -85,9 +85,25 @@ export const CalendarWidget: React.FC = () => {
         {today.toLocaleString('default', { month: 'long' })} {year}
       </div>
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: 6 }}>
-        <button onClick={() => setMonth(m => m === 0 ? 11 : m-1) || (m === 0 && setYear(y => y-1))} style={{ marginRight: 8 }}>‹</button>
+        <button onClick={() => {
+          setMonth(prev => {
+            if (prev === 0) {
+              setYear(year => year - 1);
+              return 11;
+            }
+            return prev - 1;
+          });
+        }} style={{ marginRight: 8 }}>‹</button>
         <span style={{ flex: 1, textAlign: 'center' }}>{today.toLocaleString('default', { month: 'long' })} {year}</span>
-        <button onClick={() => setMonth(m => m === 11 ? 0 : m+1) || (m === 11 && setYear(y => y+1))} style={{ marginLeft: 8 }}>›</button>
+        <button onClick={() => {
+          setMonth(prev => {
+            if (prev === 11) {
+              setYear(year => year + 1);
+              return 0;
+            }
+            return prev + 1;
+          });
+        }} style={{ marginLeft: 8 }}>›</button>
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 34px)', gap: 2, background: 'rgba(44,18,62,0.18)', borderRadius: 8, padding: 4 }}>
         {["S","M","T","W","T","F","S"].map(d => <div key={d} style={{ fontWeight: 600, color: '#bfa', fontSize: 13, textAlign: 'center' }}>{d}</div>)}
