@@ -50,8 +50,10 @@ const DesktopContent: React.FC = () => {
           content: (
             <iframe
               src={app.url}
+              sandbox="allow-scripts allow-forms allow-same-origin allow-popups allow-pointer-lock"
+              allow="fullscreen; pointer-lock"
+              allowFullScreen
               style={{ width: '100%', height: '100%', border: 'none', background: '#181c25' }}
-              sandbox="allow-scripts allow-forms allow-same-origin allow-popups"
               title={app.name}
             />
           ),

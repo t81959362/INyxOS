@@ -46,6 +46,33 @@ export const WindowManager: React.FC<{
     }));
   };
 
+  // Enable maximize/full-screen for Browser and Minecraft PWAs
+  const handleMaximize = (idx: number) => () => {
+    setWindows(ws => ws.map((w, i) => {
+      if (i !== idx) return w;
+      if (!w.maximized) {
+        return {
+          ...w,
+          maximized: true,
+          prev: { left: w.left, top: w.top, width: w.width, height: w.height },
+          left: 0,
+          top: 0,
+          width: window.innerWidth,
+          height: window.innerHeight,
+        };
+      } else {
+        return {
+          ...w,
+          maximized: false,
+          left: w.prev?.left ?? w.left,
+          top: w.prev?.top ?? w.top,
+          width: w.prev?.width ?? w.width,
+          height: w.prev?.height ?? w.height,
+        };
+      }
+    }));
+  };
+
   return (
     <>
       {windows.map((win, idx) => (
@@ -62,33 +89,7 @@ export const WindowManager: React.FC<{
               setWindows(ws => ws.map((w, i) => i === idx ? { ...w, minimized: true, focused: false } : { ...w, focused: false }));
               setFocused(null);
             }}
-            onMaximize={win.title === 'Browser' ? () => {
-              setWindows(ws => ws.map((w, i) => {
-                if (i !== idx) return w;
-                if (!w.maximized) {
-                  // Save original size/position
-                  return {
-                    ...w,
-                    maximized: true,
-                    prev: { left: w.left, top: w.top, width: w.width, height: w.height },
-                    left: 0,
-                    top: 0,
-                    width: window.innerWidth,
-                    height: window.innerHeight
-                  };
-                } else {
-                  // Restore
-                  return {
-                    ...w,
-                    maximized: false,
-                    left: w.prev?.left ?? w.left,
-                    top: w.prev?.top ?? w.top,
-                    width: w.prev?.width ?? w.width,
-                    height: w.prev?.height ?? w.height
-                  };
-                }
-              }));
-            } : undefined}
+            onMaximize={(win.title === 'Browser' || win.title === 'Minecraft') ? handleMaximize(idx) : undefined}
           />
         )
       ))}
