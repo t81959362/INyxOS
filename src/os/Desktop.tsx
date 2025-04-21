@@ -24,6 +24,8 @@ import LockScreen from './LockScreen';
 import { widgetStubs } from './widgets/WidgetRegistry';
 import { Plasmoid } from './widgets/Plasmoid';
 import { ContextMenuProvider } from './ContextMenuProvider';
+import { useContextMenu } from './ContextMenuProvider';
+import { ContextMenuItem } from './components/ContextMenu';
 
 const DesktopContent: React.FC = () => {
   // ...existing state and logic...
@@ -191,9 +193,29 @@ class WindowErrorBoundary extends React.Component<{children: React.ReactNode}, {
     localStorage.setItem('os_widgets', JSON.stringify(widgets));
   }, [widgets]);
 
+  const { openMenu } = useContextMenu();
+  const desktopMenuItems: ContextMenuItem[] = [
+    { label: 'View', icon: '👁️', submenu: [
+        { label: 'Large icons', onClick: () => {} },
+        { label: 'Medium icons', onClick: () => {} },
+        { label: 'Small icons', onClick: () => {} },
+      ] },
+    { label: 'Sort By', icon: '↕️', submenu: [
+        { label: 'Name', onClick: () => {} },
+        { label: 'Date modified', onClick: () => {} },
+        { label: 'Type', onClick: () => {} },
+        { label: 'Size', onClick: () => {} },
+      ] },
+    { label: 'New Folder', icon: '📁', onClick: () => push({ title: 'Info', message: 'Create folder...', type: 'info' }) },
+    { label: 'Display settings', icon: '🎛️', onClick: () => {
+        const settings = appStubs.find(a => a.id === 'settings');
+        if (settings) window.dispatchEvent(new CustomEvent('os-open-pwa', { detail: settings }));
+      } },
+    { label: 'Refresh', icon: '🔄', shortcut: 'F5', onClick: () => window.location.reload() },
+  ];
+
   return (
-    <ContextMenuProvider>
-      <div className="desktop-root">
+      <div className="desktop-root" onContextMenu={e => { e.preventDefault(); openMenu(e.clientX, e.clientY, desktopMenuItems); }}>
 
         <LockScreen show={locked} onUnlock={() => setLocked(false)} wallpaperUrl={wallpaperUrl} />
         <div className="desktop-icons">
@@ -329,12 +351,13 @@ class WindowErrorBoundary extends React.Component<{children: React.ReactNode}, {
           ))}
         </div>
       </div>
-    </ContextMenuProvider>
   );
 };
 
 export const Desktop: React.FC = () => (
   <NotificationProvider>
-    <DesktopContent />
+    <ContextMenuProvider>
+      <DesktopContent />
+    </ContextMenuProvider>
   </NotificationProvider>
 );
