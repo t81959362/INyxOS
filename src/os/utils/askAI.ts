@@ -243,6 +243,24 @@ export async function askAI(q: string): Promise<string> {
     } catch {}
   }
 
+  // 13. Current US President (Wiki)
+  const presMatch = q.match(/who is (?:the )?current (?:us )?president\??/i);
+  if (presMatch) {
+    try {
+      const sum: any = await fetch(
+        'https://en.wikipedia.org/api/rest_v1/page/summary/President_of_the_United_States'
+      ).then(r => r.json());
+      if (sum.extract) {
+        const sentences = sum.extract.split('. ');
+        const line = sentences.find((s: string) => /current officeholder is/i.test(s));
+        if (line) {
+          return line.replace(/.*is/i, 'The current President is') + '.';
+        }
+        return sentences[1] + '.';
+      }
+    } catch {}
+  }
+
   // 5. Wikipedia concise summary via REST API
   try {
     const page: any = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(q)}`)
@@ -264,6 +282,21 @@ export async function askAI(q: string): Promise<string> {
     } catch {}
   }
 
-  // 6. Generic fallback
+  // 6. Fallback via OpenRouter
+  const openrouterKey = import.meta.env.VITE_OPENROUTER_API_KEY;
+  if (openrouterKey) {
+    try {
+      const or: any = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${openrouterKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ model: 'openai/gpt-4o', messages: [{ role: 'user', content: q }] }),
+      }).then(r => r.json());
+      const msg = or.choices?.[0]?.message?.content;
+      if (msg) return msg;
+    } catch {}
+  }
   return `I'm sorry, I don't have an answer for that.`;
 }
