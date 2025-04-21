@@ -627,6 +627,84 @@ export async function askAI(q: string): Promise<string> {
     return `Sorry, couldn't fetch GitHub user ${ghMatch[1]}.`;
   }
 
+  // Open Library: search by title
+  if (/open library (?:search|info) (.+)/i.test(q)) {
+    const match = q.match(/open library (?:search|info) (.+)/i);
+    if (match) {
+      const title = match[1].trim();
+      try {
+        const res: any = await fetch(`https://openlibrary.org/search.json?title=${encodeURIComponent(title)}&limit=1`).then(r => r.json());
+        const doc = res.docs?.[0];
+        if (doc) {
+          return `📚 ${doc.title} by ${doc.author_name?.[0] || 'unknown'} (${doc.first_publish_year})`;
+        }
+      } catch {}
+    }
+    return "Sorry, could not fetch from Open Library.";
+  }
+
+  // ExchangeRates: latest rates or currency conversion
+  if (/exchange rate|currency convert/i.test(q)) {
+    try {
+      const rdata: any = await fetch('https://api.exchangerate.host/latest').then(r => r.json());
+      const base = rdata.base;
+      const rates = rdata.rates;
+      const parts = q.match(/convert ([A-Za-z]{3}) to ([A-Za-z]{3})/i);
+      if (parts) {
+        const from = parts[1].toUpperCase(), to = parts[2].toUpperCase();
+        const rate = rates[to] / rates[from];
+        return `1 ${from} = ${rate.toFixed(4)} ${to}`;
+      }
+      return `Base: ${base}, 1 ${base} = ${rates['USD']} USD`;
+    } catch {}
+    return "Sorry, I couldn't fetch exchange rates.";
+  }
+
+  // SpaceX: latest launch
+  if (/spacex.*latest launch/i.test(q)) {
+    try {
+      const s: any = await fetch('https://api.spacexdata.com/v4/launches/latest').then(r => r.json());
+      return `🚀 ${s.name} on ${new Date(s.date_utc).toLocaleDateString()}`;
+    } catch {}
+    return "Sorry, I couldn't fetch SpaceX data.";
+  }
+
+  // TV Maze: show info
+  const tvMatch = q.match(/tv show (\d+)/i);
+  if (tvMatch) {
+    try {
+      const show: any = await fetch(`https://api.tvmaze.com/shows/${tvMatch[1]}`).then(r => r.json());
+      return `TV Show: ${show.name} (${show.premiered}), Rating: ${show.rating?.average || 'n/a'}`;
+    } catch {}
+    return "Sorry, I couldn't fetch TV show info.";
+  }
+
+  // Open Food Facts: product barcode
+  const foodMatch = q.match(/product (\d+)/i);
+  if (foodMatch) {
+    try {
+      const fo: any = await fetch(`https://world.openfoodfacts.org/api/v0/product/${foodMatch[1]}.json`).then(r => r.json());
+      const prod = fo.product;
+      return `🧀 ${prod.product_name || prod.generic_name} by ${prod.brands}`;
+    } catch {}
+    return "Sorry, I couldn't fetch product info.";
+  }
+
+  // Public Holidays: country/year
+  if (/public holiday/i.test(q)) {
+    const phMatch = q.match(/public holidays? (?:in )?([A-Za-z]{2})(?: (\d{4}))?/i);
+    const country = phMatch?.[1] || 'US';
+    const year = phMatch?.[2] || new Date().getFullYear();
+    try {
+      const ph: any = await fetch(`https://date.nager.at/api/v3/PublicHolidays/${year}/${country.toUpperCase()}`).then(r => r.json());
+      const sample = ph[0];
+      return sample
+        ? `First holiday: ${sample.localName} on ${sample.date}`
+        : 'No holidays found.';
+    } catch {}
+    return "Sorry, I couldn't fetch public holidays.";
+  }
+
   // 6. Fallback via OpenRouter
   const openrouterKey = import.meta.env.VITE_OPENROUTER_API_KEY;
   const openrouterModel = inlineModel || import.meta.env.VITE_OPENROUTER_MODEL || 'google/gemini-2.0-flash-thinking-exp-1219:free';
