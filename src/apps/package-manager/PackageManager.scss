@@ -1,8 +1,9 @@
 .package-manager-root {
-  padding: 16px 12px;
+  padding: 4px 12px 16px;
   font-family: inherit;
   color: var(--text, #f3f3f3);
-  background: var(--bg, rgba(30,34,43,0.95));
+  background: linear-gradient(135deg, rgba(143,95,255,0.1), rgba(63,167,255,0.1)), var(--bg, rgba(30,34,43,0.8));
+  backdrop-filter: blur(8px);
   border-radius: 18px;
   box-shadow: 0 4px 32px #000a;
   max-width: 900px;
