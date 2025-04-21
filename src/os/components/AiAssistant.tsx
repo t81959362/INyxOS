@@ -17,10 +17,18 @@ const AiAssistant: React.FC<Props> = ({ onClose }) => {
     setChat(prev => [...prev, `You: ${input}`]);
     try {
       const response = await askAI(input);
+      // if response is just a URL, show popup only and exit
+      const trimmed = response.trim();
+      if (/^https?:\/\/\S+$/i.test(trimmed)) {
+        setImageUrl(trimmed);
+        // clear input and reset height
+        setInput('');
+        if (textareaRef.current) textareaRef.current.style.height = 'auto';
+        setLoading(false);
+        return;
+      }
       setChat(prev => [...prev, `Nexa: ${response}`]);
-      // detect image URL and set preview
-      const urlMatch = response.match(/(https?:\/\/\S+\.(?:png|jpe?g|gif|svg))/i);
-      if (urlMatch) setImageUrl(urlMatch[1]); else setImageUrl(null);
+      setImageUrl(null);
     } catch {
       setChat(prev => [...prev, `Nexa: Sorry, something went wrong.`]);
     }
@@ -52,17 +60,17 @@ const AiAssistant: React.FC<Props> = ({ onClose }) => {
 
   return (
     <div className="ai-assistant-overlay">
+      {imageUrl && (
+        <div className="ai-image-popup">
+          <img src={imageUrl} alt="Preview" />
+        </div>
+      )}
       <div className="ai-assistant-header">
         <span>Nexa</span>
         {loading && <div className="ai-spinner" />}
         <button className="ai-close-btn" onClick={onClose}>×</button>
       </div>
       <div className="ai-assistant-body">
-        {imageUrl && (
-          <div className="ai-image-preview">
-            <img src={imageUrl} alt="Preview" />
-          </div>
-        )}
         {chat.map((line, idx) => (
           <div key={idx} className="ai-chat-line">{line}</div>
         ))}
@@ -83,7 +91,7 @@ const AiAssistant: React.FC<Props> = ({ onClose }) => {
           disabled={loading}
         />
         <button onClick={handleSend} disabled={loading}>Send</button>
-        <button className="ai-think-btn" onClick={handleThink} disabled={loading} title="Think">🧠</button>
+        <button className="ai-think-btn" onClick={handleThink} disabled={loading} title="Research">💡</button>
       </div>
     </div>
   );

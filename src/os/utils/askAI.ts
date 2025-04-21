@@ -5,6 +5,8 @@ let lastLocation: string | null = null;
 
 export async function askAI(q: string): Promise<string> {
   q = q.trim();
+  // normalize: strip surrounding quotes (including curly)
+  q = q.replace(/^[“”"'`]+|[“”"'`]+$/g, '').trim();
   // 0.3 Pronoun resolution for weather: use lastLocation
   if (/weather/i.test(q) && /\b(there|here|it)\b/i.test(q) && lastLocation) {
     const city = lastLocation;
@@ -394,13 +396,32 @@ export async function askAI(q: string): Promise<string> {
     } catch {}
   }
 
+  // Image intent: "show me an image of X" or "picture of X"
+  const imageOf = q.match(/^(?:show me an? (?:image|picture) of |(?:image|picture) of )(.+)/i);
+  if (imageOf) {
+    const title = imageOf[1].trim();
+    try {
+      const page: any = await fetch(
+        `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`
+      ).then(r => r.json());
+      const imgUrl = page.originalimage?.source || page.thumbnail?.source;
+      if (imgUrl) return imgUrl;
+    } catch {}
+    return `Sorry, I couldn't find an image for ${title}.`;
+  }
+
   // 5. Wikipedia concise summary via REST API
   try {
     const page: any = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(q)}`)
       .then(r => r.json());
     if (page.extract) {
       const sentences = page.extract.split('. ');
-      return sentences[0] + '.';
+      const summary = sentences[0] + '.';
+      // include thumbnail if available for preview
+      if (page.thumbnail?.source) {
+        return `${summary} ${page.thumbnail.source}`;
+      }
+      return summary;
     }
   } catch {}
   // Sports next match via TheSportsDB (Premier League id=4328)

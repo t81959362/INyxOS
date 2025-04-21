@@ -6,6 +6,7 @@ import { Settings } from '../apps/settings/Settings';
 import { BrowserApp } from '../apps/browser/BrowserApp';
 import PackageManager from '../apps/package-manager';
 import LibreOfficeApp from '../apps/libreoffice/LibreOfficeApp';
+import { TinyCoreApp } from '../apps/vm/TinyCoreApp';
 
 export const appStubs = [
   {
@@ -88,6 +89,17 @@ export const appStubs = [
     top: 120,
     left: 420,
     zIndex: 10
+  },
+  {
+    id: 'tinycorevm',
+    title: 'Tiny Core VM',
+    icon: '🖥️',
+    content: () => <TinyCoreApp />,
+    width: 800,
+    height: 600,
+    top: 100,
+    left: 200,
+    zIndex: 10,
   }
 ];
 
