@@ -23,6 +23,7 @@ import LockScreen from './LockScreen';
 
 import { widgetStubs } from './widgets/WidgetRegistry';
 import { Plasmoid } from './widgets/Plasmoid';
+import { ContextMenuProvider } from './ContextMenuProvider';
 
 const DesktopContent: React.FC = () => {
   // ...existing state and logic...
@@ -191,18 +192,79 @@ class WindowErrorBoundary extends React.Component<{children: React.ReactNode}, {
   }, [widgets]);
 
   return (
-    <div className="desktop-root">
+    <ContextMenuProvider>
+      <div className="desktop-root">
 
-      <LockScreen show={locked} onUnlock={() => setLocked(false)} wallpaperUrl={wallpaperUrl} />
-      <div className="desktop-icons">
-        {desktopShortcuts.map((shortcut: { id: string; app: string; icon?: string; name?: string }) => {
-          const app = appStubs.find(a => a.id === shortcut.app);
-          if (!app) return null;
+        <LockScreen show={locked} onUnlock={() => setLocked(false)} wallpaperUrl={wallpaperUrl} />
+        <div className="desktop-icons">
+          {desktopShortcuts.map((shortcut: { id: string; app: string; icon?: string; name?: string }) => {
+            const app = appStubs.find(a => a.id === shortcut.app);
+            if (!app) return null;
+            return (
+              <button
+                key={shortcut.id}
+                className="desktop-icon"
+                onClick={() => setWindows(w => [...w, {
+                  id: Math.random().toString(36).slice(2),
+                  title: app.title,
+                  icon: app.icon,
+                  content: typeof app.content === 'function' ? app.content : () => app.content,
+                  width: app.width,
+                  height: app.height,
+                  top: app.top,
+                  left: app.left,
+                  zIndex: 10
+                }])}
+              >
+                <span className="desktop-icon-img">{shortcut.icon ? shortcut.icon : (
+  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="6" y="6" width="20" height="20" rx="6" fill="#8f5fff"/>
+    <path d="M12 18h8M12 14h8" stroke="#fff" strokeWidth="2" strokeLinecap="round"/>
+  </svg>
+)}</span>
+                <span className="desktop-icon-label">{shortcut.name || app.title}</span>
+              </button>
+            );
+          })}
+        </div>
+        {/* Plasmoid widgets */}
+        {widgets.map((w: WidgetInstance, idx: number) => {
+          const stub = widgetStubs.find((ws) => ws.id === w.widgetId);
+          if (!stub) return null;
           return (
-            <button
-              key={shortcut.id}
-              className="desktop-icon"
-              onClick={() => setWindows(w => [...w, {
+            <Plasmoid
+              key={w.id}
+              id={w.id}
+              x={w.x ?? (120 + 40 * idx)}
+              y={w.y ?? (120 + 40 * idx)}
+              zIndex={w.zIndex ?? (100 + idx)}
+              onRemove={(id) => setWidgets((ws: WidgetInstance[]) => ws.filter((ww) => ww.id !== id))}
+              onPositionChange={(id, dx, dy) => setWidgets((ws: WidgetInstance[]) => ws.map((ww) => ww.id === id ? { ...ww, x: (ww.x ?? 0) + dx, y: (ww.y ?? 0) + dy } : ww))}
+              onFocus={id => setWidgets((ws: WidgetInstance[]) => {
+                const zTop = (ws.reduce((acc: number, w: WidgetInstance) => Math.max(acc, w.zIndex ?? 100), 100) + 1);
+                return ws.map((ww) => ww.id === id ? { ...ww, zIndex: zTop } : ww);
+              })}
+              widgetTitle={stub.title}
+              widgetIcon={stub.icon}
+            >
+              <stub.component />
+            </Plasmoid>
+          );
+        })}
+        <WindowErrorBoundary>
+          <WindowManager windows={windows} setWindows={setWindows} />
+        </WindowErrorBoundary>
+        <Taskbar
+          onLauncher={() => setShowStartMenu(v => !v)}
+          windows={windows}
+          setWindows={setWindows}
+        />
+        {showStartMenu && (
+          <StartMenu
+            show={showStartMenu}
+            onClose={() => setShowStartMenu(false)}
+            onLaunchApp={app => {
+              setWindows(w => [...w, {
                 id: Math.random().toString(36).slice(2),
                 title: app.title,
                 icon: app.icon,
@@ -212,121 +274,62 @@ class WindowErrorBoundary extends React.Component<{children: React.ReactNode}, {
                 top: app.top,
                 left: app.left,
                 zIndex: 10
-              }])}
-            >
-              <span className="desktop-icon-img">{shortcut.icon ? shortcut.icon : (
-  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="6" y="6" width="20" height="20" rx="6" fill="#8f5fff"/>
-    <path d="M12 18h8M12 14h8" stroke="#fff" strokeWidth="2" strokeLinecap="round"/>
-  </svg>
-)}</span>
-              <span className="desktop-icon-label">{shortcut.name || app.title}</span>
-            </button>
-          );
-        })}
+              }]);
+              setShowStartMenu(false);
+            }}
+            onLaunchWidget={(widget) => {
+              setWidgets(ws => [
+                ...ws,
+                {
+                  id: 'widget-' + widget.id + '-' + Date.now(),
+                  widgetId: widget.id,
+                  x: 120 + 30 * ws.length,
+                  y: 120 + 30 * ws.length,
+                  zIndex: 100 + ws.length
+                }
+              ]);
+              setShowStartMenu(false);
+            }}
+            onClearSession={() => {
+              setWindows([]);
+              setWidgets([]);
+              localStorage.clear();
+              window.location.reload();
+            }}
+            apps={appStubs}
+            folders={[]}
+            onOpenFolder={() => {}}
+            onOpenShortcut={(type: 'documents' | 'pictures' | 'videos') => {
+              // Open Documents, Pictures, Videos as Explorer windows
+              let folderTitle = '';
+              if (type === 'documents') folderTitle = 'Documents';
+              if (type === 'pictures') folderTitle = 'Pictures';
+              if (type === 'videos') folderTitle = 'Videos';
+              setWindows(w => [...w, {
+                id: 'explorer-' + type + '-' + Date.now(),
+                title: folderTitle,
+                icon: '📁',
+                content: () => <div style={{padding: 32, color: '#fff'}}>Folder: {folderTitle}</div>,
+                width: 700,
+                height: 520,
+                top: 120,
+                left: 420,
+                zIndex: 10
+              }]);
+              setShowStartMenu(false);
+            }}
+            spotlight={true}
+            doubleClickApps={true}
+          />
+        )}
+        <NotificationCenter notifications={notifications} />
+        <div style={{ position: 'fixed', bottom: 60, right: 24, zIndex: 999 }}>
+          {notifications.slice(-2).map(n => (
+            <Toast key={n.id} title={n.title} message={n.message} type={n.type} onClose={() => remove(n.id)} />
+          ))}
+        </div>
       </div>
-      {/* Plasmoid widgets */}
-      {widgets.map((w: WidgetInstance, idx: number) => {
-        const stub = widgetStubs.find((ws) => ws.id === w.widgetId);
-        if (!stub) return null;
-        return (
-          <Plasmoid
-            key={w.id}
-            id={w.id}
-            x={w.x ?? (120 + 40 * idx)}
-            y={w.y ?? (120 + 40 * idx)}
-            zIndex={w.zIndex ?? (100 + idx)}
-            onRemove={(id) => setWidgets((ws: WidgetInstance[]) => ws.filter((ww) => ww.id !== id))}
-            onPositionChange={(id, dx, dy) => setWidgets((ws: WidgetInstance[]) => ws.map((ww) => ww.id === id ? { ...ww, x: (ww.x ?? 0) + dx, y: (ww.y ?? 0) + dy } : ww))}
-            onFocus={id => setWidgets((ws: WidgetInstance[]) => {
-              const zTop = (ws.reduce((acc: number, w: WidgetInstance) => Math.max(acc, w.zIndex ?? 100), 100) + 1);
-              return ws.map((ww) => ww.id === id ? { ...ww, zIndex: zTop } : ww);
-            })}
-            widgetTitle={stub.title}
-            widgetIcon={stub.icon}
-          >
-            <stub.component />
-          </Plasmoid>
-        );
-      })}
-      <WindowErrorBoundary>
-        <WindowManager windows={windows} setWindows={setWindows} />
-      </WindowErrorBoundary>
-      <Taskbar
-        onLauncher={() => setShowStartMenu(v => !v)}
-        windows={windows}
-        setWindows={setWindows}
-      />
-      {showStartMenu && (
-        <StartMenu
-          show={showStartMenu}
-          onClose={() => setShowStartMenu(false)}
-          onLaunchApp={app => {
-            setWindows(w => [...w, {
-              id: Math.random().toString(36).slice(2),
-              title: app.title,
-              icon: app.icon,
-              content: typeof app.content === 'function' ? app.content : () => app.content,
-              width: app.width,
-              height: app.height,
-              top: app.top,
-              left: app.left,
-              zIndex: 10
-            }]);
-            setShowStartMenu(false);
-          }}
-          onLaunchWidget={(widget) => {
-            setWidgets(ws => [
-              ...ws,
-              {
-                id: 'widget-' + widget.id + '-' + Date.now(),
-                widgetId: widget.id,
-                x: 120 + 30 * ws.length,
-                y: 120 + 30 * ws.length,
-                zIndex: 100 + ws.length
-              }
-            ]);
-            setShowStartMenu(false);
-          }}
-          onClearSession={() => {
-            setWindows([]);
-            setWidgets([]);
-            localStorage.clear();
-            window.location.reload();
-          }}
-          apps={appStubs}
-          folders={[]}
-          onOpenFolder={() => {}}
-          onOpenShortcut={(type: 'documents' | 'pictures' | 'videos') => {
-            // Open Documents, Pictures, Videos as Explorer windows
-            let folderTitle = '';
-            if (type === 'documents') folderTitle = 'Documents';
-            if (type === 'pictures') folderTitle = 'Pictures';
-            if (type === 'videos') folderTitle = 'Videos';
-            setWindows(w => [...w, {
-              id: 'explorer-' + type + '-' + Date.now(),
-              title: folderTitle,
-              icon: '📁',
-              content: () => <div style={{padding: 32, color: '#fff'}}>Folder: {folderTitle}</div>,
-              width: 700,
-              height: 520,
-              top: 120,
-              left: 420,
-              zIndex: 10
-            }]);
-            setShowStartMenu(false);
-          }}
-          spotlight={true}
-          doubleClickApps={true}
-        />
-      )}
-      <NotificationCenter notifications={notifications} />
-      <div style={{ position: 'fixed', bottom: 60, right: 24, zIndex: 999 }}>
-        {notifications.slice(-2).map(n => (
-          <Toast key={n.id} title={n.title} message={n.message} type={n.type} onClose={() => remove(n.id)} />
-        ))}
-      </div>
-    </div>
+    </ContextMenuProvider>
   );
 };
 
