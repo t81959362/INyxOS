@@ -210,18 +210,32 @@ const DesktopContent: React.FC = () => {
 
   const { openMenu } = useContextMenu();
   const desktopMenuItems: ContextMenuItem[] = [
-    { label: 'View', icon: '🖼️', submenu: [
+    { label: 'View', icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} style={{ width: 19, height: 19 }}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5s8.268 2.943 9.542 7c-1.274 4.057-5.065 7-9.542 7s-8.268-2.943-9.542-7z" />
+        </svg>
+      ), submenu: [
         { label: 'Large icons', onClick: () => setIconSize('large') },
         { label: 'Medium icons', onClick: () => setIconSize('medium') },
         { label: 'Small icons', onClick: () => setIconSize('small') },
       ] },
-    { label: 'Sort By', icon: '↕️', submenu: [
+    { label: 'Sort By', icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} style={{ width: 19, height: 19 }}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5L7 7m0 0l-2-2m2 2l2 2m-2-2v12m6-12l2 2m0 0l2-2m-2 2l-2 2m2-2v12" />
+        </svg>
+      ), submenu: [
         { label: 'Name', onClick: () => setDesktopItems(prev => [...prev].sort((a, b) => a.name.localeCompare(b.name))) },
         { label: 'Date modified', onClick: () => setDesktopItems(prev => [...prev].sort((a, b) => b.mtime - a.mtime)) },
         { label: 'Type', onClick: () => setDesktopItems(prev => [...prev].sort((a, b) => a.type.localeCompare(b.type))) },
         { label: 'Size', onClick: () => setDesktopItems(prev => [...prev].sort((a, b) => a.size - b.size)) },
       ] },
-    { label: 'New Folder', icon: '📁', onClick: async () => {
+    { label: 'New Folder', icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} style={{ width: 19, height: 19 }}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M3 7h6l2 2h8a2 2 0 012 2v7a2 2 0 01-2 2H3a2 2 0 01-2-2V9a2 2 0 012-2z" />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 11v6m3-3h-6" />
+        </svg>
+      ), onClick: async () => {
         const name = prompt('Folder name', 'New folder')?.trim();
         if (!name) return;
         await fsRef.current.mkdir(`/home/user/${name}`);
@@ -230,7 +244,12 @@ const DesktopContent: React.FC = () => {
         // Notify file explorer instances to refresh
         window.dispatchEvent(new CustomEvent('fs-change'));
       } },
-    { label: 'Display settings', icon: '🎛️', onClick: () => {
+    { label: 'Display settings', icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} style={{ width: 19, height: 19 }}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 6.75V18.75A2.25 2.25 0 006.75 21h10.5a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0017.25 4.5H6.75A2.25 2.25 0 004.5 6.75z" />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5h7.5M12 17h4.5M12 13.5h4.5" />
+        </svg>
+      ), onClick: () => {
         const stub = appStubs.find(a => a.id === 'settings');
         if (stub) window.dispatchEvent(new CustomEvent('os-open-pwa', { detail: stub }));
       } },

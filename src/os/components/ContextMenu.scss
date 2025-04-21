@@ -1,13 +1,17 @@
-.glass-context-menu {
-  background: linear-gradient(135deg, rgba(138,43,226,0.2), rgba(75,0,130,0.2));
+.card {
+  width: 190px;
+  background-color: rgba(36, 40, 50, 0.5);
+  background-image: linear-gradient(139deg, rgba(129, 54, 110, 0.5) 0%, rgba(37, 28, 40, 0.5) 100%);
   backdrop-filter: blur(16px) saturate(1.6);
-  border-radius: 12px;
-  box-shadow: 0 4px 24px rgba(75,0,130,0.15), 0 1px 3px rgba(75,0,130,0.1);
-  padding: 4px 0;
+  border-radius: 9px;
+  padding: 15px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   min-width: 150px;
   border: none;
   color: #e3f2fd;
-  font-size: 1.04rem;
+  font-size: 1.0rem;
   font-family: inherit;
   user-select: none;
   animation: gcm-fade-in 0.18s cubic-bezier(.61,1.4,.38,1);
@@ -18,41 +22,74 @@
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-.glass-context-menu-item {
+.separator {
+  border-top: 1.5px solid #42434a00;
+}
+
+.list {
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0px 10px;
+}
+
+.element {
   display: flex;
   align-items: center;
+  color: #7e8590;
   gap: 10px;
-  padding: 5px 16px;
+  transition: all 0.3s ease-out;
+  padding: 4px 7px;
+  border-radius: 6px;
   cursor: pointer;
-  background: none;
-  min-height: 34px;
-  transition: background 0.13s, color 0.13s;
-  border-radius: 7px;
-  color: #e3f2fd;
 }
-.glass-context-menu-item:hover:not(.disabled) {
-  background: rgba(48,138,255,0.17);
-  color: #fff;
+
+.element svg,
+.element .icon {
+  width: 19px;
+  height: 19px;
+  transition: all 0.3s ease-out;
 }
-.glass-context-menu-item.disabled {
-  color: #8ca9c9;
-  cursor: default;
+
+.label {
+  font-weight: normal;
 }
-.gcm-icon {
-  width: 1.3em;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
+
+.element:hover {
+  background-color: #ffffff;
+  color: #ffffff;
+  transform: translate(1px, -1px);
 }
-.gcm-label {
-  flex: 1;
+
+.delete:hover {
+  background-color: #8e2a2a;
 }
-.gcm-shortcut {
+
+.element:active {
+  transform: scale(0.99);
+}
+
+.list:not(:last-child) .element:hover svg,
+.list:not(:last-child) .element:hover .icon {
+  stroke: #ffffff;
+}
+
+.list:last-child svg,
+.list:last-child .icon {
+  stroke: #ffffff;
+}
+
+.list:last-child .element {
+  color: #f1f1f1;
+}
+
+.list:last-child .element:hover {
+  background-color: rgba(56, 45, 71, 0.836);
+}
+
+.element .shortcut {
   color: #7ecfff;
   font-size: 0.96em;
   margin-left: 18px;
-}
-.gcm-arrow {
-  margin-left: 10px;
-  color: #7ecfff;
 }
