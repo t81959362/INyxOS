@@ -57,7 +57,35 @@ export const Settings: React.FC = () => {
   const [nightLightEnabled, setNightLightEnabled] = useState(localStorage.getItem('nyxos_night_light')==='1');
   const [dndEnabled, setDndEnabled] = useState(localStorage.getItem('nyxos_dnd')==='1');
 
-  const [activeTab, setActiveTab] = useState<'appearance'|'accessibility'|'privacy'|'updates'|'about'>('appearance');
+  // AI Assistant Config state
+  const [models, setModels] = useState<string[]>([]);
+  const [selectedModel, setSelectedModel] = useState(localStorage.getItem('nexa_model') || '');
+  useEffect(() => {
+    fetch('https://openrouter.ai/api/v1/models')
+      .then(res => res.json())
+      .then(data => setModels(data.models.map((m: any) => m.id)))
+      .catch(console.error);
+  }, []);
+
+  // Appearance extensions
+  const [systemFont, setSystemFont] = useState(localStorage.getItem('nyxos_font_family') || 'system-ui');
+  const [fontSize, setFontSize] = useState(Number(localStorage.getItem('nyxos_font_size')) || 14);
+  const [cursorAccel, setCursorAccel] = useState(Number(localStorage.getItem('nyxos_cursor_accel')) || 1);
+  const [touchSwipe, setTouchSwipe] = useState(localStorage.getItem('nyxos_touch_swipe') === '1');
+  const [touchPinch, setTouchPinch] = useState(localStorage.getItem('nyxos_touch_pinch') === '1');
+  const [vsyncEnabled, setVsyncEnabled] = useState(localStorage.getItem('nyxos_vsync') !== '0');
+
+  // Accessibility extensions
+  const [windowMagnifier, setWindowMagnifier] = useState(localStorage.getItem('nyxos_window_magnifier') === '1');
+  const [colorBlindMode, setColorBlindMode] = useState(localStorage.getItem('nyxos_color_blind') === '1');
+  const [reduceMotion, setReduceMotion] = useState(localStorage.getItem('nyxos_reduce_motion') === '1');
+
+  // Localization & keymap
+  const languages = [ { code: 'en', label: 'English', flag: '🇺🇸' }, { code: 'es', label: 'Español', flag: '🇪🇸' } ];
+  const [language, setLanguage] = useState(localStorage.getItem('nyxos_language') || 'en');
+  const [keymap, setKeymap] = useState(localStorage.getItem('nyxos_keymap') || 'qwerty');
+
+  const [activeTab, setActiveTab] = useState<'appearance'|'accessibility'|'privacy'|'updates'|'nexa'|'language'|'about'>('appearance');
 
   return (
     <div className="settings-overlay">
@@ -77,6 +105,8 @@ export const Settings: React.FC = () => {
               <li className={activeTab==='accessibility'?'active':''} onClick={()=>setActiveTab('accessibility')}>Accessibility</li>
               <li className={activeTab==='privacy'?'active':''} onClick={()=>setActiveTab('privacy')}>Privacy</li>
               <li className={activeTab==='updates'?'active':''} onClick={()=>setActiveTab('updates')}>Updates</li>
+              <li className={activeTab==='nexa'?'active':''} onClick={()=>setActiveTab('nexa')}>Nexa Assistant</li>
+              <li className={activeTab==='language'?'active':''} onClick={()=>setActiveTab('language')}>Language</li>
               <li className={activeTab==='about'?'active':''} onClick={()=>setActiveTab('about')}>About</li>
             </ul>
           </aside>
@@ -92,6 +122,22 @@ export const Settings: React.FC = () => {
                   <input type="color" value={accent||themes.find(t=>t.name===theme)?.accent!} onChange={handleAccentChange}/>
                   <button onClick={()=>{ localStorage.removeItem('nyxos_accent'); setAccent(''); }}>Reset</button>
                 </div>
+                {/* Appearance extensions */}
+                <div className="font-settings">
+                  <label>Font Family: <select value={systemFont} onChange={e=>{setSystemFont(e.target.value);localStorage.setItem('nyxos_font_family',e.target.value);document.documentElement.style.setProperty('--font-family',e.target.value);}}>
+                    <option value="system-ui">System UI</option><option value="Arial">Arial</option><option value="Roboto">Roboto</option><option value="Custom">Custom...</option>
+                  </select></label>
+                  <label>Font Size: <input type="number" min={10} max={72} value={fontSize} onChange={e=>{const v=Number(e.target.value);setFontSize(v);localStorage.setItem('nyxos_font_size',v.toString());document.documentElement.style.setProperty('--font-size',`${v}px`);}}/>px</label>
+                  <p>Place custom fonts (.ttf/.otf) in /assets/fonts/</p>
+                </div>
+                <div className="cursor-settings">
+                  <label>Cursor Acceleration: <input type="range" min="0.1" max="5" step="0.1" value={cursorAccel} onChange={e=>{const v=Number(e.target.value);setCursorAccel(v);localStorage.setItem('nyxos_cursor_accel',v.toString());}}/></label>
+                </div>
+                <div className="touch-settings">
+                  <label><input type="checkbox" checked={touchSwipe} onChange={e=>{const v=e.target.checked;setTouchSwipe(v);localStorage.setItem('nyxos_touch_swipe',v?'1':'0');}}/> Two-finger swipe</label>
+                  <label><input type="checkbox" checked={touchPinch} onChange={e=>{const v=e.target.checked;setTouchPinch(v);localStorage.setItem('nyxos_touch_pinch',v?'1':'0');}}/> Pinch-zoom</label>
+                </div>
+                <label><input type="checkbox" checked={vsyncEnabled} onChange={e=>{const v=e.target.checked;setVsyncEnabled(v);localStorage.setItem('nyxos_vsync',v?'1':'0');}}/> VSync</label>
               </section>
             )}
             {activeTab==='accessibility' && (
@@ -99,6 +145,9 @@ export const Settings: React.FC = () => {
                 <h3>Accessibility</h3>
                 <label><input type="checkbox" checked={highContrast} onChange={toggleHighContrast}/> High Contrast</label>
                 <label><input type="checkbox" checked={screenReader} onChange={toggleScreenReader}/> Screen Reader</label>
+                <label><input type="checkbox" checked={windowMagnifier} onChange={e=>{const v=e.target.checked;setWindowMagnifier(v);localStorage.setItem('nyxos_window_magnifier',v?'1':'0');}}/> Window Magnifier</label>
+                <label><input type="checkbox" checked={colorBlindMode} onChange={e=>{const v=e.target.checked;setColorBlindMode(v);localStorage.setItem('nyxos_color_blind',v?'1':'0');document.documentElement.classList.toggle('color-blind',v);}}/> Color Blind Mode</label>
+                <label><input type="checkbox" checked={reduceMotion} onChange={e=>{const v=e.target.checked;setReduceMotion(v);localStorage.setItem('nyxos_reduce_motion',v?'1':'0');document.documentElement.classList.toggle('reduce-motion',v);}}/> Reduce Motion</label>
               </section>
             )}
             {activeTab==='privacy' && (
@@ -117,6 +166,19 @@ export const Settings: React.FC = () => {
                 <h3>Updates</h3>
                 <label><input type="checkbox" checked={autoUpdate} onChange={()=>{setAutoUpdate(!autoUpdate); localStorage.setItem('nyxos_autoupdate', autoUpdate?'0':'1');}}/> Automatic Updates</label>
                 <button onClick={()=>push({title:'Updater',message:'Checking for updates...',type:'info'})}>Check Now</button>
+              </section>
+            )}
+            {activeTab==='nexa' && (
+              <section className="section">
+                <h3>Nexa Assistant Config</h3>
+                <label>Model: <select value={selectedModel} onChange={e=>{setSelectedModel(e.target.value);localStorage.setItem('nexa_model',e.target.value);}}><option value="">Select model</option>{models.map(m=><option key={m} value={m}>{m}</option>)}</select></label>
+              </section>
+            )}
+            {activeTab==='language' && (
+              <section className="section">
+                <h3>Language & Keyboard</h3>
+                <label>Language: <select value={language} onChange={e=>{setLanguage(e.target.value);localStorage.setItem('nyxos_language',e.target.value);}}>{languages.map(l=><option key={l.code} value={l.code}>{l.flag} {l.label}</option>)}</select></label>
+                <label>Keymap: <select value={keymap} onChange={e=>{setKeymap(e.target.value);localStorage.setItem('nyxos_keymap',e.target.value);}}><option value="qwerty">QWERTY</option><option value="colemak">Colemak</option><option value="dvorak">Dvorak</option></select></label>
               </section>
             )}
             {activeTab==='about' && (
