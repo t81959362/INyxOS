@@ -2,7 +2,7 @@
   {
     "id": "minecraft",
     "name": "Minecraft",
-    "url": "https://eaglercraft.q13x.com/1.8-wasm/?retina=true&scale=0.8",
+    "url": "/games/minecraft/index.html",
     "icon": "https://eaglercraft.q13x.com/favicon.ico",
     "category": "Games",
     "type": "pwa",

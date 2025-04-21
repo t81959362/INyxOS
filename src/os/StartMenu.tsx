@@ -20,6 +20,7 @@ interface AppStub {
   height: number;
   top: number;
   left: number;
+  zIndex?: number;
 }
 
 interface StartMenuProps {

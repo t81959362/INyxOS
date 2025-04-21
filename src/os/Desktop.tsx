@@ -1,4 +1,12 @@
 import React, { useState, useEffect } from 'react';
+// Extend window interface for Electron API (injected via preload)
+declare global {
+  interface Window {
+    electronAPI?: {
+      openExternalWindow: (url: string) => void;
+    };
+  }
+}
 import { Taskbar } from './Taskbar';
 import { WindowManager } from './WindowManager';
 import { Launcher } from './Launcher';
@@ -253,7 +261,7 @@ class WindowErrorBoundary extends React.Component<{children: React.ReactNode}, {
         <StartMenu
           show={showStartMenu}
           onClose={() => setShowStartMenu(false)}
-          onLaunchApp={(app: typeof appStubs[0]) => {
+          onLaunchApp={app => {
             setWindows(w => [...w, {
               id: Math.random().toString(36).slice(2),
               title: app.title,
