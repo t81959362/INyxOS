@@ -1,5 +1,15 @@
 [
   {
+    "id": "minecraft",
+    "name": "Minecraft",
+    "url": "https://eaglercraft.q13x.com/1.8-wasm/?retina=true&scale=0.8",
+    "icon": "https://eaglercraft.q13x.com/favicon.ico",
+    "category": "Games",
+    "type": "pwa",
+    "description": "Minecraft 1.8 WASM via Eaglercraft",
+    "sandbox": "allow-scripts allow-same-origin allow-popups"
+  },
+  {
     "id": "smaller-pictures",
     "name": "Smaller Pictures",
     "url": "https://smaller-pictures.appspot.com/",

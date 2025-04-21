@@ -97,7 +97,14 @@ export const PackageManager: React.FC = () => {
 
   const combinedApps = [...apps, ...customApps];
   const visibleApps = combinedApps.filter(a => !removedApps.includes(a.id));
-  const categories = Array.from(new Set(visibleApps.map(a => a.category)));
+  // Bring Minecraft to the top of the apps list
+  const sortedApps = [...visibleApps].sort((a, b) => {
+    if (a.id === 'minecraft') return -1;
+    if (b.id === 'minecraft') return 1;
+    return 0;
+  });
+  // Categories for filter: include 'Games' first, then other categories
+  const categories = ['Games', ...Array.from(new Set(visibleApps.map(a => a.category))).filter(c => c !== 'Games')];
 
   return (
     <div className="package-manager-root">
@@ -132,7 +139,7 @@ export const PackageManager: React.FC = () => {
       </div>
       {error && <div className="pm-error">{error}</div>}
       <div className="pm-app-list">
-        {visibleApps
+        {sortedApps
           .filter(app => (showFeatured ? app.featured : true))
           .filter(app => filter === 'all' || app.category === filter)
           .filter(app => !searchTerm || app.name.toLowerCase().includes(searchTerm.toLowerCase()) || app.description.toLowerCase().includes(searchTerm.toLowerCase()))

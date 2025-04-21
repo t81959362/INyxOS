@@ -5,6 +5,7 @@ import { Terminal } from '../apps/terminal/Terminal';
 import { Settings } from '../apps/settings/Settings';
 import { BrowserApp } from '../apps/browser/BrowserApp';
 import PackageManager from '../apps/package-manager';
+import LibreOfficeApp from '../apps/libreoffice/LibreOfficeApp';
 
 export const appStubs = [
   {
@@ -73,6 +74,17 @@ export const appStubs = [
     content: () => <PackageManager />,
     width: 700,
     height: 520,
+    top: 120,
+    left: 420,
+    zIndex: 10
+  },
+  {
+    id: 'libreoffice',
+    title: 'LibreOffice',
+    icon: '📄',
+    content: () => <LibreOfficeApp />, 
+    width: 1024,
+    height: 768,
     top: 120,
     left: 420,
     zIndex: 10

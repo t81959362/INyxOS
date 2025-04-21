@@ -3,6 +3,7 @@ import './StartMenu.scss';
 
 const SIDEBAR_ITEMS = [
   { id: 'apps', label: 'Apps', icon: '🧩' },
+  { id: 'games', label: 'Games', icon: '🕹️' },
   { id: 'widgets', label: 'Widgets', icon: '🔲' },
   { id: 'documents', label: 'Documents', icon: '📄' },
   { id: 'pictures', label: 'Pictures', icon: '🖼️' },
@@ -35,6 +36,8 @@ interface StartMenuProps {
 }
 
 import { widgetStubs } from './widgets/WidgetRegistry';
+import DuckStationApp from '../apps/games/DuckStationApp';
+import PPSSPPApp from '../apps/games/PPSSPPApp';
 
 export const StartMenu: React.FC<StartMenuProps & { onLaunchWidget?: (widget: any) => void }> = ({
   show,
@@ -116,7 +119,48 @@ export const StartMenu: React.FC<StartMenuProps & { onLaunchWidget?: (widget: an
             <div className="apps-list">
               {apps.map(app => (
                 <button key={app.id} className="app-item" onClick={() => onLaunchApp(app)}>
-                  <span className="app-icon">{app.icon}</span>
+                  <span className="app-icon">
+                    {/^https?:\/\//.test(app.icon) ? (
+                      <img
+                        src={app.icon}
+                        alt={`${app.title} icon`}
+                        style={{ width: '24px', height: '24px', objectFit: 'contain' }}
+                      />
+                    ) : (
+                      app.icon
+                    )}
+                  </span>
+                  <span className="app-title">{app.title}</span>
+                </button>
+              ))}
+            </div>
+          )}
+          {expanded === 'games' && (
+            <div className="apps-list">
+              {[
+                { id: 'minecraft', title: 'Minecraft', icon: 'https://eaglercraft.q13x.com/favicon.ico', content: () => (
+                  <iframe
+                    src="https://eaglercraft.q13x.com/1.8-wasm/?retina=true&scale=0.8"
+                    sandbox="allow-scripts allow-same-origin allow-popups"
+                    style={{ width: '100%', height: '100%', border: 'none' }}
+                    title="Minecraft"
+                  />
+                ), width: 900, height: 600, top: 120, left: 420 },
+                { id: 'duckstation', title: 'DuckStation', icon: '🕹️', content: () => <DuckStationApp />, width: 800, height: 600, top: 120, left: 420 },
+                { id: 'ppsspp', title: 'PPSSPP', icon: '🕹️', content: () => <PPSSPPApp />, width: 800, height: 600, top: 120, left: 420 }
+              ].map(app => (
+                <button key={app.id} className="app-item" onClick={() => onLaunchApp(app)}>
+                  <span className="app-icon">
+                    {/^https?:\/\//.test(app.icon) ? (
+                      <img
+                        src={app.icon}
+                        alt={`${app.title} icon`}
+                        style={{ width: '24px', height: '24px', objectFit: 'contain' }}
+                      />
+                    ) : (
+                      app.icon
+                    )}
+                  </span>
                   <span className="app-title">{app.title}</span>
                 </button>
               ))}
