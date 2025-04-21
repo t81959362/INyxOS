@@ -8,6 +8,7 @@ const AiAssistant: React.FC<Props> = ({ onClose }) => {
   const [input, setInput] = useState('');
   const [chat, setChat] = useState<string[]>(["Nexa: Hello! I'm Nexa, your assistant. How can I help you today?"]);
   const [loading, setLoading] = useState(false);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleSend = async () => {
@@ -17,6 +18,9 @@ const AiAssistant: React.FC<Props> = ({ onClose }) => {
     try {
       const response = await askAI(input);
       setChat(prev => [...prev, `Nexa: ${response}`]);
+      // detect image URL and set preview
+      const urlMatch = response.match(/(https?:\/\/\S+\.(?:png|jpe?g|gif|svg))/i);
+      if (urlMatch) setImageUrl(urlMatch[1]); else setImageUrl(null);
     } catch {
       setChat(prev => [...prev, `Nexa: Sorry, something went wrong.`]);
     }
@@ -39,6 +43,11 @@ const AiAssistant: React.FC<Props> = ({ onClose }) => {
         <button className="ai-close-btn" onClick={onClose}>×</button>
       </div>
       <div className="ai-assistant-body">
+        {imageUrl && (
+          <div className="ai-image-preview">
+            <img src={imageUrl} alt="Preview" />
+          </div>
+        )}
         {chat.map((line, idx) => (
           <div key={idx} className="ai-chat-line">{line}</div>
         ))}

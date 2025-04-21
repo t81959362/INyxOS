@@ -1,5 +1,51 @@
 // Utility to route queries to free public APIs or HF fallback
+let lastIntent: 'weather' | 'time' | null = null;
+
 export async function askAI(q: string): Promise<string> {
+  q = q.trim();
+  // 0.5 Follow-up: if user just replies with a location and previous intent was weather/time
+  if (!q.includes(' ') && /^[A-Za-z\s]+$/.test(q) && lastIntent) {
+    const locQuery = q;
+    if (lastIntent === 'weather') {
+      // replicate weather logic using locQuery
+      try {
+        const geo: any = await fetch(
+          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(locQuery)}&format=json&limit=1`
+        ).then(r => r.json());
+        if (Array.isArray(geo) && geo.length > 0) {
+          const { lat, lon } = geo[0];
+          const w: any = await fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`
+          ).then(r => r.json());
+          const cw = w.current_weather;
+          lastIntent = 'weather';
+          return `Current in ${locQuery}: ${cw.temperature}°C, wind ${cw.windspeed} km/h.`;
+        }
+      } catch {}
+      return `Sorry, I couldn't find location "${locQuery}".`;
+    }
+    if (lastIntent === 'time') {
+      // replicate time logic using locQuery
+      try {
+        const geo: any = await fetch(
+          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(locQuery)}&format=json&limit=1`
+        ).then(r => r.json());
+        if (Array.isArray(geo) && geo.length > 0) {
+          const { lat, lon } = geo[0];
+          const now = new Date();
+          // get timezone from WorldTimeAPI
+          const tzRes: any = await fetch(
+            `https://api.geoapify.com/v1/timezone?lat=${lat}&lon=${lon}`
+          ).then(r => r.json());
+          const dt = new Date().toLocaleTimeString('en-US', { timeZone: tzRes.features?.[0]?.properties.timezone });
+          lastIntent = 'time';
+          return `It’s ${dt} in ${locQuery}.`;
+        }
+      } catch {}
+      return `Sorry, I couldn't determine time for "${locQuery}".`;
+    }
+  }
+
   // 0. Chatty control intents
   const lower = q.toLowerCase().trim();
   if (/^(hi|hello|hey)\b/.test(lower)) {
@@ -35,6 +81,7 @@ export async function askAI(q: string): Promise<string> {
   const weatherMatch = q.match(/weather in (.+)/i);
   if (weatherMatch) {
     const city = weatherMatch[1];
+    lastIntent = 'weather';
     // Geocode via Nominatim
     const loc = await fetch(
       `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(city)}&format=json`
@@ -54,6 +101,7 @@ export async function askAI(q: string): Promise<string> {
   const timeMatch = q.match(/time\s+(?:is\s+it\s+)?(?:in|at)\s+(.+)/i);
   if (timeMatch) {
     const placeRaw = timeMatch[1].trim().replace(/[?.!]+$/, '');
+    lastIntent = 'time';
     try {
       const geo: any = await fetch(
         `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(placeRaw)}&format=json&limit=1`
@@ -306,7 +354,8 @@ export async function askAI(q: string): Promise<string> {
     const page: any = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(q)}`)
       .then(r => r.json());
     if (page.extract) {
-      return page.extract;
+      const sentences = page.extract.split('. ');
+      return sentences[0] + '.';
     }
   } catch {}
   // Sports next match via TheSportsDB (Premier League id=4328)
@@ -320,6 +369,30 @@ export async function askAI(q: string): Promise<string> {
         return `Next match: ${ev.strEvent} on ${ev.dateEvent} at ${ev.strTime}.`;
       }
     } catch {}
+  }
+
+  // Direct Thinking Model: "flash thinking <question>" or "thinking model <question>"
+  const thinkingMatch = q.match(/^(?:flash thinking|thinking model)\s+([\s\S]+)/i);
+  if (thinkingMatch) {
+    const prompt = thinkingMatch[1];
+    const key = import.meta.env.VITE_OPENROUTER_API_KEY;
+    if (key) {
+      try {
+        const thought: any = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${key}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model: 'google/gemini-2.0-flash-thinking-exp-1219:free',
+            messages: [{ role: 'user', content: prompt }],
+          }),
+        }).then(r => r.json());
+        const cm = thought.choices?.[0]?.message?.content;
+        if (cm) return cm;
+      } catch {}
+    }
   }
 
   // Inline override for OpenRouter model: "use model <model> <question>"
