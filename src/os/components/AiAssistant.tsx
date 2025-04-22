@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { askAI } from '../utils/askAI';
+import { useTranslation } from 'react-i18next';
 import './AiAssistant.scss';
 
 type Props = { onClose: () => void };
 
 const AiAssistant: React.FC<Props> = ({ onClose }) => {
+  const { t } = useTranslation();
   const [input, setInput] = useState('');
-  const [chat, setChat] = useState<string[]>(["Nexa: Hello! I'm Nexa, your assistant. How can I help you today?"]);
+  const [chat, setChat] = useState<string[]>([t('aiAssistant.greeting')]);
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -98,11 +100,11 @@ const AiAssistant: React.FC<Props> = ({ onClose }) => {
               }
             }
           }}
-          placeholder="Ask me anything..."
+          placeholder={t('aiAssistant.placeholder')}
           disabled={loading}
         />
-        <button onClick={handleSend} disabled={loading}>Send</button>
-        <button className="ai-think-btn" onClick={handleThink} disabled={loading} title="Research">
+        <button onClick={handleSend} disabled={loading}>{t('aiAssistant.send')}</button>
+        <button className="ai-think-btn" onClick={handleThink} disabled={loading} title={t('aiAssistant.research')}>
           <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width={24} height={24} fill="none" viewBox="0 0 24 24">
             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 9a3 3 0 0 1 3-3m-2 15h4m0-3c0-4.1 4-4.9 4-9A6 6 0 1 0 6 9c0 4 4 5 4 9h4Z" />
           </svg>
