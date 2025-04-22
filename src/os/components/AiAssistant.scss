@@ -12,6 +12,9 @@
   box-shadow: 0 8px 24px rgba(0,0,0,0.5);
   animation: slideUp 0.3s ease-out;
 }
+.ai-assistant-overlay.closing {
+  animation: slideDown 0.2s ease-in forwards;
+}
 .ai-assistant-header {
   padding: 8px 12px;
   font-weight: normal;
@@ -108,14 +111,17 @@
   width: 360px;
   max-height: 280px;
   background: rgba(0, 0, 0, 0.7);
-  padding: 0.1px;
+  padding: 8px;
   border-radius: 8px;
-  overflow: hidden;
+  overflow-y: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.123);
   z-index: 1001;
 }
 .ai-image-popup img {
-  width: 100%;
+  width: calc(50% - 4px);
   height: auto;
   display: block;
   border-radius: 4px;
@@ -127,6 +133,10 @@
 @keyframes slideUp {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideDown {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(10px); }
 }
 @keyframes spin {
   from { transform: rotate(0deg); }

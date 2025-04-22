@@ -3,7 +3,6 @@ declare module '*.svg' {
   export default content;
 }
 
-declare module 'onnxruntime-web';
 declare const process: { env: { PUBLIC_URL: string } };
 
 // Vite environment type augmentations

@@ -4,7 +4,7 @@ let lastIntent: 'weather' | 'time' | 'image' | null = null;
 let lastLocation: string | null = null;
 import { addEvent, getEvents } from './calendar';
 
-export async function askAI(q: string): Promise<string> {
+export async function askAI(q: string): Promise<string | string[]> {
   q = q.trim();
   // normalize: strip surrounding quotes (including curly)
   q = q.replace(/^[“”"'`]+|[“”"'`]+$/g, '').trim();
@@ -24,6 +24,31 @@ export async function askAI(q: string): Promise<string> {
     const term = imageMatch[1].trim();
     // remove leading 'a', 'an', 'the' for more accurate queries
     const cleanedTerm = term.replace(/^(?:an?|the)\s+/i, '');
+    // first: Pexels API for varied image results
+    const pexelsKey = import.meta.env.REACT_APP_PEXELS_API_KEY || import.meta.env.VITE_PEXELS_API_KEY;
+    if (pexelsKey) {
+      try {
+        const terms = [cleanedTerm, cleanedTerm.endsWith('s') ? cleanedTerm : cleanedTerm + 's'];
+        for (const t of terms) {
+          const res: any = await fetch(
+            `https://api.pexels.com/v1/search?query=${encodeURIComponent(t)}&per_page=10`,
+            { headers: { Authorization: pexelsKey } }
+          ).then(r => r.json());
+          console.debug('Pexels search for', t, res);
+          const photos: any[] = Array.isArray(res.photos) ? res.photos.slice().sort(() => Math.random() - 0.5) : [];
+          if (photos.length) {
+            lastIntent = 'image';
+            const urls = photos
+              .map(p => p.src?.original || p.src?.large)
+              .filter((u): u is string => Boolean(u));
+            return urls;
+          }
+        }
+      } catch (err) {
+        console.error('Pexels fetch error:', err);
+      }
+    }
+    // fallback: Wikipedia summary then media-list for a single image
     try {
       const summary: any = await fetch(
         `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(cleanedTerm)}`
@@ -39,53 +64,17 @@ export async function askAI(q: string): Promise<string> {
         lastIntent = 'image';
         return imgUrl;
       }
-      // fallback: use Wikipedia media-list endpoint for pages missing summary images
-      try {
-        const media: any = await fetch(
-          `https://en.wikipedia.org/api/rest_v1/page/media-list/${encodeURIComponent(cleanedTerm)}`
-        ).then(r => r.json());
-        const imageItem = media.items?.find((i: any) => i.type === 'image' && Array.isArray(i.srcset));
-        if (imageItem?.srcset?.length) {
-          const srcset = imageItem.srcset;
-          imgUrl = srcset[srcset.length - 1].src;
-        }
-        if (imgUrl) {
-          lastIntent = 'image';
-          return imgUrl;
-        }
-      } catch {}
-    } catch {} 
-    // Fallback to Pexels if Wikipedia yields no image
-    const pexelsKey = import.meta.env.REACT_APP_PEXELS_API_KEY || import.meta.env.VITE_PEXELS_API_KEY;
-    if (pexelsKey) {
-      try {
-        // initial search
-        let pexelsRes: any = await fetch(
-          `https://api.pexels.com/v1/search?query=${encodeURIComponent(cleanedTerm)}&per_page=1`,
-          { headers: { Authorization: pexelsKey } }
-        ).then(r => r.json());
-        console.debug('Pexels response:', pexelsRes);
-        let photo = pexelsRes.photos?.[0];
-        let url = photo?.src?.original || photo?.src?.large;
-        // if no results, try plural term
-        if (!url && Array.isArray(pexelsRes.photos) && pexelsRes.photos.length === 0) {
-          const plural = cleanedTerm.endsWith('s') ? cleanedTerm : cleanedTerm + 's';
-          pexelsRes = await fetch(
-            `https://api.pexels.com/v1/search?query=${encodeURIComponent(plural)}&per_page=1`,
-            { headers: { Authorization: pexelsKey } }
-          ).then(r => r.json());
-          console.debug('Pexels plural response:', pexelsRes);
-          photo = pexelsRes.photos?.[0];
-          url = photo?.src?.original || photo?.src?.large;
-        }
-        if (url) {
-          lastIntent = 'image';
-          return url;
-        }
-      } catch (err) {
-        console.error('Pexels fetch error:', err);
+      const media: any = await fetch(
+        `https://en.wikipedia.org/api/rest_v1/page/media-list/${encodeURIComponent(cleanedTerm)}`
+      ).then(r => r.json());
+      const imageItem = media.items?.find((i: any) => i.type === 'image' && Array.isArray(i.srcset));
+      if (imageItem?.srcset?.length) {
+        const srcset = imageItem.srcset;
+        imgUrl = srcset[srcset.length - 1].src;
+        lastIntent = 'image';
+        return imgUrl;
       }
-    }
+    } catch {}
     return `Sorry, I couldn't find an image for "${cleanedTerm}".`;
   }
 

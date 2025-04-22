@@ -10,8 +10,34 @@ const AiAssistant: React.FC<Props> = ({ onClose }) => {
   const [input, setInput] = useState('');
   const [chat, setChat] = useState<string[]>([t('aiAssistant.greeting')]);
   const [loading, setLoading] = useState(false);
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  // handle soft close animation
+  const [isClosing, setIsClosing] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const startClose = () => setIsClosing(true);
+  // close on click outside
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        startClose();
+      }
+    };
+    window.addEventListener('mousedown', handler);
+    return () => window.removeEventListener('mousedown', handler);
+  }, []);
+  // after closing animation, call onClose
+  useEffect(() => {
+    if (!isClosing) return;
+    const node = containerRef.current;
+    if (!node) return;
+    const onAnimEnd = (e: AnimationEvent) => {
+      if (e.animationName === 'slideDown') onClose();
+    };
+    node.addEventListener('animationend', onAnimEnd);
+    return () => node.removeEventListener('animationend', onAnimEnd);
+  }, [isClosing, onClose]);
 
   const handleSend = async () => {
     if (!input.trim()) return;
@@ -19,9 +45,19 @@ const AiAssistant: React.FC<Props> = ({ onClose }) => {
     setChat(prev => [...prev, `${t('aiAssistant.you')}: ${input}`]);
     try {
       const response = await askAI(input);
+      // handle multiple images
+      if (Array.isArray(response)) {
+        setImageUrls(response);
+        setImageUrl(response[0] || null);
+        setLoading(false);
+        setInput('');
+        if (textareaRef.current) textareaRef.current.style.height = 'auto';
+        return;
+      }
       // if response is just a URL, show popup only and exit
-      const trimmed = response.trim();
-      if (/^https?:\/\/\S+$/i.test(trimmed)) {
+      const trimmed = (response as string).trim();
+      if (/^https?:\/\//i.test(trimmed)) {
+        setImageUrls([trimmed]);
         setImageUrl(trimmed);
         // clear input and reset height
         setInput('');
@@ -30,6 +66,8 @@ const AiAssistant: React.FC<Props> = ({ onClose }) => {
         return;
       }
       setChat(prev => [...prev, `${t('aiAssistant.nexa')}: ${response}`]);
+      // clear images on text response
+      setImageUrls([]);
       setImageUrl(null);
     } catch {
       setChat(prev => [...prev, `${t('aiAssistant.nexa')}: ${t('aiAssistant.error')}`]);
@@ -46,6 +84,8 @@ const AiAssistant: React.FC<Props> = ({ onClose }) => {
     try {
       const response = await askAI(`flash thinking ${input}`);
       setChat(prev => [...prev, `${t('aiAssistant.nexaThinking')}: ${response}`]);
+      // clear previous images
+      setImageUrls([]);
     } catch {
       setChat(prev => [...prev, `${t('aiAssistant.nexa')}: ${t('aiAssistant.error')}`]);
     }
@@ -61,16 +101,21 @@ const AiAssistant: React.FC<Props> = ({ onClose }) => {
   };
 
   return (
-    <div className="ai-assistant-overlay">
-      {imageUrl && (
+    <div
+      ref={containerRef}
+      className={`ai-assistant-overlay ${isClosing ? 'closing' : ''}`}>
+      {/* display image previews */}
+      {imageUrls.length > 0 && (
         <div className="ai-image-popup">
-          <img src={imageUrl} alt="Preview" />
+          {imageUrls.map((url, idx) => (
+            <img key={idx} src={url} alt={`Preview ${idx+1}`} />
+          ))}
         </div>
       )}
       <div className="ai-assistant-header">
         <span>Nexa</span>
         {loading && <div className="ai-spinner" />}
-        <button className="ai-close-btn" onClick={onClose}>×</button>
+        <button className="ai-close-btn" onClick={startClose}>×</button>
       </div>
       <div className="ai-assistant-body">
         {chat.map((line, idx) => (
