@@ -10,17 +10,23 @@ export async function askAI(q: string): Promise<string> {
   q = q.replace(/^[“”"'`]+|[“”"'`]+$/g, '').trim();
 
   // 0.x Image intent: match and capture term for image/picture/photo queries
-  // Supports verbs: show/give/get/display and nouns: image(s), picture(s), photo(s), pic(s)
-  let imageMatch = q.match(/(?:show|give|get|display)(?: me)? (?:an|some)? (?:images?|pictures?|photos?|pics?)(?: of)? (.+)/i);
+  //  - 'show/get/give/display ... images of <term>'
+  //  - 'images/pictures/photos of <term>'
+  //  - '<term> images/pictures/photos'
+  let imageMatch =
+    q.match(/(?:show|give|get|display)(?: me)? (?:an|some)? (?:images?|pictures?|photos?|pics?)(?: of)? (.+)/i)
+    || q.match(/(?:images?|pictures?|photos?|pics?) of (.+)/i);
   if (!imageMatch) {
     const alt = q.match(/^(.+?) (?:images?|pictures?|photos?|pics?)$/i);
     if (alt) imageMatch = alt;
   }
   if (imageMatch) {
     const term = imageMatch[1].trim();
+    // remove leading 'a', 'an', 'the' for more accurate queries
+    const cleanedTerm = term.replace(/^(?:an?|the)\s+/i, '');
     try {
       const summary: any = await fetch(
-        `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(term)}`
+        `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(cleanedTerm)}`
       ).then(r => r.json());
       const original = summary.originalimage?.source;
       const thumbnail = summary.thumbnail?.source;
@@ -33,24 +39,54 @@ export async function askAI(q: string): Promise<string> {
         lastIntent = 'image';
         return imgUrl;
       }
+      // fallback: use Wikipedia media-list endpoint for pages missing summary images
+      try {
+        const media: any = await fetch(
+          `https://en.wikipedia.org/api/rest_v1/page/media-list/${encodeURIComponent(cleanedTerm)}`
+        ).then(r => r.json());
+        const imageItem = media.items?.find((i: any) => i.type === 'image' && Array.isArray(i.srcset));
+        if (imageItem?.srcset?.length) {
+          const srcset = imageItem.srcset;
+          imgUrl = srcset[srcset.length - 1].src;
+        }
+        if (imgUrl) {
+          lastIntent = 'image';
+          return imgUrl;
+        }
+      } catch {}
     } catch {} 
     // Fallback to Pexels if Wikipedia yields no image
     const pexelsKey = import.meta.env.REACT_APP_PEXELS_API_KEY || import.meta.env.VITE_PEXELS_API_KEY;
     if (pexelsKey) {
       try {
-        const pexelsRes: any = await fetch(
-          `https://api.pexels.com/v1/search?query=${encodeURIComponent(term)}&per_page=1`,
+        // initial search
+        let pexelsRes: any = await fetch(
+          `https://api.pexels.com/v1/search?query=${encodeURIComponent(cleanedTerm)}&per_page=1`,
           { headers: { Authorization: pexelsKey } }
         ).then(r => r.json());
-        const photo = pexelsRes.photos?.[0];
-        const url = photo?.src?.original || photo?.src?.large;
+        console.debug('Pexels response:', pexelsRes);
+        let photo = pexelsRes.photos?.[0];
+        let url = photo?.src?.original || photo?.src?.large;
+        // if no results, try plural term
+        if (!url && Array.isArray(pexelsRes.photos) && pexelsRes.photos.length === 0) {
+          const plural = cleanedTerm.endsWith('s') ? cleanedTerm : cleanedTerm + 's';
+          pexelsRes = await fetch(
+            `https://api.pexels.com/v1/search?query=${encodeURIComponent(plural)}&per_page=1`,
+            { headers: { Authorization: pexelsKey } }
+          ).then(r => r.json());
+          console.debug('Pexels plural response:', pexelsRes);
+          photo = pexelsRes.photos?.[0];
+          url = photo?.src?.original || photo?.src?.large;
+        }
         if (url) {
           lastIntent = 'image';
           return url;
         }
-      } catch {}
+      } catch (err) {
+        console.error('Pexels fetch error:', err);
+      }
     }
-    return `Sorry, I couldn't find an image for "${term}".`;
+    return `Sorry, I couldn't find an image for "${cleanedTerm}".`;
   }
 
   // 0.3 Pronoun resolution for weather: use lastLocation
@@ -579,7 +615,6 @@ export async function askAI(q: string): Promise<string> {
         ? `1st NEO: ${first.name}, hazardous: ${first.is_potentially_hazardous_asteroid}`
         : 'No NEO data.';
     } catch {}
-    return "Sorry, I couldn't fetch NEO data.";
   }
   // 1g. Wayback Machine availability
   if (/wayback machine|archive available/i.test(q)) {
