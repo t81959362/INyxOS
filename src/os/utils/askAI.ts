@@ -28,7 +28,23 @@ export async function askAI(q: string): Promise<string> {
         lastIntent = 'image';
         return imgUrl;
       }
-    } catch {}
+    } catch {} 
+    // Fallback to Pexels if Wikipedia yields no image
+    const pexelsKey = import.meta.env.REACT_APP_PEXELS_API_KEY || import.meta.env.VITE_PEXELS_API_KEY;
+    if (pexelsKey) {
+      try {
+        const pexelsRes: any = await fetch(
+          `https://api.pexels.com/v1/search?query=${encodeURIComponent(term)}&per_page=1`,
+          { headers: { Authorization: pexelsKey } }
+        ).then(r => r.json());
+        const photo = pexelsRes.photos?.[0];
+        const url = photo?.src?.original || photo?.src?.large;
+        if (url) {
+          lastIntent = 'image';
+          return url;
+        }
+      } catch {}
+    }
     return `Sorry, I couldn't find an image for "${term}".`;
   }
 

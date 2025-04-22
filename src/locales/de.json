@@ -69,5 +69,15 @@
     "about": {
       "text": "NyxOS ist ein schnelles, leichtgewichtiges Betriebssystem, das lokal in Ihrem Browser läuft."
     }
+  },
+  "aiAssistant": {
+    "greeting": "Nexa: Hallo! Ich bin Nexa, dein Assistent. Wie kann ich dir heute helfen?",
+    "placeholder": "Frag mich etwas...",
+    "send": "Senden",
+    "research": "Forschung",
+    "you": "Du",
+    "nexa": "Nexa",
+    "nexaThinking": "Nexa (Denkt)",
+    "error": "Entschuldigung, es ist ein Fehler aufgetreten."
   }
 }
