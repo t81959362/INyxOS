@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Minecraft 1.8 WASM</title>
+  <style>
+    html, body { margin: 0; padding: 0; overflow: hidden; height: 100%; }
+    canvas { width: 100%; height: 100%; display: block; }
+    /* Hide any scrollbars */
+    * { scrollbar-width: none; -ms-overflow-style: none; }
+    *::-webkit-scrollbar { display: none; }
+  </style>
+</head>
+<body>
+  <!-- Host your Eaglercraft build files (minecraft.js, minecraft.wasm, etc.) in this folder -->
+  <script src="minecraft.js"></script>
+  <script>
+    // Pointer-lock on first click
+    document.addEventListener('click', () => {
+      const canvas = document.querySelector('canvas');
+      if (canvas && canvas.requestPointerLock) {
+        canvas.requestPointerLock();
+      }
+    }, { once: true });
+
+    // F11 for full-screen toggle
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'F11') {
+        e.preventDefault();
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen();
+        } else {
+          document.exitFullscreen();
+        }
+      }
+    });
+  </script>
+</body>
+</html>
