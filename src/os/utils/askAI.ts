@@ -9,8 +9,13 @@ export async function askAI(q: string): Promise<string> {
   // normalize: strip surrounding quotes (including curly)
   q = q.replace(/^[“”"'`]+|[“”"'`]+$/g, '').trim();
 
-  // 0.x Image intent: "show me an image of <term>"
-  const imageMatch = q.match(/(?:show me an image of|image of) (.+)/i);
+  // 0.x Image intent: match and capture term for image/picture/photo queries
+  // Supports verbs: show/give/get/display and nouns: image(s), picture(s), photo(s), pic(s)
+  let imageMatch = q.match(/(?:show|give|get|display)(?: me)? (?:an|some)? (?:images?|pictures?|photos?|pics?)(?: of)? (.+)/i);
+  if (!imageMatch) {
+    const alt = q.match(/^(.+?) (?:images?|pictures?|photos?|pics?)$/i);
+    if (alt) imageMatch = alt;
+  }
   if (imageMatch) {
     const term = imageMatch[1].trim();
     try {
