@@ -16,7 +16,7 @@ const AiAssistant: React.FC<Props> = ({ onClose }) => {
   const handleSend = async () => {
     if (!input.trim()) return;
     setLoading(true);
-    setChat(prev => [...prev, `You: ${input}`]);
+    setChat(prev => [...prev, `${t('aiAssistant.you')}: ${input}`]);
     try {
       const response = await askAI(input);
       // if response is just a URL, show popup only and exit
@@ -29,10 +29,10 @@ const AiAssistant: React.FC<Props> = ({ onClose }) => {
         setLoading(false);
         return;
       }
-      setChat(prev => [...prev, `Nexa: ${response}`]);
+      setChat(prev => [...prev, `${t('aiAssistant.nexa')}: ${response}`]);
       setImageUrl(null);
     } catch {
-      setChat(prev => [...prev, `Nexa: Sorry, something went wrong.`]);
+      setChat(prev => [...prev, `${t('aiAssistant.nexa')}: ${t('aiAssistant.error')}`]);
     }
     setInput('');
     if (textareaRef.current) textareaRef.current.style.height = 'auto';
@@ -42,12 +42,12 @@ const AiAssistant: React.FC<Props> = ({ onClose }) => {
   const handleThink = async () => {
     if (!input.trim()) return;
     setLoading(true);
-    setChat(prev => [...prev, `You: ${input}`]);
+    setChat(prev => [...prev, `${t('aiAssistant.you')}: ${input}`]);
     try {
       const response = await askAI(`flash thinking ${input}`);
-      setChat(prev => [...prev, `Nexa (Thinking): ${response}`]);
+      setChat(prev => [...prev, `${t('aiAssistant.nexaThinking')}: ${response}`]);
     } catch {
-      setChat(prev => [...prev, `Nexa: Sorry, something went wrong.`]);
+      setChat(prev => [...prev, `${t('aiAssistant.nexa')}: ${t('aiAssistant.error')}`]);
     }
     setInput('');
     if (textareaRef.current) textareaRef.current.style.height = 'auto';

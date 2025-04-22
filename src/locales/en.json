@@ -69,5 +69,53 @@
     "about": {
       "text": "NyxOS is a fast, lightweight OS running locally in your browser."
     }
+  },
+  "taskbar": {
+    "openLauncher": "Open Launcher",
+    "notifications": "Notifications",
+    "showHiddenIcons": "Show hidden icons",
+    "hideHiddenIcons": "Hide hidden icons",
+    "actionCenter": "Action Center",
+    "startMenu": "Start Menu",
+    "nexaAi": "Nexa AI"
+  },
+  "startMenu": {
+    "apps": "Apps",
+    "games": "Games",
+    "widgets": "Widgets",
+    "documents": "Documents",
+    "pictures": "Pictures",
+    "videos": "Videos",
+    "power": "Power",
+    "openDocuments": "Open Documents",
+    "openPictures": "Open Pictures",
+    "openVideos": "Open Videos",
+    "powerOff": "Power Off (Clear Session)"
+  },
+  "notificationPopover": {
+    "title": "Notifications",
+    "empty": "No notifications",
+    "ariaLabel": "Notifications",
+    "dismiss": "Dismiss notification"
+  },
+  "toast": {
+    "closeAriaLabel": "Close notification"
+  },
+  "optionsCenter": {
+    "nightLight": "Night Light",
+    "on": "On",
+    "off": "Off",
+    "perAppVolume": "Per-app Volume",
+    "noAudioApps": "No audio or video apps running"
+  },
+  "aiAssistant": {
+    "greeting": "Nexa: Hello! I'm Nexa, your assistant. How can I help you today?",
+    "placeholder": "Ask me anything...",
+    "send": "Send",
+    "research": "Research",
+    "you": "You",
+    "nexa": "Nexa",
+    "nexaThinking": "Nexa (Thinking)",
+    "error": "Sorry, something went wrong."
   }
 }
