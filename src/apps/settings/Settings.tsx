@@ -13,6 +13,10 @@ const themes = [
   { name: 'dark', label: 'Dark', accent: '#232a39', background: '#11131a' },
 ];
 
+// OpenRouter configuration
+const OR_API_KEY = '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';
+const DEFAULT_MODEL_ID = 'google/gemini-2.5-pro-exp-03-25:free';
+
 export const Settings: React.FC = () => {
   const [theme, setTheme] = useState('default');
   const [accent, setAccent] = useState(localStorage.getItem('nyxos_accent') || '');
@@ -59,13 +63,62 @@ export const Settings: React.FC = () => {
 
   // AI Assistant Config state
   const [models, setModels] = useState<string[]>([]);
-  const [selectedModel, setSelectedModel] = useState(localStorage.getItem('nexa_model') || '');
+  const [selectedModel, setSelectedModel] = useState(localStorage.getItem('nexa_model') || DEFAULT_MODEL_ID);
+  const [testStatus, setTestStatus] = useState<'idle'|'testing'|'success'|'error'>('idle');
+  const [testMessage, setTestMessage] = useState<string>('');
+  const [gpuWorkers, setGpuWorkers] = useState<number>(Number(localStorage.getItem('nexa_gpu_workers') || '1'));
+  interface Metrics { totalCalls: number; totalTokens: number; lastLatency: number; costEstimate: number; }
+  const [metrics, setMetrics] = useState<Metrics>(() => JSON.parse(localStorage.getItem('nexa_usage') || JSON.stringify({ totalCalls:0, totalTokens:0, lastLatency:0, costEstimate:0 })));
+
+  useEffect(() => { localStorage.setItem('nexa_gpu_workers', gpuWorkers.toString()); }, [gpuWorkers]);
+  useEffect(() => { localStorage.setItem('nexa_usage', JSON.stringify(metrics)); }, [metrics]);
+
+  // Fetch these specific free, low-latency models as of April 2025
   useEffect(() => {
-    fetch('https://openrouter.ai/api/v1/models')
+    fetch('https://openrouter.ai/api/v1/models', { headers: { Authorization: `Bearer ${OR_API_KEY}` } })
       .then(res => res.json())
-      .then(data => setModels(data.models.map((m: any) => m.id)))
-      .catch(console.error);
+      .then(data => {
+        const list = data.data || data.models;
+        const desired = [
+          'moonshotai/kimi-vl-a3b-thinking:free',
+          'qwen/qwen2.5-vl-3b-instruct:free',
+          'nvidia/llama-3.1-nemotron-nano-8b-v1:free',
+          'deepseek/deepseek-v3-base:free',
+          'deepseek/deepseek-r1-zero:free'
+        ];
+        const available = desired.filter(id => list.some((m: any) => m.id === id));
+        setModels(available);
+      })
+      .catch(err => console.error('Model fetch error:', err));
   }, []);
+
+  // Auto-test selected model
+  useEffect(() => {
+    if (!OR_API_KEY || !selectedModel) return;
+    setTestStatus('testing');
+    fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${OR_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: selectedModel,
+        messages: [{ role: 'user', content: 'What model are you?' }]
+      })
+    })
+      .then(res => res.json())
+      .then(data => {
+        const msg = data.choices?.[0]?.message?.content || data.choices?.[0]?.text || 'No response';
+        setTestMessage(msg);
+        setTestStatus('success');
+      })
+      .catch(err => {
+        console.error(err);
+        setTestMessage(err.message || 'Error');
+        setTestStatus('error');
+      });
+  }, [selectedModel]);
 
   // Appearance extensions
   const [systemFont, setSystemFont] = useState(localStorage.getItem('nyxos_font_family') || 'system-ui');
@@ -120,7 +173,12 @@ export const Settings: React.FC = () => {
                 <div className="accent-picker">
                   <label>Accent:</label>
                   <input type="color" value={accent||themes.find(t=>t.name===theme)?.accent!} onChange={handleAccentChange}/>
-                  <button onClick={()=>{ localStorage.removeItem('nyxos_accent'); setAccent(''); }}>Reset</button>
+                  <button onClick={()=>{
+                    localStorage.removeItem('nyxos_accent');
+                    setAccent('');
+                    const def = themes.find(t=>t.name===theme)?.accent || '';
+                    document.documentElement.style.setProperty('--accent', def);
+                  }}>Reset</button>
                 </div>
                 {/* Appearance extensions */}
                 <div className="font-settings">
@@ -171,7 +229,29 @@ export const Settings: React.FC = () => {
             {activeTab==='nexa' && (
               <section className="section">
                 <h3>Nexa Assistant Config</h3>
-                <label>Model: <select value={selectedModel} onChange={e=>{setSelectedModel(e.target.value);localStorage.setItem('nexa_model',e.target.value);}}><option value="">Select model</option>{models.map(m=><option key={m} value={m}>{m}</option>)}</select></label>
+                <div className="section-item">
+                  <label>Model:
+                    <select value={selectedModel} onChange={e=>{ setSelectedModel(e.target.value); localStorage.setItem('nexa_model', e.target.value); }}>
+                      <option value="">Select model</option>
+                      {models.map(m=><option key={m} value={m}>{m}</option>)}
+                    </select>
+                  </label>
+                  {testStatus==='testing' && <p className="small">Testing model...</p>}
+                  {testStatus==='success' && <p className="small">Test successful: {testMessage}</p>}
+                  {testStatus==='error' && <p className="small">Test failed: {testMessage}</p>}
+                  <p>Current Model: {selectedModel}</p>
+                </div>
+                <div className="section-item">
+                  <h4>GPU Workers</h4>
+                  <input type="range" min={1} max={8} value={gpuWorkers} onChange={e=>setGpuWorkers(Number(e.target.value))} /> <span>{gpuWorkers}</span>
+                </div>
+                <div className="usage-dashboard">
+                  <h4>Usage Dashboard</h4>
+                  <p>Total Calls: {metrics.totalCalls}</p>
+                  <p>Total Tokens: {metrics.totalTokens}</p>
+                  <p>Last Latency: {metrics.lastLatency} ms</p>
+                  <p>Estimated Cost: ${metrics.costEstimate.toFixed(4)}</p>
+                </div>
               </section>
             )}
             {activeTab==='language' && (

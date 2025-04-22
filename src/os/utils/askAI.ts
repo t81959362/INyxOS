@@ -714,7 +714,7 @@ export async function askAI(q: string): Promise<string> {
 
   // 6. Fallback via OpenRouter
   const openrouterKey = import.meta.env.VITE_OPENROUTER_API_KEY;
-  const openrouterModel = inlineModel || import.meta.env.VITE_OPENROUTER_MODEL || 'google/gemini-2.0-flash-thinking-exp-1219:free';
+  const openrouterModel = inlineModel || import.meta.env.VITE_OPENROUTER_MODEL || 'google/gemini-2.5-pro-exp-03-25:free';
   if (openrouterKey) {
     try {
       const or: any = await fetch('https://openrouter.ai/api/v1/chat/completions', {
