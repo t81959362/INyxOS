@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FileSystem } from '../../os/fs';
 import StartMenu from '../../assets/Start Menu.png';
 import './Settings.scss';
@@ -25,6 +26,7 @@ const customFonts = Object.entries(customFontModules).map(([path, url]) => {
 });
 
 export const Settings: React.FC = () => {
+  const { t, i18n } = useTranslation();
   const [theme, setTheme] = useState('default');
   const [accent, setAccent] = useState(localStorage.getItem('nyxos_accent') || '');
   const [highContrast, setHighContrast] = useState(false);
@@ -154,9 +156,10 @@ export const Settings: React.FC = () => {
   const [timeZone, setTimeZone] = useState(localStorage.getItem('nyxos_time_zone') || Intl.DateTimeFormat().resolvedOptions().timeZone);
 
   useEffect(() => {
+    i18n.changeLanguage(language);
     document.documentElement.lang = language;
     localStorage.setItem('nyxos_language', language);
-  }, [language]);
+  }, [language, i18n]);
   useEffect(() => { localStorage.setItem('nyxos_date_format', dateFormat); }, [dateFormat]);
   useEffect(() => { localStorage.setItem('nyxos_time_zone', timeZone); }, [timeZone]);
 
@@ -166,7 +169,7 @@ export const Settings: React.FC = () => {
     <div className="settings-overlay">
       <div className="settings-modal">
         <div className="settings-header">
-          <h2>Settings</h2>
+          <h2>{t('settings.title')}</h2>
           <button className="settings-close" onClick={() => window.dispatchEvent(new CustomEvent('os-close-app',{detail:'settings'}))}>
             <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -176,138 +179,142 @@ export const Settings: React.FC = () => {
         <div className="settings-layout">
           <aside className="settings-sidebar">
             <ul>
-              <li className={activeTab==='appearance'?'active':''} onClick={()=>setActiveTab('appearance')}>Appearance</li>
-              <li className={activeTab==='accessibility'?'active':''} onClick={()=>setActiveTab('accessibility')}>Accessibility</li>
-              <li className={activeTab==='privacy'?'active':''} onClick={()=>setActiveTab('privacy')}>Privacy</li>
-              <li className={activeTab==='updates'?'active':''} onClick={()=>setActiveTab('updates')}>Updates</li>
-              <li className={activeTab==='nexa'?'active':''} onClick={()=>setActiveTab('nexa')}>Nexa Assistant</li>
-              <li className={activeTab==='language'?'active':''} onClick={()=>setActiveTab('language')}>Language</li>
-              <li className={activeTab==='about'?'active':''} onClick={()=>setActiveTab('about')}>About</li>
+              <li className={activeTab==='appearance'?'active':''} onClick={()=>setActiveTab('appearance')}>{t('settings.tabs.appearance')}</li>
+              <li className={activeTab==='accessibility'?'active':''} onClick={()=>setActiveTab('accessibility')}>{t('settings.tabs.accessibility')}</li>
+              <li className={activeTab==='privacy'?'active':''} onClick={()=>setActiveTab('privacy')}>{t('settings.tabs.privacy')}</li>
+              <li className={activeTab==='updates'?'active':''} onClick={()=>setActiveTab('updates')}>{t('settings.tabs.updates')}</li>
+              <li className={activeTab==='nexa'?'active':''} onClick={()=>setActiveTab('nexa')}>{t('settings.tabs.nexa')}</li>
+              <li className={activeTab==='language'?'active':''} onClick={()=>setActiveTab('language')}>{t('settings.tabs.language')}</li>
+              <li className={activeTab==='about'?'active':''} onClick={()=>setActiveTab('about')}>{t('settings.tabs.about')}</li>
             </ul>
           </aside>
           <main className="settings-content">
             {activeTab==='appearance' && (
               <section className="section">
-                <h3>Appearance</h3>
+                <h3>{t('settings.tabs.appearance')}</h3>
                 {themes.map(t=>(
                   <label key={t.name}><input type="radio" name="theme" value={t.name} checked={theme===t.name} onChange={()=>save(t.name)}/>{t.label}</label>
                 ))}
                 <div className="font-settings">
-                  <select className="font-family-select" value={systemFont} onChange={e=>{
-                    const v=e.target.value;
-                    setSystemFont(v);
-                    localStorage.setItem('nyxos_font_family', v);
-                    const custom = customFonts.find(cf => cf.name === v);
-                    if (custom) {
-                      let styleTag = document.getElementById(`font-face-${v}`) as HTMLStyleElement;
-                      if (!styleTag) {
-                        styleTag = document.createElement('style');
-                        styleTag.id = `font-face-${v}`;
+                  <label>{t('settings.appearance.fontFamily')}
+                    <select className="font-family-select" value={systemFont} onChange={e=>{
+                      const v=e.target.value;
+                      setSystemFont(v);
+                      localStorage.setItem('nyxos_font_family', v);
+                      const custom = customFonts.find(cf => cf.name === v);
+                      if (custom) {
+                        let styleTag = document.getElementById(`font-face-${v}`) as HTMLStyleElement;
+                        if (!styleTag) {
+                          styleTag = document.createElement('style');
+                          styleTag.id = `font-face-${v}`;
+                        }
+                        styleTag.innerHTML = `@font-face { font-family: '${v}'; src: url('${custom.url}'); font-display: swap; }`;
+                        document.head.appendChild(styleTag);
+                        document.documentElement.style.setProperty('--font-family', `'${v}'`);
+                      } else {
+                        document.documentElement.style.setProperty('--font-family', v);
                       }
-                      styleTag.innerHTML = `@font-face { font-family: '${v}'; src: url('${custom.url}'); font-display: swap; }`;
-                      document.head.appendChild(styleTag);
-                      document.documentElement.style.setProperty('--font-family', `'${v}'`);
-                    } else {
-                      document.documentElement.style.setProperty('--font-family', v);
-                    }
-                  }}>
-                    <option value="system-ui">System UI</option>
-                    <option value="Arial">Arial</option>
-                    <option value="Roboto">Roboto</option>
-                    <option value="Custom">Custom...</option>
-                    {customFonts.map(f => <option key={f.name} value={f.name}>{f.name}</option>)}
-                  </select>
-                  <select className="font-size-select" value={fontSize} onChange={e=>{
-                    const v=Number(e.target.value); setFontSize(v); localStorage.setItem('nyxos_font_size',v.toString());
-                    document.documentElement.style.setProperty('--font-size',`${v}px`);
-                  }}>
-                    {[12,14,16,18,20,24,28,32].map(s=><option key={s} value={s}>{s}px</option>)}
-                  </select>
-                  <p>Place custom fonts (.ttf/.otf) in /assets/fonts/</p>
+                    }}>
+                      <option value="system-ui">{t('settings.appearance.systemUi')}</option>
+                      <option value="Arial">Arial</option>
+                      <option value="Roboto">Roboto</option>
+                      <option value="Custom">{t('settings.appearance.custom')}</option>
+                      {customFonts.map(f => <option key={f.name} value={f.name}>{f.name}</option>)}
+                    </select>
+                  </label>
+                  <label>{t('settings.appearance.fontSize')}
+                    <select className="font-size-select" value={fontSize} onChange={e=>{
+                      const v=Number(e.target.value); setFontSize(v); localStorage.setItem('nyxos_font_size',v.toString());
+                      document.documentElement.style.setProperty('--font-size',`${v}px`);
+                    }}>
+                      {[12,14,16,18,20,24,28,32].map(s=><option key={s} value={s}>{s}px</option>)}
+                    </select>
+                  </label>
+                  <p>{t('settings.appearance.customFontsInfo')}</p>
                 </div>
                 <div className="cursor-settings">
-                  <label>Cursor Acceleration: <input type="range" min="0.1" max="5" step="0.1" value={cursorAccel} onChange={e=>{const v=Number(e.target.value);setCursorAccel(v);localStorage.setItem('nyxos_cursor_accel',v.toString());}}/></label>
+                  <label>{t('settings.appearance.cursorAcceleration')}: <input type="range" min="0.1" max="5" step="0.1" value={cursorAccel} onChange={e=>{const v=Number(e.target.value);setCursorAccel(v);localStorage.setItem('nyxos_cursor_accel',v.toString());}}/></label>
                 </div>
                 <div className="touch-settings">
-                  <label><input type="checkbox" checked={touchSwipe} onChange={e=>{const v=e.target.checked;setTouchSwipe(v);localStorage.setItem('nyxos_touch_swipe',v?'1':'0');}}/> Two-finger swipe</label>
-                  <label><input type="checkbox" checked={touchPinch} onChange={e=>{const v=e.target.checked;setTouchPinch(v);localStorage.setItem('nyxos_touch_pinch',v?'1':'0');}}/> Pinch-zoom</label>
+                  <label><input type="checkbox" checked={touchSwipe} onChange={e=>{const v=e.target.checked;setTouchSwipe(v);localStorage.setItem('nyxos_touch_swipe',v?'1':'0');}}/> {t('settings.appearance.touchSwipe')}</label>
+                  <label><input type="checkbox" checked={touchPinch} onChange={e=>{const v=e.target.checked;setTouchPinch(v);localStorage.setItem('nyxos_touch_pinch',v?'1':'0');}}/> {t('settings.appearance.touchPinch')}</label>
                 </div>
-                <label><input type="checkbox" checked={vsyncEnabled} onChange={e=>{const v=e.target.checked;setVsyncEnabled(v);localStorage.setItem('nyxos_vsync',v?'1':'0');}}/> VSync</label>
+                <label><input type="checkbox" checked={vsyncEnabled} onChange={e=>{const v=e.target.checked;setVsyncEnabled(v);localStorage.setItem('nyxos_vsync',v?'1':'0');}}/> {t('settings.appearance.vsync')}</label>
               </section>
             )}
             {activeTab==='accessibility' && (
               <section className="section">
-                <h3>Accessibility</h3>
-                <label><input type="checkbox" checked={highContrast} onChange={toggleHighContrast}/> High Contrast</label>
-                <label><input type="checkbox" checked={screenReader} onChange={toggleScreenReader}/> Screen Reader</label>
-                <label><input type="checkbox" checked={windowMagnifier} onChange={e=>{const v=e.target.checked;setWindowMagnifier(v);localStorage.setItem('nyxos_window_magnifier',v?'1':'0');}}/> Window Magnifier</label>
-                <label><input type="checkbox" checked={colorBlindMode} onChange={e=>{const v=e.target.checked;setColorBlindMode(v);localStorage.setItem('nyxos_color_blind',v?'1':'0');document.documentElement.classList.toggle('color-blind',v);}}/> Color Blind Mode</label>
-                <label><input type="checkbox" checked={reduceMotion} onChange={e=>{const v=e.target.checked;setReduceMotion(v);localStorage.setItem('nyxos_reduce_motion',v?'1':'0');document.documentElement.classList.toggle('reduce-motion',v);}}/> Reduce Motion</label>
+                <h3>{t('settings.tabs.accessibility')}</h3>
+                <label><input type="checkbox" checked={highContrast} onChange={toggleHighContrast}/> {t('settings.accessibility.highContrast')}</label>
+                <label><input type="checkbox" checked={screenReader} onChange={toggleScreenReader}/> {t('settings.accessibility.screenReader')}</label>
+                <label><input type="checkbox" checked={windowMagnifier} onChange={e=>{const v=e.target.checked;setWindowMagnifier(v);localStorage.setItem('nyxos_window_magnifier',v?'1':'0');}}/> {t('settings.accessibility.windowMagnifier')}</label>
+                <label><input type="checkbox" checked={colorBlindMode} onChange={e=>{const v=e.target.checked;setColorBlindMode(v);localStorage.setItem('nyxos_color_blind',v?'1':'0');document.documentElement.classList.toggle('color-blind',v);}}/> {t('settings.accessibility.colorBlind')}</label>
+                <label><input type="checkbox" checked={reduceMotion} onChange={e=>{const v=e.target.checked;setReduceMotion(v);localStorage.setItem('nyxos_reduce_motion',v?'1':'0');document.documentElement.classList.toggle('reduce-motion',v);}}/> {t('settings.accessibility.reduceMotion')}</label>
               </section>
             )}
             {activeTab==='privacy' && (
               <section className="section">
-                <h3>Privacy</h3>
-                <label><input type="checkbox" checked={locationEnabled} onChange={()=>{setLocationEnabled(!locationEnabled); localStorage.setItem('nyxos_location', locationEnabled?'0':'1');}}/> Location Services</label>
-                <label><input type="checkbox" checked={telemetryEnabled} onChange={()=>{setTelemetryEnabled(!telemetryEnabled); localStorage.setItem('nyxos_telemetry', telemetryEnabled?'0':'1');}}/> Telemetry</label>
-                <label><input type="checkbox" checked={animationsEnabled} onChange={()=>{const v=!animationsEnabled; setAnimationsEnabled(v); localStorage.setItem('nyxos_animations', v?'1':'0');}}/> Desktop Animations</label>
-                <label><input type="checkbox" checked={soundEffectsEnabled} onChange={()=>{const v=!soundEffectsEnabled; setSoundEffectsEnabled(v); localStorage.setItem('nyxos_sounds', v?'1':'0');}}/> Sound Effects</label>
-                <label><input type="checkbox" checked={nightLightEnabled} onChange={()=>{const v=!nightLightEnabled; setNightLightEnabled(v); localStorage.setItem('nyxos_night_light', v?'1':'0'); document.documentElement.classList.toggle('night-light', v);}}/> Night Light</label>
-                <label><input type="checkbox" checked={dndEnabled} onChange={()=>{const v=!dndEnabled; setDndEnabled(v); localStorage.setItem('nyxos_dnd', v?'1':'0'); push({title:'Notifications', message: v? 'Do Not Disturb enabled':'Do Not Disturb disabled', type:'info'});}}/> Do Not Disturb</label>
+                <h3>{t('settings.tabs.privacy')}</h3>
+                <label><input type="checkbox" checked={locationEnabled} onChange={()=>{setLocationEnabled(!locationEnabled); localStorage.setItem('nyxos_location', locationEnabled?'0':'1');}}/> {t('settings.privacy.location')}</label>
+                <label><input type="checkbox" checked={telemetryEnabled} onChange={()=>{setTelemetryEnabled(!telemetryEnabled); localStorage.setItem('nyxos_telemetry', telemetryEnabled?'0':'1');}}/> {t('settings.privacy.telemetry')}</label>
+                <label><input type="checkbox" checked={animationsEnabled} onChange={()=>{const v=!animationsEnabled; setAnimationsEnabled(v); localStorage.setItem('nyxos_animations', v?'1':'0');}}/> {t('settings.privacy.animations')}</label>
+                <label><input type="checkbox" checked={soundEffectsEnabled} onChange={()=>{const v=!soundEffectsEnabled; setSoundEffectsEnabled(v); localStorage.setItem('nyxos_sounds', v?'1':'0');}}/> {t('settings.privacy.sounds')}</label>
+                <label><input type="checkbox" checked={nightLightEnabled} onChange={()=>{const v=!nightLightEnabled; setNightLightEnabled(v); localStorage.setItem('nyxos_night_light', v?'1':'0'); document.documentElement.classList.toggle('night-light', v);}}/> {t('settings.privacy.nightLight')}</label>
+                <label><input type="checkbox" checked={dndEnabled} onChange={()=>{const v=!dndEnabled; setDndEnabled(v); localStorage.setItem('nyxos_dnd', v?'1':'0'); push({title:'Notifications', message: v? 'Do Not Disturb enabled':'Do Not Disturb disabled', type:'info'});}}/> {t('settings.privacy.dnd')}</label>
               </section>
             )}
             {activeTab==='updates' && (
               <section className="section">
-                <h3>Updates</h3>
-                <label><input type="checkbox" checked={autoUpdate} onChange={()=>{setAutoUpdate(!autoUpdate); localStorage.setItem('nyxos_autoupdate', autoUpdate?'0':'1');}}/> Automatic Updates</label>
-                <button onClick={()=>push({title:'Updater',message:'Checking for updates...',type:'info'})}>Check Now</button>
+                <h3>{t('settings.tabs.updates')}</h3>
+                <label><input type="checkbox" checked={autoUpdate} onChange={()=>{setAutoUpdate(!autoUpdate); localStorage.setItem('nyxos_autoupdate', autoUpdate?'0':'1');}}/> {t('settings.updates.autoUpdate')}</label>
+                <button onClick={()=>push({title:'Updater',message:'Checking for updates...',type:'info'})}>{t('settings.updates.checkNow')}</button>
               </section>
             )}
             {activeTab==='nexa' && (
               <section className="section">
-                <h3>Nexa Assistant Config</h3>
+                <h3>{t('settings.tabs.nexa')}</h3>
                 <div className="section-item">
                   <select className="model-select" value={selectedModel} onChange={e=>{ setSelectedModel(e.target.value); localStorage.setItem('nexa_model', e.target.value); }}>
-                    <option value="">Select model</option>
+                    <option value="">{t('settings.nexa.selectModel')}</option>
                     {models.map(m=><option key={m} value={m}>{m}</option>)}
                   </select>
-                  {testStatus==='testing' && <p className="small">Testing model...</p>}
-                  {testStatus==='success' && <p className="small">Test successful: {testMessage}</p>}
-                  {testStatus==='error' && <p className="small">Test failed: {testMessage}</p>}
-                  <p>Current Model: {selectedModel}</p>
+                  {testStatus==='testing' && <p className="small">{t('settings.nexa.testingModel')}</p>}
+                  {testStatus==='success' && <p className="small">{t('settings.nexa.testSuccessful')} {testMessage}</p>}
+                  {testStatus==='error' && <p className="small">{t('settings.nexa.testFailed')} {testMessage}</p>}
+                  <p>{t('settings.nexa.currentModel')} {selectedModel}</p>
                 </div>
                 <div className="section-item">
-                  <h4>GPU Workers</h4>
+                  <h4>{t('settings.nexa.gpuWorkers')}</h4>
                   <input type="range" min={1} max={8} value={gpuWorkers} onChange={e=>setGpuWorkers(Number(e.target.value))} /> <span>{gpuWorkers}</span>
                 </div>
                 <div className="usage-dashboard">
-                  <h4>Usage Dashboard</h4>
-                  <p>Total Calls: {metrics.totalCalls}</p>
-                  <p>Total Tokens: {metrics.totalTokens}</p>
-                  <p>Last Latency: {metrics.lastLatency} ms</p>
-                  <p>Estimated Cost: ${metrics.costEstimate.toFixed(4)}</p>
+                  <h4>{t('settings.nexa.usageDashboard')}</h4>
+                  <p>{t('settings.nexa.totalCalls')} {metrics.totalCalls}</p>
+                  <p>{t('settings.nexa.totalTokens')} {metrics.totalTokens}</p>
+                  <p>{t('settings.nexa.lastLatency')} {metrics.lastLatency} ms</p>
+                  <p>{t('settings.nexa.estimatedCost')} ${metrics.costEstimate.toFixed(4)}</p>
                 </div>
               </section>
             )}
             {activeTab==='language' && (
               <section className="section">
-                <h3>Language, Date & Time</h3>
-                <label>Language: <select value={language} onChange={e=>setLanguage(e.target.value)}>
+                <h3>{t('settings.tabs.language')}</h3>
+                <label>{t('settings.language.language')}: <select value={language} onChange={e=>setLanguage(e.target.value)}>
                   {languages.map(l => (
                     <option key={l.code} value={l.code}>
                       {l.code === 'en' ? l.label : `${l.flag} ${l.label}`}
                     </option>
                   ))}
                 </select></label>
-                <label>Keymap: <select value={keymap} onChange={e=>{const v=e.target.value;setKeymap(v);localStorage.setItem('nyxos_keymap',v);}}>
-                  <option value="qwerty">QWERTY</option><option value="colemak">Colemak</option><option value="dvorak">Dvorak</option>
+                <label>{t('settings.language.keymap')}: <select value={keymap} onChange={e=>{const v=e.target.value;setKeymap(v);localStorage.setItem('nyxos_keymap',v);}}>
+                  <option value="qwerty">{t('settings.language.qwerty')}</option><option value="colemak">{t('settings.language.colemak')}</option><option value="dvorak">{t('settings.language.dvorak')}</option>
                 </select></label>
-                <label>Date Format: <select value={dateFormat} onChange={e=>{const v=e.target.value;setDateFormat(v);localStorage.setItem('nyxos_date_format',v);}}>
-                  <option value="MM/DD/YYYY">MM/DD/YYYY</option>
-                  <option value="DD/MM/YYYY">DD/MM/YYYY</option>
-                  <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                <label>{t('settings.language.dateFormat')}: <select value={dateFormat} onChange={e=>{const v=e.target.value;setDateFormat(v);localStorage.setItem('nyxos_date_format',v);}}>
+                  <option value="MM/DD/YYYY">{t('settings.language.mmddyyyy')}</option>
+                  <option value="DD/MM/YYYY">{t('settings.language.ddmmyyyy')}</option>
+                  <option value="YYYY-MM-DD">{t('settings.language.yyyymmdd')}</option>
                 </select></label>
-                <label>Time Zone: <select value={timeZone} onChange={e=>{const v=e.target.value;setTimeZone(v);localStorage.setItem('nyxos_time_zone',v);}}>
+                <label>{t('settings.language.timeZone')}: <select value={timeZone} onChange={e=>{const v=e.target.value;setTimeZone(v);localStorage.setItem('nyxos_time_zone',v);}}>
                   {/* list common time zones or use Intl.supportedValuesOf */}
                   {Intl.supportedValuesOf ? Intl.supportedValuesOf('timeZone').map(tz=><option key={tz} value={tz}>{tz}</option>) : <option value={timeZone}>{timeZone}</option>}
                 </select></label>
@@ -329,7 +336,7 @@ Resolution: ${window.screen.width}x${window.screen.height}
 Browser: ${navigator.userAgent}
 `}</pre>
                 </div>
-                <p className="about-text">NyxOS is a fast, lightweight running locally in your browser.</p>
+                <p className="about-text">{t('settings.about.text')}</p>
               </section>
             )}
             <LockScreen show={locked} onUnlock={()=>setLocked(false)}/>

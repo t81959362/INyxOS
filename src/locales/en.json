@@ -18,7 +18,9 @@
       "touchSwipe": "Two-finger swipe",
       "touchPinch": "Pinch-zoom",
       "vsync": "VSync",
-      "customFontsInfo": "Place custom fonts (.ttf/.otf) in /assets/fonts/"
+      "customFontsInfo": "Place custom fonts (.ttf/.otf) in /assets/fonts/",
+      "systemUi": "System UI",
+      "custom": "Custom..."
     },
     "accessibility": {
       "highContrast": "High Contrast",
@@ -36,13 +38,36 @@
       "dnd": "Do Not Disturb"
     },
     "updates": {
-      "autoUpdate": "Auto Update"
+      "autoUpdate": "Auto Update",
+      "checkNow": "Check Now"
     },
     "language": {
       "language": "Language",
       "keymap": "Keymap",
       "dateFormat": "Date Format",
-      "timeZone": "Time Zone"
+      "timeZone": "Time Zone",
+      "qwerty": "QWERTY",
+      "colemak": "Colemak",
+      "dvorak": "Dvorak",
+      "mmddyyyy": "MM/DD/YYYY",
+      "ddmmyyyy": "DD/MM/YYYY",
+      "yyyymmdd": "YYYY-MM-DD"
+    },
+    "nexa": {
+      "selectModel": "Select model",
+      "testingModel": "Testing model...",
+      "testSuccessful": "Test successful:",
+      "testFailed": "Test failed:",
+      "currentModel": "Current Model:",
+      "gpuWorkers": "GPU Workers",
+      "usageDashboard": "Usage Dashboard",
+      "totalCalls": "Total Calls:",
+      "totalTokens": "Total Tokens:",
+      "lastLatency": "Last Latency:",
+      "estimatedCost": "Estimated Cost:"
+    },
+    "about": {
+      "text": "NyxOS is a fast, lightweight OS running locally in your browser."
     }
   }
 }

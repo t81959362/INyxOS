@@ -18,7 +18,9 @@
       "touchSwipe": "Свайп двома пальцями",
       "touchPinch": "Зум щипком",
       "vsync": "VSync",
-      "customFontsInfo": "Розмістіть власні шрифти (.ttf/.otf) у /assets/fonts/"
+      "customFontsInfo": "Розмістіть власні шрифти (.ttf/.otf) у /assets/fonts/",
+      "systemUi": "Системний інтерфейс",
+      "custom": "Власні..."
     },
     "accessibility": {
       "highContrast": "Висока контрастність",
@@ -36,13 +38,36 @@
       "dnd": "Не турбувати"
     },
     "updates": {
-      "autoUpdate": "Автоматичне оновлення"
+      "autoUpdate": "Автоматичне оновлення",
+      "checkNow": "Перевірити зараз"
     },
     "language": {
       "language": "Мова",
       "keymap": "Розкладка клавіатури",
       "dateFormat": "Формат дати",
-      "timeZone": "Часовий пояс"
+      "timeZone": "Часовий пояс",
+      "qwerty": "QWERTY",
+      "colemak": "Colemak",
+      "dvorak": "Dvorak",
+      "mmddyyyy": "MM/DD/YYYY",
+      "ddmmyyyy": "DD/MM/YYYY",
+      "yyyymmdd": "YYYY-MM-DD"
+    },
+    "nexa": {
+      "selectModel": "Вибрати модель",
+      "testingModel": "Тестування моделі...",
+      "testSuccessful": "Тест успішний:",
+      "testFailed": "Тест не вдався:",
+      "currentModel": "Поточна модель:",
+      "gpuWorkers": "GPU працівники",
+      "usageDashboard": "Панель використання",
+      "totalCalls": "Загальні виклики:",
+      "totalTokens": "Загальні токени:",
+      "lastLatency": "Остання затримка:",
+      "estimatedCost": "Оцінена вартість:"
+    },
+    "about": {
+      "text": "NyxOS — швидка, легка операційна система, що працює локально у вашому браузері."
     }
   }
 }

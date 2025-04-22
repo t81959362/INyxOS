@@ -18,7 +18,9 @@
       "touchSwipe": "Zweifinger-Wischen",
       "touchPinch": "Pinch-Zoom",
       "vsync": "VSync",
-      "customFontsInfo": "Lege benutzerdefinierte Schriftarten (.ttf/.otf) in /assets/fonts/ ab"
+      "customFontsInfo": "Lege benutzerdefinierte Schriftarten (.ttf/.otf) in /assets/fonts/ ab",
+      "systemUi": "System-Benutzeroberfläche",
+      "custom": "Benutzerdefiniert..."
     },
     "accessibility": {
       "highContrast": "Hoher Kontrast",
@@ -36,13 +38,36 @@
       "dnd": "Bitte nicht stören"
     },
     "updates": {
-      "autoUpdate": "Automatisches Update"
+      "autoUpdate": "Automatisches Update",
+      "checkNow": "Jetzt prüfen"
     },
     "language": {
       "language": "Sprache",
       "keymap": "Tastaturbelegung",
+      "qwerty": "QWERTY",
+      "colemak": "Colemak",
+      "dvorak": "Dvorak",
       "dateFormat": "Datumsformat",
+      "mmddyyyy": "MM/DD/YYYY",
+      "ddmmyyyy": "DD/MM/YYYY",
+      "yyyymmdd": "YYYY-MM-DD",
       "timeZone": "Zeitzone"
+    },
+    "nexa": {
+      "selectModel": "Modell auswählen",
+      "testingModel": "Modell wird getestet...",
+      "testSuccessful": "Test erfolgreich:",
+      "testFailed": "Test fehlgeschlagen:",
+      "currentModel": "Aktuelles Modell:",
+      "gpuWorkers": "GPU-Arbeiter",
+      "usageDashboard": "Nutzungsübersicht",
+      "totalCalls": "Gesamtaufrufe:",
+      "totalTokens": "Gesamttoken:",
+      "lastLatency": "Letzte Latenz:",
+      "estimatedCost": "Geschätzte Kosten:"
+    },
+    "about": {
+      "text": "NyxOS ist ein schnelles, leichtgewichtiges Betriebssystem, das lokal in Ihrem Browser läuft."
     }
   }
 }
