@@ -1,0 +1,48 @@
+{
+  "settings": {
+    "title": "Settings",
+    "tabs": {
+      "appearance": "Appearance",
+      "accessibility": "Accessibility",
+      "privacy": "Privacy",
+      "updates": "Updates",
+      "nexa": "Nexa Assistant",
+      "language": "Language",
+      "about": "About"
+    },
+    "appearance": {
+      "theme": "Theme",
+      "fontFamily": "Font Family",
+      "fontSize": "Font Size",
+      "cursorAcceleration": "Cursor Acceleration",
+      "touchSwipe": "Two-finger swipe",
+      "touchPinch": "Pinch-zoom",
+      "vsync": "VSync",
+      "customFontsInfo": "Place custom fonts (.ttf/.otf) in /assets/fonts/"
+    },
+    "accessibility": {
+      "highContrast": "High Contrast",
+      "screenReader": "Screen Reader",
+      "windowMagnifier": "Window Magnifier",
+      "colorBlind": "Color Blind Mode",
+      "reduceMotion": "Reduce Motion"
+    },
+    "privacy": {
+      "location": "Location Services",
+      "telemetry": "Telemetry",
+      "animations": "Desktop Animations",
+      "sounds": "Sound Effects",
+      "nightLight": "Night Light",
+      "dnd": "Do Not Disturb"
+    },
+    "updates": {
+      "autoUpdate": "Auto Update"
+    },
+    "language": {
+      "language": "Language",
+      "keymap": "Keymap",
+      "dateFormat": "Date Format",
+      "timeZone": "Time Zone"
+    }
+  }
+}

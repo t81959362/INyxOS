@@ -192,16 +192,6 @@ export const Settings: React.FC = () => {
                 {themes.map(t=>(
                   <label key={t.name}><input type="radio" name="theme" value={t.name} checked={theme===t.name} onChange={()=>save(t.name)}/>{t.label}</label>
                 ))}
-                <div className="accent-picker">
-                  <label>Accent:</label>
-                  <input type="color" value={accent||themes.find(t=>t.name===theme)?.accent!} onChange={handleAccentChange}/>
-                  <button onClick={()=>{
-                    localStorage.removeItem('nyxos_accent');
-                    setAccent('');
-                    const def = themes.find(t=>t.name===theme)?.accent || '';
-                    document.documentElement.style.setProperty('--accent', def);
-                  }}>Reset</button>
-                </div>
                 <div className="font-settings">
                   <select className="font-family-select" value={systemFont} onChange={e=>{
                     const v=e.target.value;

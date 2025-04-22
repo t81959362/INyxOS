@@ -1,0 +1,48 @@
+{
+  "settings": {
+    "title": "Einstellungen",
+    "tabs": {
+      "appearance": "Aussehen",
+      "accessibility": "Barrierefreiheit",
+      "privacy": "Datenschutz",
+      "updates": "Updates",
+      "nexa": "Nexa Assistent",
+      "language": "Sprache",
+      "about": "Über"
+    },
+    "appearance": {
+      "theme": "Thema",
+      "fontFamily": "Schriftart",
+      "fontSize": "Schriftgröße",
+      "cursorAcceleration": "Cursorbeschleunigung",
+      "touchSwipe": "Zweifinger-Wischen",
+      "touchPinch": "Pinch-Zoom",
+      "vsync": "VSync",
+      "customFontsInfo": "Lege benutzerdefinierte Schriftarten (.ttf/.otf) in /assets/fonts/ ab"
+    },
+    "accessibility": {
+      "highContrast": "Hoher Kontrast",
+      "screenReader": "Bildschirmleser",
+      "windowMagnifier": "Fenster-Lupe",
+      "colorBlind": "Farbblindmodus",
+      "reduceMotion": "Bewegung reduzieren"
+    },
+    "privacy": {
+      "location": "Standortdienste",
+      "telemetry": "Telemetrie",
+      "animations": "Desktop-Animationen",
+      "sounds": "Soundeffekte",
+      "nightLight": "Nachtlicht",
+      "dnd": "Bitte nicht stören"
+    },
+    "updates": {
+      "autoUpdate": "Automatisches Update"
+    },
+    "language": {
+      "language": "Sprache",
+      "keymap": "Tastaturbelegung",
+      "dateFormat": "Datumsformat",
+      "timeZone": "Zeitzone"
+    }
+  }
+}

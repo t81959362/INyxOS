@@ -1,0 +1,48 @@
+{
+  "settings": {
+    "title": "Налаштування",
+    "tabs": {
+      "appearance": "Зовнішній вигляд",
+      "accessibility": "Доступність",
+      "privacy": "Конфіденційність",
+      "updates": "Оновлення",
+      "nexa": "Асистент Nexa",
+      "language": "Мова",
+      "about": "Про програму"
+    },
+    "appearance": {
+      "theme": "Тема",
+      "fontFamily": "Шрифт",
+      "fontSize": "Розмір шрифту",
+      "cursorAcceleration": "Прискорення курсору",
+      "touchSwipe": "Свайп двома пальцями",
+      "touchPinch": "Зум щипком",
+      "vsync": "VSync",
+      "customFontsInfo": "Розмістіть власні шрифти (.ttf/.otf) у /assets/fonts/"
+    },
+    "accessibility": {
+      "highContrast": "Висока контрастність",
+      "screenReader": "Зчитувач екрану",
+      "windowMagnifier": "Лупа вікна",
+      "colorBlind": "Режим дальтоніка",
+      "reduceMotion": "Зменшити рух"
+    },
+    "privacy": {
+      "location": "Служби локації",
+      "telemetry": "Телеметрія",
+      "animations": "Анімація робочого столу",
+      "sounds": "Звукові ефекти",
+      "nightLight": "Нічне світло",
+      "dnd": "Не турбувати"
+    },
+    "updates": {
+      "autoUpdate": "Автоматичне оновлення"
+    },
+    "language": {
+      "language": "Мова",
+      "keymap": "Розкладка клавіатури",
+      "dateFormat": "Формат дати",
+      "timeZone": "Часовий пояс"
+    }
+  }
+}
