@@ -17,6 +17,13 @@ const themes = [
 const OR_API_KEY = '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';
 const DEFAULT_MODEL_ID = 'google/gemini-2.5-pro-exp-03-25:free';
 
+// Auto-import any custom fonts in assets/fonts
+const customFontModules: Record<string, string> = import.meta.glob('../../assets/fonts/*.{ttf,otf}', { eager: true, as: 'url' });
+const customFonts = Object.entries(customFontModules).map(([path, url]) => {
+  const name = path.split('/').pop()?.replace(/\.(ttf|otf)$/, '') || '';
+  return { name, url };
+});
+
 export const Settings: React.FC = () => {
   const [theme, setTheme] = useState('default');
   const [accent, setAccent] = useState(localStorage.getItem('nyxos_accent') || '');
@@ -122,7 +129,7 @@ export const Settings: React.FC = () => {
 
   // Appearance extensions
   const [systemFont, setSystemFont] = useState(localStorage.getItem('nyxos_font_family') || 'system-ui');
-  const [fontSize, setFontSize] = useState(Number(localStorage.getItem('nyxos_font_size')) || 14);
+  const [fontSize, setFontSize] = useState(Number(localStorage.getItem('nyxos_font_size') || '14'));
   const [cursorAccel, setCursorAccel] = useState(Number(localStorage.getItem('nyxos_cursor_accel')) || 1);
   const [touchSwipe, setTouchSwipe] = useState(localStorage.getItem('nyxos_touch_swipe') === '1');
   const [touchPinch, setTouchPinch] = useState(localStorage.getItem('nyxos_touch_pinch') === '1');
@@ -134,9 +141,24 @@ export const Settings: React.FC = () => {
   const [reduceMotion, setReduceMotion] = useState(localStorage.getItem('nyxos_reduce_motion') === '1');
 
   // Localization & keymap
-  const languages = [ { code: 'en', label: 'English', flag: '🇺🇸' }, { code: 'es', label: 'Español', flag: '🇪🇸' } ];
+  const languages = [
+    { code: 'en', label: 'English', flag: '🇬🇧' },
+    { code: 'es', label: 'Español', flag: '🇪🇸' },
+    { code: 'fr', label: 'Français', flag: '🇫🇷' },
+    { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
+    { code: 'uk', label: 'Українська', flag: '🇺🇦' },
+  ];
   const [language, setLanguage] = useState(localStorage.getItem('nyxos_language') || 'en');
   const [keymap, setKeymap] = useState(localStorage.getItem('nyxos_keymap') || 'qwerty');
+  const [dateFormat, setDateFormat] = useState(localStorage.getItem('nyxos_date_format') || 'MM/DD/YYYY');
+  const [timeZone, setTimeZone] = useState(localStorage.getItem('nyxos_time_zone') || Intl.DateTimeFormat().resolvedOptions().timeZone);
+
+  useEffect(() => {
+    document.documentElement.lang = language;
+    localStorage.setItem('nyxos_language', language);
+  }, [language]);
+  useEffect(() => { localStorage.setItem('nyxos_date_format', dateFormat); }, [dateFormat]);
+  useEffect(() => { localStorage.setItem('nyxos_time_zone', timeZone); }, [timeZone]);
 
   const [activeTab, setActiveTab] = useState<'appearance'|'accessibility'|'privacy'|'updates'|'nexa'|'language'|'about'>('appearance');
 
@@ -180,12 +202,37 @@ export const Settings: React.FC = () => {
                     document.documentElement.style.setProperty('--accent', def);
                   }}>Reset</button>
                 </div>
-                {/* Appearance extensions */}
                 <div className="font-settings">
-                  <label>Font Family: <select value={systemFont} onChange={e=>{setSystemFont(e.target.value);localStorage.setItem('nyxos_font_family',e.target.value);document.documentElement.style.setProperty('--font-family',e.target.value);}}>
-                    <option value="system-ui">System UI</option><option value="Arial">Arial</option><option value="Roboto">Roboto</option><option value="Custom">Custom...</option>
-                  </select></label>
-                  <label>Font Size: <input type="number" min={10} max={72} value={fontSize} onChange={e=>{const v=Number(e.target.value);setFontSize(v);localStorage.setItem('nyxos_font_size',v.toString());document.documentElement.style.setProperty('--font-size',`${v}px`);}}/>px</label>
+                  <select className="font-family-select" value={systemFont} onChange={e=>{
+                    const v=e.target.value;
+                    setSystemFont(v);
+                    localStorage.setItem('nyxos_font_family', v);
+                    const custom = customFonts.find(cf => cf.name === v);
+                    if (custom) {
+                      let styleTag = document.getElementById(`font-face-${v}`) as HTMLStyleElement;
+                      if (!styleTag) {
+                        styleTag = document.createElement('style');
+                        styleTag.id = `font-face-${v}`;
+                      }
+                      styleTag.innerHTML = `@font-face { font-family: '${v}'; src: url('${custom.url}'); font-display: swap; }`;
+                      document.head.appendChild(styleTag);
+                      document.documentElement.style.setProperty('--font-family', `'${v}'`);
+                    } else {
+                      document.documentElement.style.setProperty('--font-family', v);
+                    }
+                  }}>
+                    <option value="system-ui">System UI</option>
+                    <option value="Arial">Arial</option>
+                    <option value="Roboto">Roboto</option>
+                    <option value="Custom">Custom...</option>
+                    {customFonts.map(f => <option key={f.name} value={f.name}>{f.name}</option>)}
+                  </select>
+                  <select className="font-size-select" value={fontSize} onChange={e=>{
+                    const v=Number(e.target.value); setFontSize(v); localStorage.setItem('nyxos_font_size',v.toString());
+                    document.documentElement.style.setProperty('--font-size',`${v}px`);
+                  }}>
+                    {[12,14,16,18,20,24,28,32].map(s=><option key={s} value={s}>{s}px</option>)}
+                  </select>
                   <p>Place custom fonts (.ttf/.otf) in /assets/fonts/</p>
                 </div>
                 <div className="cursor-settings">
@@ -230,12 +277,10 @@ export const Settings: React.FC = () => {
               <section className="section">
                 <h3>Nexa Assistant Config</h3>
                 <div className="section-item">
-                  <label>Model:
-                    <select value={selectedModel} onChange={e=>{ setSelectedModel(e.target.value); localStorage.setItem('nexa_model', e.target.value); }}>
-                      <option value="">Select model</option>
-                      {models.map(m=><option key={m} value={m}>{m}</option>)}
-                    </select>
-                  </label>
+                  <select className="model-select" value={selectedModel} onChange={e=>{ setSelectedModel(e.target.value); localStorage.setItem('nexa_model', e.target.value); }}>
+                    <option value="">Select model</option>
+                    {models.map(m=><option key={m} value={m}>{m}</option>)}
+                  </select>
                   {testStatus==='testing' && <p className="small">Testing model...</p>}
                   {testStatus==='success' && <p className="small">Test successful: {testMessage}</p>}
                   {testStatus==='error' && <p className="small">Test failed: {testMessage}</p>}
@@ -256,9 +301,26 @@ export const Settings: React.FC = () => {
             )}
             {activeTab==='language' && (
               <section className="section">
-                <h3>Language & Keyboard</h3>
-                <label>Language: <select value={language} onChange={e=>{setLanguage(e.target.value);localStorage.setItem('nyxos_language',e.target.value);}}>{languages.map(l=><option key={l.code} value={l.code}>{l.flag} {l.label}</option>)}</select></label>
-                <label>Keymap: <select value={keymap} onChange={e=>{setKeymap(e.target.value);localStorage.setItem('nyxos_keymap',e.target.value);}}><option value="qwerty">QWERTY</option><option value="colemak">Colemak</option><option value="dvorak">Dvorak</option></select></label>
+                <h3>Language, Date & Time</h3>
+                <label>Language: <select value={language} onChange={e=>setLanguage(e.target.value)}>
+                  {languages.map(l => (
+                    <option key={l.code} value={l.code}>
+                      {l.code === 'en' ? l.label : `${l.flag} ${l.label}`}
+                    </option>
+                  ))}
+                </select></label>
+                <label>Keymap: <select value={keymap} onChange={e=>{const v=e.target.value;setKeymap(v);localStorage.setItem('nyxos_keymap',v);}}>
+                  <option value="qwerty">QWERTY</option><option value="colemak">Colemak</option><option value="dvorak">Dvorak</option>
+                </select></label>
+                <label>Date Format: <select value={dateFormat} onChange={e=>{const v=e.target.value;setDateFormat(v);localStorage.setItem('nyxos_date_format',v);}}>
+                  <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                  <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                  <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                </select></label>
+                <label>Time Zone: <select value={timeZone} onChange={e=>{const v=e.target.value;setTimeZone(v);localStorage.setItem('nyxos_time_zone',v);}}>
+                  {/* list common time zones or use Intl.supportedValuesOf */}
+                  {Intl.supportedValuesOf ? Intl.supportedValuesOf('timeZone').map(tz=><option key={tz} value={tz}>{tz}</option>) : <option value={timeZone}>{timeZone}</option>}
+                </select></label>
               </section>
             )}
             {activeTab==='about' && (
