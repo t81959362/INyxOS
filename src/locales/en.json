@@ -1,0 +1,121 @@
+{
+  "settings": {
+    "title": "Settings",
+    "tabs": {
+      "appearance": "Appearance",
+      "accessibility": "Accessibility",
+      "privacy": "Privacy",
+      "updates": "Updates",
+      "nexa": "Nexa Assistant",
+      "language": "Language",
+      "about": "About"
+    },
+    "appearance": {
+      "theme": "Theme",
+      "fontFamily": "Font Family",
+      "fontSize": "Font Size",
+      "cursorAcceleration": "Cursor Acceleration",
+      "touchSwipe": "Two-finger swipe",
+      "touchPinch": "Pinch-zoom",
+      "vsync": "VSync",
+      "customFontsInfo": "Place custom fonts (.ttf/.otf) in /assets/fonts/",
+      "systemUi": "System UI",
+      "custom": "Custom..."
+    },
+    "accessibility": {
+      "highContrast": "High Contrast",
+      "screenReader": "Screen Reader",
+      "windowMagnifier": "Window Magnifier",
+      "colorBlind": "Color Blind Mode",
+      "reduceMotion": "Reduce Motion"
+    },
+    "privacy": {
+      "location": "Location Services",
+      "telemetry": "Telemetry",
+      "animations": "Desktop Animations",
+      "sounds": "Sound Effects",
+      "nightLight": "Night Light",
+      "dnd": "Do Not Disturb"
+    },
+    "updates": {
+      "autoUpdate": "Auto Update",
+      "checkNow": "Check Now"
+    },
+    "language": {
+      "language": "Language",
+      "keymap": "Keymap",
+      "dateFormat": "Date Format",
+      "timeZone": "Time Zone",
+      "qwerty": "QWERTY",
+      "colemak": "Colemak",
+      "dvorak": "Dvorak",
+      "mmddyyyy": "MM/DD/YYYY",
+      "ddmmyyyy": "DD/MM/YYYY",
+      "yyyymmdd": "YYYY-MM-DD"
+    },
+    "nexa": {
+      "selectModel": "Select model",
+      "testingModel": "Testing model...",
+      "testSuccessful": "Test successful:",
+      "testFailed": "Test failed:",
+      "currentModel": "Current Model:",
+      "gpuWorkers": "GPU Workers",
+      "usageDashboard": "Usage Dashboard",
+      "totalCalls": "Total Calls:",
+      "totalTokens": "Total Tokens:",
+      "lastLatency": "Last Latency:",
+      "estimatedCost": "Estimated Cost:"
+    },
+    "about": {
+      "text": "NyxOS is a fast, lightweight OS running locally in your browser."
+    }
+  },
+  "taskbar": {
+    "openLauncher": "Open Launcher",
+    "notifications": "Notifications",
+    "showHiddenIcons": "Show hidden icons",
+    "hideHiddenIcons": "Hide hidden icons",
+    "actionCenter": "Action Center",
+    "startMenu": "Start Menu",
+    "nexaAi": "Nexa AI"
+  },
+  "startMenu": {
+    "apps": "Apps",
+    "games": "Games",
+    "widgets": "Widgets",
+    "documents": "Documents",
+    "pictures": "Pictures",
+    "videos": "Videos",
+    "power": "Power",
+    "openDocuments": "Open Documents",
+    "openPictures": "Open Pictures",
+    "openVideos": "Open Videos",
+    "powerOff": "Power Off (Clear Session)"
+  },
+  "notificationPopover": {
+    "title": "Notifications",
+    "empty": "No notifications",
+    "ariaLabel": "Notifications",
+    "dismiss": "Dismiss notification"
+  },
+  "toast": {
+    "closeAriaLabel": "Close notification"
+  },
+  "optionsCenter": {
+    "nightLight": "Night Light",
+    "on": "On",
+    "off": "Off",
+    "perAppVolume": "Per-app Volume",
+    "noAudioApps": "No audio or video apps running"
+  },
+  "aiAssistant": {
+    "greeting": "Nexa: Hello! I'm Nexa, your assistant. How can I help you today?",
+    "placeholder": "Ask me anything...",
+    "send": "Send",
+    "research": "Research",
+    "you": "You",
+    "nexa": "Nexa",
+    "nexaThinking": "Nexa (Thinking)",
+    "error": "Sorry, something went wrong."
+  }
+}

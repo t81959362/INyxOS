@@ -1,0 +1,83 @@
+{
+  "settings": {
+    "title": "Paramètres",
+    "tabs": {
+      "appearance": "Apparence",
+      "accessibility": "Accessibilité",
+      "privacy": "Confidentialité",
+      "updates": "Mises à jour",
+      "nexa": "Assistant Nexa",
+      "language": "Langue",
+      "about": "À propos"
+    },
+    "appearance": {
+      "theme": "Thème",
+      "fontFamily": "Police",
+      "fontSize": "Taille de police",
+      "cursorAcceleration": "Accélération du curseur",
+      "touchSwipe": "Glisser à deux doigts",
+      "touchPinch": "Zoom par pincement",
+      "vsync": "VSync",
+      "customFontsInfo": "Placez des polices personnalisées (.ttf/.otf) dans /assets/fonts/",
+      "systemUi": "Interface système",
+      "custom": "Personnalisé..."
+    },
+    "accessibility": {
+      "highContrast": "Contraste élevé",
+      "screenReader": "Lecteur d'écran",
+      "windowMagnifier": "Loupe de fenêtre",
+      "colorBlind": "Mode daltonien",
+      "reduceMotion": "Réduire le mouvement"
+    },
+    "privacy": {
+      "location": "Services de localisation",
+      "telemetry": "Télémétrie",
+      "animations": "Animations du bureau",
+      "sounds": "Effets sonores",
+      "nightLight": "Lumière nocturne",
+      "dnd": "Ne pas déranger"
+    },
+    "updates": {
+      "autoUpdate": "Mise à jour automatique",
+      "checkNow": "Vérifier maintenant"
+    },
+    "language": {
+      "language": "Langue",
+      "keymap": "Configuration du clavier",
+      "dateFormat": "Format de date",
+      "timeZone": "Fuseau horaire",
+      "qwerty": "QWERTY",
+      "colemak": "Colemak",
+      "dvorak": "Dvorak",
+      "mmddyyyy": "MM/DD/YYYY",
+      "ddmmyyyy": "DD/MM/YYYY",
+      "yyyymmdd": "YYYY-MM-DD"
+    },
+    "nexa": {
+      "selectModel": "Sélectionner le modèle",
+      "testingModel": "Test du modèle...",
+      "testSuccessful": "Test réussi :",
+      "testFailed": "Échec du test :",
+      "currentModel": "Modèle actuel :",
+      "gpuWorkers": "Workers GPU",
+      "usageDashboard": "Tableau de bord d'utilisation",
+      "totalCalls": "Nombre total d'appels :",
+      "totalTokens": "Nombre total de jetons :",
+      "lastLatency": "Dernière latence :",
+      "estimatedCost": "Coût estimé :"
+    },
+    "about": {
+      "text": "NyxOS est un système d'exploitation rapide et léger fonctionnant localement dans votre navigateur."
+    }
+  },
+  "aiAssistant": {
+    "greeting": "Nexa : Bonjour ! Je suis Nexa, votre assistant. Comment puis-je vous aider aujourd'hui ?",
+    "placeholder": "Posez-moi une question...",
+    "send": "Envoyer",
+    "research": "Rechercher",
+    "you": "Vous",
+    "nexa": "Nexa",
+    "nexaThinking": "Nexa (Réflexion)",
+    "error": "Désolé, une erreur est survenue."
+  }
+}

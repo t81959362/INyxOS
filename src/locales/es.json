@@ -1,0 +1,83 @@
+{
+  "settings": {
+    "title": "Configuración",
+    "tabs": {
+      "appearance": "Apariencia",
+      "accessibility": "Accesibilidad",
+      "privacy": "Privacidad",
+      "updates": "Actualizaciones",
+      "nexa": "Asistente Nexa",
+      "language": "Idioma",
+      "about": "Acerca de"
+    },
+    "appearance": {
+      "theme": "Tema",
+      "fontFamily": "Fuente",
+      "fontSize": "Tamaño de fuente",
+      "cursorAcceleration": "Aceleración del cursor",
+      "touchSwipe": "Deslizar con dos dedos",
+      "touchPinch": "Acercar con pellizco",
+      "vsync": "VSync",
+      "customFontsInfo": "Coloque fuentes personalizadas (.ttf/.otf) en /assets/fonts/",
+      "systemUi": "Interfaz del sistema",
+      "custom": "Personalizado..."
+    },
+    "accessibility": {
+      "highContrast": "Alto contraste",
+      "screenReader": "Lector de pantalla",
+      "windowMagnifier": "Lupa de ventana",
+      "colorBlind": "Modo daltónico",
+      "reduceMotion": "Reducir movimiento"
+    },
+    "privacy": {
+      "location": "Servicios de ubicación",
+      "telemetry": "Telemetría",
+      "animations": "Animaciones de escritorio",
+      "sounds": "Efectos de sonido",
+      "nightLight": "Luz nocturna",
+      "dnd": "No molestar"
+    },
+    "updates": {
+      "autoUpdate": "Actualización automática",
+      "checkNow": "Buscar ahora"
+    },
+    "language": {
+      "language": "Idioma",
+      "keymap": "Distribución",
+      "dateFormat": "Formato de fecha",
+      "timeZone": "Zona horaria",
+      "qwerty": "QWERTY",
+      "colemak": "Colemak",
+      "dvorak": "Dvorak",
+      "mmddyyyy": "MM/DD/YYYY",
+      "ddmmyyyy": "DD/MM/YYYY",
+      "yyyymmdd": "YYYY-MM-DD"
+    },
+    "nexa": {
+      "selectModel": "Seleccionar modelo",
+      "testingModel": "Probando modelo...",
+      "testSuccessful": "Prueba exitosa:",
+      "testFailed": "Prueba fallida:",
+      "currentModel": "Modelo actual:",
+      "gpuWorkers": "Trabajadores de GPU",
+      "usageDashboard": "Panel de uso",
+      "totalCalls": "Llamadas totales:",
+      "totalTokens": "Tokens totales:",
+      "lastLatency": "Última latencia:",
+      "estimatedCost": "Costo estimado:"
+    },
+    "about": {
+      "text": "NyxOS es un sistema operativo rápido y ligero que se ejecuta localmente en tu navegador."
+    },
+    "aiAssistant": {
+      "greeting": "Nexa: ¡Hola! Soy Nexa, tu asistente. ¿Cómo puedo ayudarte hoy?",
+      "placeholder": "Pregúntame lo que sea...",
+      "send": "Enviar",
+      "research": "Investigar",
+      "you": "Tú",
+      "nexa": "Nexa",
+      "nexaThinking": "Nexa (Pensando)",
+      "error": "Lo siento, algo salió mal."
+    }
+  }
+}

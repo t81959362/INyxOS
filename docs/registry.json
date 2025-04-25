@@ -1,0 +1,292 @@
+[
+  {
+    "id": "minecraft",
+    "name": "Minecraft",
+    "url": "/games/minecraft/index.html",
+    "icon": "https://eaglercraft.q13x.com/favicon.ico",
+    "category": "Games",
+    "type": "pwa",
+    "description": "Minecraft 1.8 WASM via Eaglercraft",
+    "sandbox": "allow-scripts allow-same-origin allow-popups"
+  },
+  {
+    "id": "smaller-pictures",
+    "name": "Smaller Pictures",
+    "url": "https://smaller-pictures.appspot.com/",
+    "icon": "https://smaller-pictures.appspot.com/favicon.ico",
+    "category": "Utility",
+    "type": "pwa",
+    "description": "Batch-resize and optimize images in your browser",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "qi-reader",
+    "name": "QR Reader",
+    "url": "https://www.qireader.com/",
+    "icon": "https://www.qireader.com/favicon.ico",
+    "category": "Utility",
+    "type": "pwa",
+    "description": "Scan and decode QR codes in your browser",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "flipboard",
+    "name": "Flipboard",
+    "url": "https://flipboard.com/",
+    "icon": "https://flipboard.com/favicon.ico",
+    "category": "News",
+    "type": "pwa",
+    "description": "Discover and share stories from around the world",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "pinterest",
+    "name": "Pinterest",
+    "url": "https://pinterest.com/",
+    "icon": "https://pinterest.com/favicon.ico",
+    "category": "Social",
+    "type": "pwa",
+    "description": "Visual discovery and bookmarking",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "telegram-web",
+    "name": "Telegram Web",
+    "url": "https://web.telegram.org/",
+    "icon": "https://web.telegram.org/favicon.ico",
+    "category": "Communication",
+    "type": "pwa",
+    "description": "Cloud-based messaging service",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "spotify",
+    "name": "Spotify",
+    "url": "https://spotify.com/",
+    "icon": "https://spotify.com/favicon.ico",
+    "category": "Music",
+    "type": "pwa",
+    "description": "Music streaming service",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "google-maps",
+    "name": "Google Maps",
+    "url": "https://google.com/maps",
+    "icon": "https://www.google.com/maps/favicon.ico",
+    "category": "Maps",
+    "type": "pwa",
+    "description": "Interactive maps and directions",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "weather-com",
+    "name": "Weather.com",
+    "url": "https://weather.com/",
+    "icon": "https://weather.com/favicon.ico",
+    "category": "Weather",
+    "type": "pwa",
+    "description": "Local weather forecasts and radar",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "trivago",
+    "name": "Trivago",
+    "url": "https://trivago.com/",
+    "icon": "https://trivago.com/favicon.ico",
+    "category": "Travel",
+    "type": "pwa",
+    "description": "Hotel search and price comparison",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "vscode-dev",
+    "name": "VSCode.dev",
+    "url": "https://vscode.dev/",
+    "icon": "https://vscode.dev/favicon.ico",
+    "category": "Development",
+    "type": "pwa",
+    "description": "Online code editor",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "devdocs",
+    "name": "DevDocs",
+    "url": "https://devdocs.io/",
+    "icon": "https://devdocs.io/favicon.ico",
+    "category": "Documentation",
+    "type": "pwa",
+    "description": "API documentation browser",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "aliexpress",
+    "name": "AliExpress",
+    "url": "https://www.aliexpress.com/",
+    "icon": "https://www.aliexpress.com/favicon.ico",
+    "category": "Shopping",
+    "type": "pwa",
+    "description": "Online retail marketplace",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "codeit",
+    "name": "CodeIt",
+    "url": "https://codeit.codes/",
+    "icon": "https://codeit.codes/favicon.ico",
+    "category": "Development",
+    "type": "pwa",
+    "description": "Learn to code interactively",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "edit-video",
+    "name": "Edit.Video",
+    "url": "https://edit.video/",
+    "icon": "https://edit.video/favicon.ico",
+    "category": "Video",
+    "type": "pwa",
+    "description": "Browser-based video editing",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "photopea",
+    "name": "Photopea",
+    "url": "https://www.photopea.com/",
+    "icon": "https://www.photopea.com/favicon.ico",
+    "category": "Graphics",
+    "type": "pwa",
+    "description": "Advanced image editor",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "typst",
+    "name": "Typst",
+    "url": "https://typst.app/",
+    "icon": "https://typst.app/favicon.ico",
+    "category": "Writing",
+    "type": "pwa",
+    "description": "Next-generation typesetting online",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "vimonlineeditor",
+    "name": "Vim Online Editor",
+    "url": "https://www.vimonlineeditor.com/",
+    "icon": "https://www.vimonlineeditor.com/favicon.ico",
+    "category": "Development",
+    "type": "pwa",
+    "description": "Online Vim in browser",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "traintimes",
+    "name": "Train Times",
+    "url": "https://traintimes.org.uk/",
+    "icon": "https://traintimes.org.uk/favicon.ico",
+    "category": "Travel",
+    "type": "pwa",
+    "description": "UK train schedules and times",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "vslite",
+    "name": "VS Lite",
+    "url": "https://vslite.dev/",
+    "icon": "https://vslite.dev/favicon.ico",
+    "category": "Development",
+    "type": "pwa",
+    "description": "Lightweight code editor in browser",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "logseq",
+    "name": "Logseq",
+    "url": "https://logseq.com/?spa=true",
+    "icon": "https://logseq.com/favicon.ico",
+    "category": "Productivity",
+    "type": "pwa",
+    "description": "Knowledge management tool",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "paintz",
+    "name": "PaintZ",
+    "url": "https://paintz.app/",
+    "icon": "https://paintz.app/favicon.ico",
+    "category": "Graphics",
+    "type": "pwa",
+    "description": "Online painting app",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "kiwix",
+    "name": "Kiwix",
+    "url": "https://pwa.kiwix.org/www/index.html",
+    "icon": "https://pwa.kiwix.org/favicon.ico",
+    "category": "Education",
+    "type": "pwa",
+    "description": "Offline Wikipedia reader",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "vectorpea",
+    "name": "VectorPea",
+    "url": "https://www.vectorpea.com/",
+    "icon": "https://www.vectorpea.com/favicon.ico",
+    "category": "Graphics",
+    "type": "pwa",
+    "description": "Online vector graphics editor",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "ytaudio",
+    "name": "YTAudio",
+    "url": "https://ytaud.io/",
+    "icon": "https://ytaud.io/favicon.ico",
+    "category": "Audio",
+    "type": "pwa",
+    "description": "YouTube to audio converter",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "espruino-ide",
+    "name": "Espruino IDE",
+    "url": "https://www.espruino.com/ide/",
+    "icon": "https://www.espruino.com/favicon.ico",
+    "category": "Development",
+    "type": "pwa",
+    "description": "JavaScript IDE for microcontrollers",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "dogsafefoods",
+    "name": "Dog Safe Foods",
+    "url": "https://dogsafefoods.com/",
+    "icon": "https://dogsafefoods.com/favicon.ico",
+    "category": "Health",
+    "type": "pwa",
+    "description": "Check if foods are safe for dogs",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "recipesage",
+    "name": "RecipeSage",
+    "url": "https://recipesage.com/",
+    "icon": "https://recipesage.com/favicon.ico",
+    "category": "Food",
+    "type": "pwa",
+    "description": "Discover and generate recipes",
+    "sandbox": "allow-scripts allow-same-origin"
+  },
+  {
+    "id": "versus",
+    "name": "Versus.com",
+    "url": "https://versus.com/en",
+    "icon": "https://versus.com/favicon.ico",
+    "category": "Comparison",
+    "type": "pwa",
+    "description": "Compare products, athletes and more",
+    "sandbox": "allow-scripts allow-same-origin"
+  }
+]

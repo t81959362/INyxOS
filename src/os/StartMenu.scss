@@ -1,0 +1,237 @@
+.startmenu-root {
+  position: fixed;
+  left: 0;
+  bottom: 56px; /* Sits just above the taskbar, adjust if needed */
+  z-index: 300;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  pointer-events: none; /* Only menu is interactive */
+  background: none;
+  width: auto;
+  height: auto;
+}
+
+.startmenu-main {
+  margin-bottom: 0;
+  margin-left: 6px; /* slightly compact to the left */
+  border-radius: 32px;
+  box-shadow: 0 12px 48px 0 #a084e033, 0 2px 12px 0 #e0c4fc22 inset;
+  background: linear-gradient(135deg, rgba(200,160,255,0.19) 0%, rgba(180,120,255,0.11) 40%, rgba(140,90,220,0.10) 100%), rgba(120,80,220,0.18);
+  transition: transform 0.24s cubic-bezier(.44,1.6,.66,1), opacity 0.18s cubic-bezier(.44,1.6,.66,1);
+  opacity: 0;
+  transform: scale(0.97) translateY(24px);
+  backdrop-filter: blur(54px) saturate(1.7);
+  -webkit-backdrop-filter: blur(54px) saturate(1.7);
+  border: 1px solid rgba(200,140,255,0.13);
+  box-shadow: 0 12px 48px 0 #a084e033, 0 2px 12px 0 #e0c4fc22 inset, 0 0 0 2px rgba(200,140,255,0.09) inset;
+}
+
+.apps-list {
+  border-radius: 0 !important;
+  background: linear-gradient(120deg, rgba(120,180,255,0.10) 0%, rgba(36,40,54,0.32) 100%);
+  box-shadow: none;
+  overflow: visible;
+}
+
+
+
+
+.startmenu-main.startmenu-open {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  animation: fadeInUpMenu 0.18s cubic-bezier(.44,1.6,.66,1);
+}
+
+@keyframes fadeInUpMenu {
+  0% {
+    opacity: 0;
+    transform: scale(0.97) translateY(18px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+
+
+
+/* Only the menu itself is glassy, not the whole screen */
+.startmenu-spotlight {
+  background: radial-gradient(circle at 30% 25%, rgba(200,160,255,0.13) 0%, rgba(140,90,220,0.22) 100%), rgba(120,80,220,0.10);
+}
+.startmenu-main {
+  margin: 0;
+  display: flex;
+  min-width: 440px;
+  min-height: 420px;
+  border-radius: 32px;
+  box-shadow: 0 8px 44px #232a3933;
+  background: rgba(36, 40, 54, 0.62);
+  backdrop-filter: blur(16px) saturate(1.18);
+  overflow: hidden;
+  pointer-events: auto;
+}
+.startmenu-sidebar {
+  width: 76px;
+  background: rgba(36, 40, 54, 0.72);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 12px 0;
+  border-top-left-radius: 24px;
+  border-bottom-left-radius: 24px;
+  box-shadow: 3px 0 18px 0 rgba(24,28,37,0.07);
+  transition: width 0.2s;
+}
+.startmenu-sidebar.expanded {
+  width: 180px;
+}
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 500;
+  padding: 12px 18px;
+  border-radius: 10px;
+  margin: 0 10px 8px 10px;
+  cursor: pointer;
+  transition: background 0.16s, color 0.16s;
+}
+.sidebar-item.active, .sidebar-item:hover {
+  background: rgba(48,138,255,0.13);
+  color: #8fcaff;
+}
+.sidebar-icon {
+  font-size: 20px;
+}
+.startmenu-content {
+  flex: 1;
+  padding: 28px 22px 28px 18px;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.apps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 240px;
+  overflow-y: auto;
+  padding-right: 2px;
+  padding-bottom: 12px; /* Prevent cutoff above taskbar */
+  margin-left: -10px;
+  background: linear-gradient(120deg, rgba(120,180,255,0.10) 0%, rgba(36,40,54,0.32) 100%);
+  border-radius: 0 32px 32px 0 !important;
+  box-shadow: none;
+  backdrop-filter: blur(18px) saturate(1.2);
+  overflow-y: auto;
+
+  /* Glassy custom scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(120,180,255,0.18) rgba(36,40,54,0.12);
+}
+.apps-list::-webkit-scrollbar {
+  width: 9px;
+  background: transparent;
+  border-radius: 8px;
+}
+.apps-list::-webkit-scrollbar-thumb {
+  background: rgba(120,180,255,0.18);
+  border-radius: 8px;
+  backdrop-filter: blur(6px) saturate(1.1);
+  box-shadow: none;
+  border: none;
+}
+.apps-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(120,180,255,0.28);
+}
+
+.app-item {
+  background: none;
+  color: #fff;
+  border: none;
+  border-radius: 0;
+  padding: 8px 8px 8px 0;
+  min-width: 120px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  box-shadow: none;
+  transition: background 0.16s, color 0.15s;
+  outline: none;
+  white-space: nowrap;
+}
+.app-item:hover, .app-item:focus {
+  background: rgba(120,180,255,0.09);
+  color: #e6f3ff;
+}
+
+.widget-item {
+  margin-top: -10px;
+  background: none;
+  color: #fff;
+  border: none;
+  border-radius: 0;
+  padding: 8px 8px 8px 0;
+  min-width: 120px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  box-shadow: none;
+  transition: background 0.16s, color 0.15s;
+  outline: none;
+  white-space: nowrap;
+}
+.widget-item:hover, .widget-item:focus {
+  background: rgba(120,180,255,0.09);
+  color: #e6f3ff;
+}
+
+
+.app-item:hover, .app-item:focus {
+  background: linear-gradient(90deg, rgba(120,180,255,0.13) 0%, rgba(44,18,62,0.38) 100%);
+  border: 1.5px solid rgba(120,180,255,0.26);
+  box-shadow: 0 8px 28px #232a3944, 0 2.5px 1.5px 0 rgba(120,180,255,0.18) inset;
+  color: #e6f3ff;
+}
+
+
+.app-item:hover {
+  background: rgba(48,138,255,0.19);
+  box-shadow: 0 8px 28px #232a3944;
+  filter: brightness(1.09);
+}
+.app-icon {
+  font-size: 22px;
+  margin-bottom: 0;
+}
+.folder-list, .power-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.folder-shortcut, .power-btn {
+  background: rgba(48,138,255,0.11);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.14s;
+}
+.folder-shortcut:hover, .power-btn:hover {
+  background: #308aff;
+}

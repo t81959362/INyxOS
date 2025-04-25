@@ -1,0 +1,2 @@
+html { font-family: var(--font-family, system-ui); font-size: var(--font-size, 14px); }
+* { font-family: inherit; }

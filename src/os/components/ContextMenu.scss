@@ -1,0 +1,95 @@
+.card {
+  width: 190px;
+  background-color: rgba(36, 40, 50, 0.5);
+  background-image: linear-gradient(139deg, rgba(129, 54, 110, 0.5) 0%, rgba(37, 28, 40, 0.5) 100%);
+  backdrop-filter: blur(16px) saturate(1.6);
+  border-radius: 9px;
+  padding: 15px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 150px;
+  border: none;
+  color: #e3f2fd;
+  font-size: 1.0rem;
+  font-family: inherit;
+  user-select: none;
+  animation: gcm-fade-in 0.18s cubic-bezier(.61,1.4,.38,1);
+}
+
+@keyframes gcm-fade-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.separator {
+  border-top: 1.5px solid #42434a00;
+}
+
+.list {
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0px 10px;
+}
+
+.element {
+  display: flex;
+  align-items: center;
+  color: #7e8590;
+  gap: 10px;
+  transition: all 0.3s ease-out;
+  padding: 4px 7px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.element svg,
+.element .icon {
+  width: 19px;
+  height: 19px;
+  transition: all 0.3s ease-out;
+}
+
+.label {
+  font-weight: normal;
+}
+
+.element:hover {
+  background-color: #ffffff;
+  color: #ffffff;
+  transform: translate(1px, -1px);
+}
+
+.delete:hover {
+  background-color: #8e2a2a;
+}
+
+.element:active {
+  transform: scale(0.99);
+}
+
+.list:not(:last-child) .element:hover svg,
+.list:not(:last-child) .element:hover .icon {
+  stroke: #ffffff;
+}
+
+.list:last-child svg,
+.list:last-child .icon {
+  stroke: #ffffff;
+}
+
+.list:last-child .element {
+  color: #f1f1f1;
+}
+
+.list:last-child .element:hover {
+  background-color: rgba(56, 45, 71, 0.836);
+}
+
+.element .shortcut {
+  color: #7ecfff;
+  font-size: 0.96em;
+  margin-left: 18px;
+}

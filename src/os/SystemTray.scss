@@ -1,0 +1,15 @@
+.system-tray-root {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tray-icon {
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 6px;
+  transition: background 0.2s;
+  &:hover, &:focus {
+    background: rgba(80, 120, 220, 0.12);
+    outline: none;
+  }
+}

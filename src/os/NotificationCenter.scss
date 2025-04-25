@@ -1,0 +1,18 @@
+.notification-center-root {
+  position: fixed;
+  top: 16px;
+  right: 24px;
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.notification {
+  background: rgba(24,28,37,0.96);
+  color: var(--foreground);
+  border-radius: 8px;
+  padding: 12px 18px;
+  box-shadow: var(--shadow);
+  border-left: 4px solid var(--accent);
+  min-width: 220px;
+}
