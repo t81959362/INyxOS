@@ -18,7 +18,20 @@ self.addEventListener('install', event => {
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
   event.respondWith(
+<<<<<<< HEAD
     caches.match(event.request).then(res => res || fetch(event.request))
+=======
+    caches.match(event.request).then(res => {
+      // If found in cache, return it
+      if (res) return res;
+      // If not found and it's a navigation request, fallback to index.html
+      if (event.request.mode === 'navigate') {
+        return caches.match('/index.html');
+      }
+      // Otherwise, try network
+      return fetch(event.request);
+    })
+>>>>>>> 714e7c6c643fdd875b1686c8d85307fce5b9dd29
   );
 });
 

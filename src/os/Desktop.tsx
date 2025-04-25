@@ -17,7 +17,7 @@ import { Toast } from './Toast';
 import { defaultWindows, appStubs } from './defaultWindows';
 import { desktopShortcuts } from './desktopShortcuts';
 import { FileSystem } from './fs';
-import Nyxwallpaper from '../assets/Nyxwallpaper.png'; // Corrected path
+const Nyxwallpaper = '/Nyxwallpaper.webp'; // Use .webp from public
 import './Desktop.scss';
 
 import LockScreen from './LockScreen';
@@ -36,7 +36,7 @@ const DesktopContent: React.FC = () => {
   // ...existing state and logic...
   // Lock screen state and inactivity timer
   const [locked, setLocked] = useState(false);
-  const [wallpaperUrl] = useState(Nyxwallpaper);
+  const [wallpaperUrl] = useState('/Nyxwallpaper.webp');
   React.useEffect(() => {
     let timer: any;
     const reset = () => {
